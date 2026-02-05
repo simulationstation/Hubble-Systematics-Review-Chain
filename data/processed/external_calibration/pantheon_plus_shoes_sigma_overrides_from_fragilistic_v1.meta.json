@@ -1,0 +1,281 @@
+{
+  "computed": {
+    "1": {
+      "frag_keys": [
+        "SDSS"
+      ],
+      "missing_frag_keys": [],
+      "name": "SDSS",
+      "sigma_mag": 0.002788075423188689
+    },
+    "10": {
+      "frag_keys": [
+        "DES3YR",
+        "DES5YR"
+      ],
+      "missing_frag_keys": [],
+      "name": "DES",
+      "sigma_mag": 0.0024256994632497245
+    },
+    "100": {
+      "frag_keys": [],
+      "missing_frag_keys": [],
+      "name": "HST",
+      "sigma_mag": 0.01
+    },
+    "101": {
+      "frag_keys": [],
+      "missing_frag_keys": [],
+      "name": "SNAP",
+      "sigma_mag": 0.01
+    },
+    "106": {
+      "frag_keys": [],
+      "missing_frag_keys": [],
+      "name": "CANDELS",
+      "sigma_mag": 0.01
+    },
+    "15": {
+      "frag_keys": [
+        "PS1",
+        "oldPS1",
+        "newPS1"
+      ],
+      "missing_frag_keys": [],
+      "name": "PS1MD",
+      "sigma_mag": 0.002272342145671854
+    },
+    "150": {
+      "frag_keys": [
+        "PS1",
+        "oldPS1",
+        "newPS1"
+      ],
+      "missing_frag_keys": [],
+      "name": "FOUND",
+      "sigma_mag": 0.002272342145671854
+    },
+    "18": {
+      "frag_keys": [
+        "CNIa0.2"
+      ],
+      "missing_frag_keys": [],
+      "name": "CNIa0.02",
+      "sigma_mag": 0.007612315362757858
+    },
+    "4": {
+      "frag_keys": [
+        "SNLS"
+      ],
+      "missing_frag_keys": [],
+      "name": "SNLS",
+      "sigma_mag": 0.0029099070746622497
+    },
+    "5": {
+      "frag_keys": [
+        "CSPDR3"
+      ],
+      "missing_frag_keys": [],
+      "name": "CSP",
+      "sigma_mag": 0.004051390662760063
+    },
+    "50": {
+      "frag_keys": [],
+      "missing_frag_keys": [],
+      "name": "LOWZ/JRK07",
+      "sigma_mag": 0.01
+    },
+    "51": {
+      "frag_keys": [
+        "KAIT1",
+        "KAIT2",
+        "KAIT3",
+        "KAIT4",
+        "NICKEL1",
+        "NICKEL2"
+      ],
+      "missing_frag_keys": [],
+      "name": "LOSS1",
+      "sigma_mag": 0.0028598773964593222
+    },
+    "56": {
+      "frag_keys": [
+        "SWIFT"
+      ],
+      "missing_frag_keys": [],
+      "name": "SOUSA",
+      "sigma_mag": 0.007854331285683925
+    },
+    "57": {
+      "frag_keys": [
+        "KAIT1",
+        "KAIT2",
+        "KAIT3",
+        "KAIT4",
+        "NICKEL1",
+        "NICKEL2"
+      ],
+      "missing_frag_keys": [],
+      "name": "LOSS2",
+      "sigma_mag": 0.0028598773964593222
+    },
+    "61": {
+      "frag_keys": [],
+      "missing_frag_keys": [],
+      "name": "CFA1",
+      "sigma_mag": 0.01
+    },
+    "62": {
+      "frag_keys": [],
+      "missing_frag_keys": [],
+      "name": "CFA2",
+      "sigma_mag": 0.01
+    },
+    "63": {
+      "frag_keys": [
+        "CFA3S"
+      ],
+      "missing_frag_keys": [],
+      "name": "CFA3S",
+      "sigma_mag": 0.005552522750373665
+    },
+    "64": {
+      "frag_keys": [
+        "CFA3K"
+      ],
+      "missing_frag_keys": [],
+      "name": "CFA3K",
+      "sigma_mag": 0.005435696193352983
+    },
+    "65": {
+      "frag_keys": [
+        "CFA4 p2"
+      ],
+      "missing_frag_keys": [],
+      "name": "CFA4p2",
+      "sigma_mag": 0.005077066071301967
+    },
+    "66": {
+      "frag_keys": [
+        "CFA4 p1"
+      ],
+      "missing_frag_keys": [],
+      "name": "CFA4p3",
+      "sigma_mag": 0.005208378671394337
+    }
+  },
+  "created_by": "scripts/derive_pantheon_shoes_fragilistic_priors.py",
+  "fallback_sigma_mag": 0.01,
+  "fragilistic_keys": [
+    "CFA3K",
+    "CFA3S",
+    "CFA4 p1",
+    "CFA4 p2",
+    "CNIa0.2",
+    "CSPDR3",
+    "DES3YR",
+    "DES5YR",
+    "KAIT1",
+    "KAIT2",
+    "KAIT3",
+    "KAIT4",
+    "NICKEL1",
+    "NICKEL2",
+    "PS1",
+    "SDSS",
+    "SNLS",
+    "SWIFT",
+    "newPS1",
+    "oldPS1"
+  ],
+  "idsurvey_to_name": {
+    "1": "SDSS",
+    "10": "DES",
+    "100": "HST",
+    "101": "SNAP",
+    "106": "CANDELS",
+    "15": "PS1MD",
+    "150": "FOUND",
+    "18": "CNIa0.02",
+    "4": "SNLS",
+    "5": "CSP",
+    "50": "LOWZ/JRK07",
+    "51": "LOSS1",
+    "56": "SOUSA",
+    "57": "LOSS2",
+    "61": "CFA1",
+    "62": "CFA2",
+    "63": "CFA3S",
+    "64": "CFA3K",
+    "65": "CFA4p2",
+    "66": "CFA4p3"
+  },
+  "notes": [
+    "FRAGILISTIC_COVARIANCE.npz is the zeropoint-offset covariance from Brout+21 (as shipped by Pantheon+SH0ES DataRelease).",
+    "We compress per-survey+band zeropoint offsets into a single per-survey offset by taking the mean across that survey\u2019s bands.",
+    "This is a pragmatic prior for our audit model\u2019s per-survey standardized-magnitude offset parameters; it is not a full photometry-level forward model."
+  ],
+  "scale": 1.0,
+  "survey_to_frag_keys": {
+    "CFA1": [],
+    "CFA2": [],
+    "CFA3K": [
+      "CFA3K"
+    ],
+    "CFA3S": [
+      "CFA3S"
+    ],
+    "CFA4p2": [
+      "CFA4 p2"
+    ],
+    "CFA4p3": [
+      "CFA4 p1"
+    ],
+    "CNIa0.02": [
+      "CNIa0.2"
+    ],
+    "CSP": [
+      "CSPDR3"
+    ],
+    "DES": [
+      "DES3YR",
+      "DES5YR"
+    ],
+    "FOUND": [
+      "PS1",
+      "oldPS1",
+      "newPS1"
+    ],
+    "LOSS1": [
+      "KAIT1",
+      "KAIT2",
+      "KAIT3",
+      "KAIT4",
+      "NICKEL1",
+      "NICKEL2"
+    ],
+    "LOSS2": [
+      "KAIT1",
+      "KAIT2",
+      "KAIT3",
+      "KAIT4",
+      "NICKEL1",
+      "NICKEL2"
+    ],
+    "LOWZ/JRK07": [],
+    "PS1MD": [
+      "PS1",
+      "oldPS1",
+      "newPS1"
+    ],
+    "SDSS": [
+      "SDSS"
+    ],
+    "SNLS": [
+      "SNLS"
+    ],
+    "SOUSA": [
+      "SWIFT"
+    ]
+  }
+}

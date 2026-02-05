@@ -79,6 +79,10 @@ This file maps the “systematics-first” spec you described (CatWISE-style sta
 - **Covariance-implied per-survey / per-epoch bounds (derived from published STAT+SYS cov):**
   `scripts/derive_pantheon_shoes_cov_priors.py` and
   `configs/stack_sn_bao_cc_plus_ladder_cov_implied_gates_v1.yaml`
+- **External calibration covariance (Brout+21 “FRAGILISTIC”; per-survey priors):**
+  `scripts/derive_pantheon_shoes_fragilistic_priors.py`,
+  `configs/stack_sn_bao_cc_plus_ladder_fragilistic_gates_v1.yaml`,
+  `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_fragilistic_v1.yaml`
 - **Injection suite (adds new metadata proxies):**
   `configs/pantheon_plus_shoes_ladder_injection_misspec_v4.yaml`
 - **SBC (new metadata proxies):**
@@ -95,6 +99,7 @@ This file maps the “systematics-first” spec you described (CatWISE-style sta
 
 - **More probes:** strong lenses, TRGB-only ladders, additional siren products, etc. (requires adding/copying datasets into `data/processed/...` with source metadata).
 - **Metadata-tied priors:** current “external priors” are *synthetic knobs* (tight vs loose). A full version should tie priors to survey calibration logs, overlap residuals, or external calibrators (Gaia / standard-star networks) and validate them with holdouts.
+- **Note:** we now include one concrete metadata-tied prior source (the Brout+21 zeropoint covariance shipped with Pantheon+), but we still lack true per-epoch calibration logs and photometry-level forward modeling.
 - **Instrument-level forward sims:** current injection/SBC operates at the *compressed data-vector* level (linearized magnitude / distance residuals). A full end-to-end simulator for Cepheids/TRGB/lens modeling is not yet implemented here.
 
 ## Live status snapshot (where to read results fast)

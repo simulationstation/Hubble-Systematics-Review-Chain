@@ -152,6 +152,32 @@ prior, but the gain is smaller than when the offset is essentially unconstrained
 
 See: `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_cov_implied_v1/report.md`.
 
+### External calibration covariance (Brout+21 “FRAGILISTIC”; survey-level)
+
+Pantheon+ ships an external calibration product in its DataRelease calibration folder:
+`FRAGILISTIC_COVARIANCE.npz`, described as the covariance of photometric zeropoint offsets from
+Brout et al. (2021). This provides a more “instrument-like” calibration constraint than an
+arbitrary σ=0.02 mag gate.
+
+We download that file into:
+`data/raw/pantheon_plus_calibration/FRAGILISTIC_COVARIANCE.npz`
+and compress its per-(survey,band) zeropoint covariance into **one effective per-survey magnitude
+offset prior** (mean across that survey’s bands). This produces survey-level sigmas typically at
+the **few-mmag** level (σ≈0.002–0.008 mag) and writes them to:
+`data/processed/external_calibration/pantheon_plus_shoes_sigma_overrides_from_fragilistic_v1.json`
+via `scripts/derive_pantheon_shoes_fragilistic_priors.py`.
+
+When we rerun the joint anchor-consistency stack with these tight **survey** calibration priors:
+
+- the model still wants essentially the same large calibrator↔HF step when allowed:
+  `calibrator_offset_mag ≈ 0.164 ± 0.031`,
+- and calibrator-holdout predictive scoring still strongly prefers the calibrator offset even under
+  the tight survey-calibration priors (Δlogp ≈ +5.90).
+
+See:
+- Gate sweep: `outputs/stack_sn_bao_cc_plus_ladder_fragilistic_gates_v1/report.md`
+- Holdout: `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_fragilistic_v1/report.md`
+
 ## Calibrator holdout (cross-validated; real data)
 
 A key “is this just overfitting a few points?” check is to **hold out calibrators** while keeping

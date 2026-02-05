@@ -11,6 +11,7 @@ import astropy.units as u
 from hubble_systematics.anchors import AnchorLCDM
 from hubble_systematics.design import DesignMatrix, bspline_basis, one_hot_levels, ones, second_difference_precision, sky_real_harmonics
 from hubble_systematics.gaussian_linear_model import GaussianPrior
+from hubble_systematics.prior_overrides import load_sigma_overrides, sigma_from_mapping
 from hubble_systematics.shared_scale import shared_scale_params
 
 
@@ -173,14 +174,28 @@ class PantheonPlusDataset:
             prior = GaussianPrior.from_sigmas([], [], mean=0.0)
             return y, y0, cov, X.X, prior
 
+        sigma_overrides = load_sigma_overrides(prior_cfg)
+        sigma_survey_by_id = prior_cfg.get("sigma_survey_offset_mag_by_idsurvey")
+
         sigmas = []
         for n in names:
+            if n in sigma_overrides:
+                sigmas.append(float(sigma_overrides[n]))
+                continue
             if n == "global_offset_mag":
                 sigmas.append(float(prior_cfg.get("sigma_global_offset_mag", 10.0)))
             elif n in shared_params:
                 sigmas.append(float("inf"))
             elif n.startswith("survey_offset_"):
-                sigmas.append(float(prior_cfg.get("sigma_survey_offset_mag", 0.2)))
+                sid = n.removeprefix("survey_offset_")
+                sigma = None
+                try:
+                    sigma = sigma_from_mapping(sigma_survey_by_id, int(sid))
+                except Exception:
+                    sigma = None
+                if sigma is None:
+                    sigma = float(prior_cfg.get("sigma_survey_offset_mag", 0.2))
+                sigmas.append(float(sigma))
             elif n.startswith("sn_z_spline_"):
                 sigmas.append(float(prior_cfg.get("sigma_z_spline_mag", 0.2)))
             elif n.startswith("sky_"):

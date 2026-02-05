@@ -44,6 +44,10 @@ using this repo’s **linear-Gaussian audit models** (not a full end-to-end SH0E
   Report: `outputs/stack_sn_bao_cc_plus_ladder_cov_implied_gates_v1/report.md`  
   Reproduce: `configs/stack_sn_bao_cc_plus_ladder_cov_implied_gates_v1.yaml`  
   Derivation: `scripts/derive_pantheon_shoes_cov_priors.py`
+- **External calibration covariance (Brout+21 “FRAGILISTIC”; real data):** using the public zeropoint-offset covariance shipped with the Pantheon+ DataRelease (typical per-survey σ≈0.002–0.008 mag), constraining per-survey offsets does **not** remove the need for a large calibrator↔HF step (the fit still wants `calibrator_offset_mag ≈ 0.16` when allowed). Calibrator holdout predictive scoring still prefers `calibrator_offset_mag` even under these tight survey-calibration priors.  
+  Reports: `outputs/stack_sn_bao_cc_plus_ladder_fragilistic_gates_v1/report.md`, `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_fragilistic_v1/report.md`  
+  Reproduce: `configs/stack_sn_bao_cc_plus_ladder_fragilistic_gates_v1.yaml`, `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_fragilistic_v1.yaml`  
+  Derivation: `scripts/derive_pantheon_shoes_fragilistic_priors.py`
 - **Anti-overfit gates:** cross-validated predictive scoring and exact Gaussian log-evidence both *penalize* adding flexible closure terms (HF redshift splines / sky low-ℓ modes) on the ladder subset.  
   Reports: `outputs/pantheon_plus_shoes_ladder_predictive_score_v2/report.md`, `outputs/pantheon_plus_shoes_ladder_level_sweep_v2/report.md`
 - **External H0 probes as `h0_grid` (TRGB / lenses / masers; stress-test):** adding these does not remove the need for a large calibrator↔HF offset in the joint stack, and calibrator holdout improvements persist.  

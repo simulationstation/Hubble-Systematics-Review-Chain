@@ -262,6 +262,10 @@ model:
     sigma_overrides_path: data/processed/external_calibration/sigma_overrides.json
 ```
 
+The `pantheon_plus` probe also supports `sigma_overrides` / `sigma_overrides_path` (and
+`sigma_survey_offset_mag_by_idsurvey`) for its `survey_offset_<idsurvey>` parameters, so the same
+override file can be applied consistently across a joint stack.
+
 ## `scan` (cut scans)
 
 ```yaml

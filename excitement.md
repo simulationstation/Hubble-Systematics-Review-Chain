@@ -99,3 +99,23 @@ Artifacts:
 - Derivation: `scripts/derive_pantheon_shoes_cov_priors.py`
 - Sigma file: `data/processed/external_calibration/pantheon_plus_shoes_sigma_overrides_from_cov_v1.json`
 - Gate sweep: `outputs/stack_sn_bao_cc_plus_ladder_cov_implied_gates_v1/report.md`
+
+## 2026-02-05 — Brout+21 “FRAGILISTIC” zeropoint covariance implies mmag survey priors (real data)
+
+Pantheon+ ships an external calibration product (`FRAGILISTIC_COVARIANCE.npz`) described as the
+zeropoint-offset covariance from Brout+21. When compressed into per-survey offset priors, typical
+sigmas are only a few mmag (σ≈0.002–0.008 mag).
+
+Applying these tight survey-calibration priors:
+
+- does **not** reduce the needed calibrator↔HF step when that step is allowed:
+  `calibrator_offset_mag ≈ 0.164 ± 0.031` (still ~0.16),
+- and calibrator-holdout predictive scoring still strongly prefers the calibrator offset under
+  these priors (Δlogp ≈ +5.90).
+
+Artifacts:
+- Data: `data/raw/pantheon_plus_calibration/FRAGILISTIC_COVARIANCE.npz`
+- Derivation: `scripts/derive_pantheon_shoes_fragilistic_priors.py`
+- Sigma file: `data/processed/external_calibration/pantheon_plus_shoes_sigma_overrides_from_fragilistic_v1.json`
+- Gate sweep: `outputs/stack_sn_bao_cc_plus_ladder_fragilistic_gates_v1/report.md`
+- Holdout: `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_fragilistic_v1/report.md`

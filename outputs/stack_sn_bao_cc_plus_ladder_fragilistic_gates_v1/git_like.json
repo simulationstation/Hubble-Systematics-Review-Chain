@@ -1,0 +1,22 @@
+{
+  "branch": "main",
+  "describe": "92734c0-dirty",
+  "dirty": true,
+  "head": "92734c0ce2e655e5fbc1360427dc1c9c0db7cc5f",
+  "ok": true,
+  "remotes": [
+    "origin\tgit@github.com:simulationstation/Hubble-Systematics-Review-Chain.git (fetch)",
+    "origin\tgit@github.com:simulationstation/Hubble-Systematics-Review-Chain.git (push)"
+  ],
+  "status_porcelain": [
+    "M src/hubble_systematics/probes/pantheon_plus.py",
+    "?? configs/stack_sn_bao_cc_plus_ladder_fragilistic_gates_v1.yaml",
+    "?? data/processed/external_calibration/pantheon_plus_shoes_sigma_overrides_from_fragilistic_v1.json",
+    "?? data/processed/external_calibration/pantheon_plus_shoes_sigma_overrides_from_fragilistic_v1.meta.json",
+    "?? data/raw/pantheon_plus_calibration/",
+    "?? data/raw/pantheon_plus_shoes/README_DataRelease_4_DISTANCES_AND_COVAR.txt",
+    "?? outputs/stack_sn_bao_cc_plus_ladder_fragilistic_gates_v1/",
+    "?? scripts/derive_pantheon_shoes_fragilistic_priors.py"
+  ],
+  "toplevel": "/home/primary/Hubble-Systematics-Review-Chain"
+}
