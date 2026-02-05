@@ -169,6 +169,8 @@ Notes:
 - Additional optional mechanisms for `pantheon_plus_shoes_ladder` live under `model.mechanisms`, e.g.:
   - `calibrator_offset: true` → adds `calibrator_offset_mag` (calibrator-only shift)
   - `cal_survey_offsets: true` → adds per-survey calibrator-only shifts `cal_survey_offset_<idsurvey>` (prior: `sigma_cal_survey_offset_mag`)
+  - `m_b_corr_err_linear: true` → adds `m_b_corr_err_linear_mag` (linear in `m_b_corr_err_DIAG`, z-scored on load; prior: `sigma_m_b_corr_err_linear_mag`)
+    - scope via `m_b_corr_err_apply_to: hf|cal|all` (default `hf`)
 
 ## `sweep` (baseline model variants)
 
@@ -228,12 +230,21 @@ always included while varying the maximum Hubble-flow redshift.
 YAML 1.1 has an implicit `null` scalar, so to avoid parser surprises you can quote the key as
 `"null":` (the runner also supports the unquoted form).
 
+Notes:
+
+- For most probes, `correlated_cut_null` uses a linear-Gaussian simulation (fit the max-cut model,
+  inject noise, and re-fit across nested cuts).
+- For `probe.name: siren_gate2_grid`, you can choose a siren-specific null:
+  - `mode: event_gaussian` simulates event-level ln(H0) measurements using widths inferred from
+    each event’s `logL(H0)` curve, then recomputes the selection-corrected posterior per cut.
+
 ```yaml
 "null":
   n_mc: 200
   seed: 123
   drift_param: global_offset_mag
   use_diagonal_errors: true
+  mode: ""   # default (linear-Gaussian); use "event_gaussian" for siren_gate2_grid
 ```
 
 ## `injection` (injection/recovery)
@@ -258,6 +269,12 @@ injection:
   - label: dust
     seed: 123
     mechanism: mwebv_linear_mag
+    amplitudes: [-0.2, -0.1, 0.0, 0.1, 0.2]
+    param_of_interest: delta_lnH0
+  - label: quality
+    seed: 123
+    mechanism: m_b_corr_err_linear_mag
+    apply_to: hf
     amplitudes: [-0.2, -0.1, 0.0, 0.1, 0.2]
     param_of_interest: delta_lnH0
   - label: cal

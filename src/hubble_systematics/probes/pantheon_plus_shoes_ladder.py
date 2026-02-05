@@ -52,6 +52,8 @@ class PantheonPlusShoesLadderDataset:
     z_hf_support_max: float | None
     mwebv_mu: float
     mwebv_sd: float
+    m_b_corr_err_mu: float
+    m_b_corr_err_sd: float
     pkmjd_mu: float
     pkmjd_sd: float
     pkmjd_edges: np.ndarray | None
@@ -172,6 +174,8 @@ class PantheonPlusShoesLadderDataset:
             z_hf_support_max=self.z_hf_support_max,
             mwebv_mu=self.mwebv_mu,
             mwebv_sd=self.mwebv_sd,
+            m_b_corr_err_mu=self.m_b_corr_err_mu,
+            m_b_corr_err_sd=self.m_b_corr_err_sd,
             pkmjd_mu=self.pkmjd_mu,
             pkmjd_sd=self.pkmjd_sd,
             pkmjd_edges=self.pkmjd_edges,
@@ -243,6 +247,26 @@ class PantheonPlusShoesLadderDataset:
             elif apply_to != "all":
                 raise ValueError(f"Unsupported mwebv_apply_to: {apply_to}")
             X = X.append(DesignMatrix(X=xz.reshape(-1, 1), names=["mwebv_linear_mag"]))
+
+        def add_m_b_corr_err_linear() -> None:
+            nonlocal X
+            x = np.asarray(self.m_b_corr_err_diag, dtype=float)
+            good = np.isfinite(x) & (x > 0.0)
+            if not np.any(good):
+                raise ValueError("No finite positive m_b_corr_err_diag values for m_b_corr_err_linear")
+            mu_x = float(self.m_b_corr_err_mu)
+            sd_x = float(self.m_b_corr_err_sd)
+            xz = (x - mu_x) / sd_x
+            apply_to = str((mech_cfg.get("m_b_corr_err_apply_to") or "hf")).lower()
+            if apply_to == "hf":
+                xz = xz * hf
+            elif apply_to == "cal":
+                xz = xz * cal
+            elif apply_to == "all":
+                pass
+            else:
+                raise ValueError(f"Unsupported m_b_corr_err_apply_to: {apply_to}")
+            X = X.append(DesignMatrix(X=xz.reshape(-1, 1), names=["m_b_corr_err_linear_mag"]))
 
         def add_host_mass_step() -> None:
             nonlocal X
@@ -450,6 +474,8 @@ class PantheonPlusShoesLadderDataset:
                 add_cal_survey_offsets()
             if bool(mech_cfg.get("mwebv_linear", False)):
                 add_mwebv_linear()
+            if bool(mech_cfg.get("m_b_corr_err_linear", False)):
+                add_m_b_corr_err_linear()
             if bool(mech_cfg.get("host_mass_step", False)):
                 add_host_mass_step()
             if bool(mech_cfg.get("pkmjd_linear", False)):
@@ -486,6 +512,8 @@ class PantheonPlusShoesLadderDataset:
                 sigmas.append(float(prior_cfg.get("sigma_cal_survey_offset_mag", 0.2)))
             elif n == "mwebv_linear_mag":
                 sigmas.append(float(prior_cfg.get("sigma_mwebv_linear_mag", 0.2)))
+            elif n == "m_b_corr_err_linear_mag":
+                sigmas.append(float(prior_cfg.get("sigma_m_b_corr_err_linear_mag", 0.2)))
             elif n == "host_mass_step_mag":
                 sigmas.append(float(prior_cfg.get("sigma_host_mass_step_mag", 0.2)))
             elif n == "pkmjd_linear_mag":
@@ -584,6 +612,14 @@ def load_pantheon_plus_shoes_ladder_dataset(probe_cfg: dict[str, Any]) -> Panthe
             else:
                 mwebv_mu, mwebv_sd = 0.0, 1.0
 
+            m_b_corr_err = np.asarray(npz["m_b_corr_err_diag"], dtype=float)
+            good_e = np.isfinite(m_b_corr_err) & (m_b_corr_err > 0.0)
+            if np.any(good_e):
+                m_b_corr_err_mu = float(np.mean(m_b_corr_err[good_e]))
+                m_b_corr_err_sd = float(np.std(m_b_corr_err[good_e]) + 1e-12)
+            else:
+                m_b_corr_err_mu, m_b_corr_err_sd = 0.0, 1.0
+
             if np.any(good_t):
                 pkmjd_mu = float(np.mean(pkmjd[good_t]))
                 pkmjd_sd = float(np.std(pkmjd[good_t]) + 1e-12)
@@ -620,6 +656,8 @@ def load_pantheon_plus_shoes_ladder_dataset(probe_cfg: dict[str, Any]) -> Panthe
                 z_hf_support_max=z_hf_support_max,
                 mwebv_mu=mwebv_mu,
                 mwebv_sd=mwebv_sd,
+                m_b_corr_err_mu=m_b_corr_err_mu,
+                m_b_corr_err_sd=m_b_corr_err_sd,
                 pkmjd_mu=pkmjd_mu,
                 pkmjd_sd=pkmjd_sd,
                 pkmjd_edges=pkmjd_edges,
@@ -695,6 +733,13 @@ def load_pantheon_plus_shoes_ladder_dataset(probe_cfg: dict[str, Any]) -> Panthe
         mwebv_sd = float(np.std(mwebv[good_m]) + 1e-12)
     else:
         mwebv_mu, mwebv_sd = 0.0, 1.0
+
+    good_e = np.isfinite(m_b_corr_err_diag) & (m_b_corr_err_diag > 0.0)
+    if np.any(good_e):
+        m_b_corr_err_mu = float(np.mean(m_b_corr_err_diag[good_e]))
+        m_b_corr_err_sd = float(np.std(m_b_corr_err_diag[good_e]) + 1e-12)
+    else:
+        m_b_corr_err_mu, m_b_corr_err_sd = 0.0, 1.0
 
     if np.any(good_t):
         pkmjd_mu = float(np.mean(pkmjd[good_t]))
@@ -773,6 +818,8 @@ def load_pantheon_plus_shoes_ladder_dataset(probe_cfg: dict[str, Any]) -> Panthe
         z_hf_support_max=z_hf_support_max,
         mwebv_mu=mwebv_mu,
         mwebv_sd=mwebv_sd,
+        m_b_corr_err_mu=m_b_corr_err_mu,
+        m_b_corr_err_sd=m_b_corr_err_sd,
         pkmjd_mu=pkmjd_mu,
         pkmjd_sd=pkmjd_sd,
         pkmjd_edges=pkmjd_edges,

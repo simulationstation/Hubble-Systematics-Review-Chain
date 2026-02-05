@@ -98,3 +98,39 @@ def test_injection_suite_calibrator_offset_runs() -> None:
     assert res.mechanism == "calibrator_offset_mag"
     assert res.param_of_interest == "delta_lnH0"
     assert len(res.rows) == 1
+
+
+def test_injection_suite_m_b_corr_err_linear_runs() -> None:
+    root = Path(__file__).resolve().parents[1]
+    cfg = {
+        "raw_dat_path": str(root / "data/raw/pantheon_plus_shoes/Pantheon+SH0ES.dat"),
+        "raw_cov_path": str(root / "data/raw/pantheon_plus_shoes/Pantheon+SH0ES_STAT+SYS.cov"),
+        "include_calibrators": True,
+        "include_hubble_flow": True,
+        "z_column": "zHD",
+        "z_hf_min": 0.023,
+        "z_hf_max": 0.15,
+        "tag": "pytest_cal+hf_zHD",
+        "processed_dir": str(root / "data/processed/pantheon_plus_shoes_ladder"),
+    }
+    ds = load_pantheon_plus_shoes_ladder_dataset(cfg)
+    anchor = AnchorLCDM(H0=67.4, Omega_m=0.315, Omega_k=0.0, rd_Mpc=147.09)
+
+    model_cfg = {
+        "shared_scale": {"enable": True, "params": ["delta_lnH0"], "prior_sigma": 0.5},
+        "priors": {"sigma_global_offset_mag": 10.0, "sigma_survey_offset_mag": 0.2},
+    }
+    inj_cfg = {
+        "mechanism": "m_b_corr_err_linear_mag",
+        "apply_to": "hf",
+        "amplitudes": [0.0],
+        "n_mc": 3,
+        "use_diagonal_errors": True,
+        "param_of_interest": "delta_lnH0",
+        "seed": 123,
+    }
+    rng = np.random.default_rng(123)
+    res = run_injection_suite(dataset=ds, anchor=anchor, ladder_level="L2", model_cfg=model_cfg, inj_cfg=inj_cfg, rng=rng)
+    assert res.mechanism == "m_b_corr_err_linear_mag"
+    assert res.param_of_interest == "delta_lnH0"
+    assert len(res.rows) == 1

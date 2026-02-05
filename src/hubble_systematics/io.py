@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import os
 import platform
+import subprocess
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -27,4 +28,38 @@ def copy_config_and_env(config_path: Path, run_dir: Path) -> None:
         "numpy": np.__version__,
     }
     (run_dir / "env.json").write_text(json.dumps(env, indent=2, sort_keys=True))
+    _write_git_like(run_dir)
 
+
+def _run_git(args: list[str]) -> tuple[int, str]:
+    proc = subprocess.run(["git", *args], capture_output=True, text=True, check=False)
+    out = (proc.stdout or "").strip()
+    if proc.returncode != 0 and proc.stderr:
+        out = f"{out}\n{proc.stderr.strip()}".strip()
+    return int(proc.returncode), out
+
+
+def _write_git_like(run_dir: Path) -> None:
+    code, top = _run_git(["rev-parse", "--show-toplevel"])
+    if code != 0:
+        (run_dir / "git_like.json").write_text(json.dumps({"ok": False, "reason": "not a git repo"}, indent=2, sort_keys=True))
+        return
+
+    code, head = _run_git(["rev-parse", "HEAD"])
+    code, branch = _run_git(["rev-parse", "--abbrev-ref", "HEAD"])
+    code, describe = _run_git(["describe", "--tags", "--always", "--dirty"])
+    code, status = _run_git(["status", "--porcelain"])
+    dirty = bool(status.strip())
+    code, remotes = _run_git(["remote", "-v"])
+
+    payload = {
+        "ok": True,
+        "toplevel": top,
+        "head": head,
+        "branch": branch,
+        "describe": describe,
+        "dirty": dirty,
+        "status_porcelain": [ln for ln in status.splitlines() if ln.strip()],
+        "remotes": [ln for ln in remotes.splitlines() if ln.strip()],
+    }
+    (run_dir / "git_like.json").write_text(json.dumps(payload, indent=2, sort_keys=True))

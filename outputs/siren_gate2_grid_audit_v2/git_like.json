@@ -1,0 +1,28 @@
+{
+  "branch": "main",
+  "describe": "442c28d-dirty",
+  "dirty": true,
+  "head": "442c28d16cc8e18a9c3bd388ed9a54783f45ea19",
+  "ok": true,
+  "remotes": [
+    "origin\tgit@github.com:simulationstation/Hubble-Systematics-Review-Chain.git (fetch)",
+    "origin\tgit@github.com:simulationstation/Hubble-Systematics-Review-Chain.git (push)"
+  ],
+  "status_porcelain": [
+    "M README.md",
+    " M docs/CONFIG.md",
+    " M docs/LAYMAN_SUMMARY.md",
+    " M src/hubble_systematics/audit/correlated_cut_null.py",
+    " M src/hubble_systematics/audit/injection.py",
+    " M src/hubble_systematics/audit/tasks.py",
+    " M src/hubble_systematics/io.py",
+    " M src/hubble_systematics/probes/pantheon_plus_shoes_ladder.py",
+    " M tests/test_pantheon_plus_shoes_ladder_dataset.py",
+    "?? configs/pantheon_plus_shoes_ladder_injection_misspec_v3.yaml",
+    "?? configs/pantheon_plus_shoes_ladder_sweep_v2.yaml",
+    "?? configs/siren_gate2_grid_audit_v2.yaml",
+    "?? outputs/siren_gate2_grid_audit_v2/",
+    "?? tests/test_correlated_cut_null_siren_gate2.py"
+  ],
+  "toplevel": "/home/primary/Hubble-Systematics-Review-Chain"
+}

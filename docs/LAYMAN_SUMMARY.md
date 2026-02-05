@@ -38,11 +38,14 @@ on a common grid (independent of SN/BAO/CC) and enables the same cut/time drift 
 QC metrics (`ess_min`, `n_good_min`) and event time parsed from the event name.
 
 - Baseline (moment summary of the selection-corrected posterior): `H0_eff ≈ 60.84 ± 12.74` (broad).  
-  Cut scan over `ess_min` shows large variation once `N` becomes small, but:
-  - correlated-cut drift null p-values are not small (≈0.81/0.81/0.88), and
-  - a time-bin shuffle null shows no significant time drift (p≈0.58–0.61).
+  Cut scan over `ess_min` shows large variation once `N` becomes small. Under a siren-specific
+  correlated-cut null (event-level Gaussian surrogate), the observed drift across the ESS scan is
+  **unlikely** (max-pair p≈`2e-5`; path-length p≈`0` in 50k sims). A time-bin shuffle null shows no
+  significant time drift (p≈0.58–0.62).
 
-See: `outputs/siren_gate2_grid_audit_v1/report.md`.
+See:
+- `outputs/siren_gate2_grid_audit_v1/report.md` (legacy linear-Gaussian null)
+- `outputs/siren_gate2_grid_audit_v2/report.md` (siren-specific null)
 
 ## What we checked (real‑data stability tests)
 
@@ -68,11 +71,12 @@ The key output is the **amplitude required to fake the full ladder offset**.
 Examples (all in magnitudes, in our parameterization):
 
 - Calibrator-vs-Hubble‑flow offset needs **~0.19 mag** (this is essentially the full H0 gap).
+- A quality/selection proxy linear in `m_b_corr_err_DIAG` needs **~0.45 mag per 1σ(error)** (HF only).
 - A pure sky dipole needs **~0.40 mag**.
 - A pure time trend needs **~0.68 mag per 1σ(time)**.
 - A host-mass step needs **~2.35 mag**.
 
-See: `outputs/pantheon_plus_shoes_ladder_injection_misspec_v2/report.md`.
+See: `outputs/pantheon_plus_shoes_ladder_injection_misspec_v3/report.md`.
 
 ## Joint “anchor-consistency” inference (real data)
 

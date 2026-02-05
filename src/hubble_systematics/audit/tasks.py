@@ -8,6 +8,7 @@ import numpy as np
 
 from hubble_systematics.anchors import AnchorLCDM
 from hubble_systematics.audit.correlated_cut_null import run_correlated_cut_null_mc
+from hubble_systematics.audit.correlated_cut_null import run_correlated_cut_null_siren_gate2_event_gaussian_mc
 from hubble_systematics.audit.group_split_null import run_group_split_null_mc
 from hubble_systematics.audit.injection import run_injection_suite
 from hubble_systematics.audit.hemisphere_scan import run_hemisphere_scan
@@ -309,19 +310,31 @@ def run_correlated_cut_null(ctx) -> dict[str, Any]:
     use_diag = bool(null_cfg.get("use_diagonal_errors", True))
     rng = np.random.default_rng(seed)
 
-    drift = run_correlated_cut_null_mc(
-        dataset=dataset,
-        anchor=anchor,
-        ladder_level=level,
-        model_cfg=model,
-        cut_var=cut_var,
-        cut_mode=cut_mode,
-        cuts=cut_grid,
-        n_mc=n_mc,
-        rng=rng,
-        drift_param=drift_param,
-        use_diagonal_errors=use_diag,
-    )
+    null_mode = str(null_cfg.get("mode", "")).lower()
+    if probe_name == "siren_gate2_grid" and (null_mode == "event_gaussian"):
+        drift = run_correlated_cut_null_siren_gate2_event_gaussian_mc(
+            dataset=dataset,
+            anchor=anchor,
+            cut_var=cut_var,
+            cut_mode=cut_mode,
+            cuts=cut_grid,
+            n_mc=n_mc,
+            rng=rng,
+        )
+    else:
+        drift = run_correlated_cut_null_mc(
+            dataset=dataset,
+            anchor=anchor,
+            ladder_level=level,
+            model_cfg=model,
+            cut_var=cut_var,
+            cut_mode=cut_mode,
+            cuts=cut_grid,
+            n_mc=n_mc,
+            rng=rng,
+            drift_param=drift_param,
+            use_diagonal_errors=use_diag,
+        )
     write_json(ctx.run_dir / "correlated_cut_null.json", drift.to_jsonable())
     return drift.to_jsonable()
 

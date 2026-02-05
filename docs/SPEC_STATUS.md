@@ -42,6 +42,7 @@ This file maps the “systematics-first” spec you described (CatWISE-style sta
 - **Model-evidence ladder sweep (L2→L4):** `configs/pantheon_plus_shoes_ladder_level_sweep_v2.yaml`
 - **Time invariance null (fixed calibrators):** `configs/pantheon_plus_shoes_ladder_time_invariance_null_fixedcal_v3.yaml`
 - **Quality-cut scans (FITPROB / redchi2 / etc.):** `configs/pantheon_plus_shoes_ladder_fitprob_cut_scan.yaml`, `configs/pantheon_plus_shoes_ladder_redchi2_cut_scan.yaml`, …
+- **Mechanism sweeps (including quality/selection proxy):** `configs/pantheon_plus_shoes_ladder_sweep_v2.yaml` (adds `m_b_corr_err_linear`)
 - **External-prior sensitivity sweep (tight vs loose priors):** `configs/pantheon_plus_shoes_ladder_external_prior_sweep.yaml`
 - **Joint “anchor consistency” stress test (SN-only+BAO+CC+siren + ladder with calibrator offset):**
   `configs/stack_sn_bao_cc_siren_plus_ladder_cal_offset_v2.yaml`
