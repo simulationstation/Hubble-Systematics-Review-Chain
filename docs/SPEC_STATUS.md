@@ -40,6 +40,10 @@ This file maps the “systematics-first” spec you described (CatWISE-style sta
 
 - **Ladder reproduction + cut scan + correlated-cut null + injection + SBC:** `configs/pantheon_plus_shoes_ladder_audit.yaml`
 - **Predictive scoring (CV):** `configs/pantheon_plus_shoes_ladder_predictive_score_v2.yaml`
+- **Predictive scoring (hold out calibrators; HF fixed in TRAIN):**
+  `configs/pantheon_plus_shoes_ladder_predictive_score_cal_holdout_v1.yaml`
+  and the survey-holdout variant
+  `configs/pantheon_plus_shoes_ladder_predictive_score_cal_survey_holdout_v1.yaml`
 - **Model-evidence ladder sweep (L2→L4):** `configs/pantheon_plus_shoes_ladder_level_sweep_v2.yaml`
 - **Time invariance null (fixed calibrators):** `configs/pantheon_plus_shoes_ladder_time_invariance_null_fixedcal_v3.yaml`
 - **Quality-cut scans (FITPROB / redchi2 / etc.):** `configs/pantheon_plus_shoes_ladder_fitprob_cut_scan.yaml`, `configs/pantheon_plus_shoes_ladder_redchi2_cut_scan.yaml`, …

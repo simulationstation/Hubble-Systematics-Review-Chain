@@ -18,6 +18,7 @@ class PredictiveScoreResult:
     n_rep: int
     train_frac: float | None
     always_include_calibrators: bool
+    always_include_hubble_flow: bool
     models: dict[str, dict[str, Any]]
 
     def to_jsonable(self) -> dict[str, Any]:
@@ -28,6 +29,7 @@ class PredictiveScoreResult:
             "n_rep": self.n_rep,
             "train_frac": self.train_frac,
             "always_include_calibrators": self.always_include_calibrators,
+            "always_include_hubble_flow": self.always_include_hubble_flow,
             "models": self.models,
         }
 
@@ -45,6 +47,7 @@ def run_predictive_score(
     use_diag = bool(pred_cfg.get("use_diagonal_errors", True))
     seed = pred_cfg.get("seed")
     always_include_cal = bool(pred_cfg.get("always_include_calibrators", False))
+    always_include_hf = bool(pred_cfg.get("always_include_hubble_flow", False))
 
     model_list = pred_cfg.get("models") or pred_cfg.get("compare") or []
     if not isinstance(model_list, list) or not model_list:
@@ -55,13 +58,26 @@ def run_predictive_score(
         train_frac = float(pred_cfg.get("train_frac", 0.7))
         if not (0.1 < train_frac < 0.95):
             raise ValueError("predictive_score.train_frac must be in (0.1,0.95)")
-        splits = _random_splits(dataset=dataset, n_rep=n_rep, train_frac=train_frac, rng=rng, always_include_calibrators=always_include_cal)
+        splits = _random_splits(
+            dataset=dataset,
+            n_rep=n_rep,
+            train_frac=train_frac,
+            rng=rng,
+            always_include_calibrators=always_include_cal,
+            always_include_hubble_flow=always_include_hf,
+        )
     elif mode == "group_holdout":
         n_rep = 0
         train_frac = None
         group_var = str(pred_cfg.get("group_var", "idsurvey"))
         min_group_n = int(pred_cfg.get("min_group_n", 20))
-        splits = _group_holdout_splits(dataset=dataset, group_var=group_var, min_group_n=min_group_n, always_include_calibrators=always_include_cal)
+        splits = _group_holdout_splits(
+            dataset=dataset,
+            group_var=group_var,
+            min_group_n=min_group_n,
+            always_include_calibrators=always_include_cal,
+            always_include_hubble_flow=always_include_hf,
+        )
         n_rep = len(splits)
     else:
         raise ValueError(f"Unsupported predictive_score.mode: {mode}")
@@ -127,11 +143,20 @@ def run_predictive_score(
         n_rep=int(len(splits)),
         train_frac=train_frac,
         always_include_calibrators=always_include_cal,
+        always_include_hubble_flow=always_include_hf,
         models=out_models,
     )
 
 
-def _random_splits(*, dataset, n_rep: int, train_frac: float, rng: np.random.Generator, always_include_calibrators: bool) -> list[tuple[np.ndarray, np.ndarray]]:
+def _random_splits(
+    *,
+    dataset,
+    n_rep: int,
+    train_frac: float,
+    rng: np.random.Generator,
+    always_include_calibrators: bool,
+    always_include_hubble_flow: bool,
+) -> list[tuple[np.ndarray, np.ndarray]]:
     n = int(dataset.z.size)
     all_idx = np.arange(n)
 
@@ -140,6 +165,10 @@ def _random_splits(*, dataset, n_rep: int, train_frac: float, rng: np.random.Gen
         cal = np.asarray(getattr(dataset, "is_calibrator"), dtype=bool)
         if cal.shape == (n,):
             fixed_train |= cal
+    if always_include_hubble_flow and hasattr(dataset, "is_hubble_flow"):
+        hf = np.asarray(getattr(dataset, "is_hubble_flow"), dtype=bool)
+        if hf.shape == (n,):
+            fixed_train |= hf
 
     free_idx = all_idx[~fixed_train]
     n_train_free = int(round(train_frac * free_idx.size))
@@ -158,7 +187,14 @@ def _random_splits(*, dataset, n_rep: int, train_frac: float, rng: np.random.Gen
     return splits
 
 
-def _group_holdout_splits(*, dataset, group_var: str, min_group_n: int, always_include_calibrators: bool) -> list[tuple[np.ndarray, np.ndarray]]:
+def _group_holdout_splits(
+    *,
+    dataset,
+    group_var: str,
+    min_group_n: int,
+    always_include_calibrators: bool,
+    always_include_hubble_flow: bool,
+) -> list[tuple[np.ndarray, np.ndarray]]:
     v = dataset.get_column(group_var)
     v = np.asarray(v)
     n = int(v.size)
@@ -168,6 +204,10 @@ def _group_holdout_splits(*, dataset, group_var: str, min_group_n: int, always_i
         cal = np.asarray(getattr(dataset, "is_calibrator"), dtype=bool)
         if cal.shape == (n,):
             fixed_train |= cal
+    if always_include_hubble_flow and hasattr(dataset, "is_hubble_flow"):
+        hf = np.asarray(getattr(dataset, "is_hubble_flow"), dtype=bool)
+        if hf.shape == (n,):
+            fixed_train |= hf
 
     # Only hold out finite groups.
     good = np.isfinite(v)
@@ -291,4 +331,3 @@ def _deep_merge_dicts(a: dict[str, Any], b: dict[str, Any]) -> dict[str, Any]:
         else:
             out[k] = v
     return out
-

@@ -387,6 +387,7 @@ predictive_score:
   n_rep: 50
   train_frac: 0.7
   always_include_calibrators: true
+  always_include_hubble_flow: false
   use_diagonal_errors: true
   models:
     - label: baseline
@@ -397,6 +398,16 @@ predictive_score:
         sky: {frame: galactic, lmin: 2, lmax: 3}
 ```
 
+`always_include_calibrators` and `always_include_hubble_flow` are fixed-support options (if the
+dataset exposes `is_calibrator` / `is_hubble_flow` boolean masks). When enabled, the corresponding
+rows are always included in TRAIN and never appear in TEST. This is useful for “hold out only the
+other side” stress tests, e.g.:
+
+- **Hold out Hubble-flow SNe** while keeping calibrators fixed in TRAIN:
+  `always_include_calibrators: true`, `always_include_hubble_flow: false`
+- **Hold out calibrators** while keeping Hubble-flow fixed in TRAIN:
+  `always_include_calibrators: false`, `always_include_hubble_flow: true`
+
 Group-holdout example (hold out one survey at a time):
 
 ```yaml
@@ -405,6 +416,7 @@ predictive_score:
   group_var: idsurvey
   min_group_n: 20
   always_include_calibrators: true
+  always_include_hubble_flow: false
   use_diagonal_errors: true
   models:
     - label: baseline

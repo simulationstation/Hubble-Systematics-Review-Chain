@@ -103,6 +103,26 @@ A small prior-width sweep confirms this trend: once `sigma_calibrator_offset_mag
 ~0.05 mag, the log evidence falls quickly (ΔlogZ ≈ -2.3 at 0.05, ≈ -7.5 at 0.02, ≈ -9.9 at 0.01).
 See: `outputs/stack_sn_bao_cc_plus_ladder_cal_offset_prior_sigma_sweep_v1/report.md`.
 
+## Calibrator holdout (cross-validated; real data)
+
+A key “is this just overfitting a few points?” check is to **hold out calibrators** while keeping
+the Hubble‑flow sample fixed in TRAIN, then score held‑out calibrators under the posterior
+predictive distribution.
+
+Result: calibrator-only mechanisms improve held‑out predictive performance substantially:
+
+- Random calibrator holdout: Δlogp ≈ **+10.2** for `calibrator_offset_mag` and Δlogp ≈ **+8.3** for
+  calibrator time-bin offsets (`pkmjd_bins` applied to calibrators).
+- Survey-by-survey calibrator holdout: improvements persist but are smaller (Δlogp ≈ +3.8 and +3.5).
+
+See:
+- `outputs/pantheon_plus_shoes_ladder_predictive_score_cal_holdout_v1/report.md`
+- `outputs/pantheon_plus_shoes_ladder_predictive_score_cal_survey_holdout_v1/report.md`
+
+This does **not** prove a physical mechanism (we are not modeling the full photometry pipeline), but
+it does say the required calibrator↔HF offset behaves like a **coherent effect**, not a tiny-N
+artifact.
+
 ## External-probe bracketing (TRGB / strong lenses / megamasers)
 
 As a **stress test** (not an independence claim), we added a small set of published, approximately-Gaussian
@@ -139,8 +159,14 @@ relative to a single `calibrator_offset_mag`:
 
 ## “Are any of these probable yet?”
 
-Not yet. The tests so far *don’t* pick out a specific small/metadata‑tracked distortion that can explain most of the ~0.19 mag ladder shift.
-The only mechanisms that fully close the gap require **very large** corrections.
+We have a **probable “shape”** but not a probable **physical cause** yet.
+
+- The existence of a coherent **calibrator↔HF offset** is supported in this simplified framework:
+  it is required by the joint anchor-consistency stack and it improves held‑out calibrator
+  predictive scoring.
+- However, we still do **not** have a specific, independently validated metadata mechanism
+  (time/sky/quality/host) that can explain most of the ~0.19 mag ladder shift at an amplitude that
+  is clearly physically plausible.
 
 One concrete sign of this: cross-validated predictive scoring and exact Gaussian-model evidence both
 **penalize** adding flexible HF redshift splines and low‑ℓ sky modes on the ladder subset (they make

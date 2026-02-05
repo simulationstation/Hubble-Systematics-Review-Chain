@@ -207,6 +207,10 @@ def write_report(run_dir: Path) -> None:
         pieces.append(f"- Mode: {pred.get('mode')}\n")
         pieces.append(f"- N splits: {pred.get('n_rep')}\n")
         pieces.append(f"- Train frac: {pred.get('train_frac')}\n")
+        if "always_include_calibrators" in pred:
+            pieces.append(f"- Always include calibrators: {pred.get('always_include_calibrators')}\n")
+        if "always_include_hubble_flow" in pred:
+            pieces.append(f"- Always include hubble-flow: {pred.get('always_include_hubble_flow')}\n")
         base_label = None
         models = pred.get("models", {}) or {}
         if isinstance(models, dict) and models:

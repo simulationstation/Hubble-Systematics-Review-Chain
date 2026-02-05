@@ -23,6 +23,10 @@ using this repo’s **linear-Gaussian audit models** (not a full end-to-end SH0E
   `calibrator_offset_mag = +0.1616 ± 0.0318` mag.  
   Report: `outputs/stack_sn_bao_cc_plus_ladder_cal_offset_v1/report.md`  
   Reproduce: `configs/stack_sn_bao_cc_plus_ladder_cal_offset_v1.yaml`
+- **Calibrator holdout (real data):** holding out calibrators (keeping hubble-flow fixed in TRAIN) shows a large out-of-sample improvement from calibrator-only mechanisms:  
+  Δlogp ≈ +10.2 for `calibrator_offset_mag`, and Δlogp ≈ +8.3 for calibrator time-bin offsets (`pkmjd_bins` on calibrators).  
+  Reports: `outputs/pantheon_plus_shoes_ladder_predictive_score_cal_holdout_v1/report.md`, `outputs/pantheon_plus_shoes_ladder_predictive_score_cal_survey_holdout_v1/report.md`  
+  Reproduce: `configs/pantheon_plus_shoes_ladder_predictive_score_cal_holdout_v1.yaml`, `configs/pantheon_plus_shoes_ladder_predictive_score_cal_survey_holdout_v1.yaml`
 - **External-prior stress test:** forcing a tight prior on `calibrator_offset_mag` degrades evidence and shifts the fit (does *not* recover `H0≈73`).  
   Report: `outputs/stack_sn_bao_cc_plus_ladder_cal_offset_tight_v1/report.md`  
   Reproduce: `configs/stack_sn_bao_cc_plus_ladder_cal_offset_tight_v1.yaml`

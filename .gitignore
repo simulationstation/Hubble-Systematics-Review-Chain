@@ -12,4 +12,6 @@ coverage.xml
 build/
 dist/
 
+.venv/
+
 .DS_Store
