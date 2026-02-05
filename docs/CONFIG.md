@@ -144,6 +144,9 @@ Notes:
 - For `pantheon_plus_shoes_ladder`, the `delta_lnH0` shared-scale parameter (if enabled) applies only
   to Hubble-flow rows, so it acts like an “H0 tension” diagnostic relative to the anchor when
   calibrators are included.
+- Additional optional mechanisms for `pantheon_plus_shoes_ladder` live under `model.mechanisms`, e.g.:
+  - `calibrator_offset: true` → adds `calibrator_offset_mag` (calibrator-only shift)
+  - `cal_survey_offsets: true` → adds per-survey calibrator-only shifts `cal_survey_offset_<idsurvey>` (prior: `sigma_cal_survey_offset_mag`)
 
 ## `sweep` (baseline model variants)
 

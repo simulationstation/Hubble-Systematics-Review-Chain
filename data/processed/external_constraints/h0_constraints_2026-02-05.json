@@ -1,0 +1,65 @@
+{
+  "created_utc": "2026-02-05T00:00:00Z",
+  "notes": [
+    "These are convenience, approximately-Gaussian H0 constraints intended for stress-testing the audit chain.",
+    "Where published errors are asymmetric or split into stat/sys components, we record the source values and also provide a symmetric 'sigma' for use in gaussian_measurement (typically an average or quadrature).",
+    "These constraints are not treated as independent of the SN ladder/SN-only datasets (they share data/assumptions); they are used only as a bracketing sensitivity test."
+  ],
+  "constraints": [
+    {
+      "label": "trgb_freedman_2021_review",
+      "quantity": "H0",
+      "mean": 69.8,
+      "sigma_stat": 0.6,
+      "sigma_sys": 1.6,
+      "sigma": 1.7088007490635064,
+      "space": "ln",
+      "reference": {
+        "arxiv": "2106.15656",
+        "title": "Measurements of the Hubble Constant: Tensions in Perspective",
+        "note": "Review summarizing TRGB-based H0 with separate stat/sys components."
+      }
+    },
+    {
+      "label": "h0licow_wong_2020",
+      "quantity": "H0",
+      "mean": 73.3,
+      "sigma_plus": 1.7,
+      "sigma_minus": 1.8,
+      "sigma": 1.75,
+      "space": "ln",
+      "reference": {
+        "doi": "10.1093/mnras/stz3094",
+        "title": "H0LiCOW XIII. A 2.4% measurement of H0 from lensed quasars",
+        "note": "Uses time-delay strong lensing; asymmetric errors approximated symmetrically for this stress-test."
+      }
+    },
+    {
+      "label": "tdcosmo_slacs_birrer_2020",
+      "quantity": "H0",
+      "mean": 67.4,
+      "sigma_plus": 4.1,
+      "sigma_minus": 3.2,
+      "sigma": 3.65,
+      "space": "ln",
+      "reference": {
+        "doi": "10.1051/0004-6361/202038861",
+        "title": "TDCOSMO IV. Hierarchical time-delay cosmography: mass models and H0",
+        "note": "Constraint reported for the combined TDCOSMO+SLACS analysis; asymmetric errors approximated symmetrically for this stress-test."
+      }
+    },
+    {
+      "label": "megamaser_pesce_2020",
+      "quantity": "H0",
+      "mean": 73.9,
+      "sigma": 3.0,
+      "space": "ln",
+      "reference": {
+        "doi": "10.3847/1538-4357/ab75f0",
+        "title": "The Megamaser Cosmology Project. XIII. H0 from Angular-diameter Distances",
+        "note": "Quoted as an approximately Gaussian constraint for this audit-chain stress test."
+      }
+    }
+  ]
+}
+

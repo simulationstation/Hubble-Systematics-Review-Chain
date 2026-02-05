@@ -38,6 +38,9 @@ def write_report(run_dir: Path) -> None:
             pieces.append(f"- H0_eff (from delta_lnH0): {H0.get('mean'):.3f} ± {H0.get('sd_lin'):.3f}\n")
             if dm is not None:
                 pieces.append(f"- Equivalent Δμ [mag]: {dm.get('mean'):.4f} ± {dm.get('sd'):.4f}\n")
+            cal_equiv = ledger.get("calibrator_offset_equiv_H0")
+            if isinstance(cal_equiv, dict) and "mean" in cal_equiv and "sd_lin" in cal_equiv:
+                pieces.append(f"- Calibrator-offset-equivalent H0 [km/s/Mpc]: {cal_equiv.get('mean'):.3f} ± {cal_equiv.get('sd_lin'):.3f}\n")
         # Quick systematic-parameter summary (if present).
         try:
             names = list(base.get("param_names") or [])

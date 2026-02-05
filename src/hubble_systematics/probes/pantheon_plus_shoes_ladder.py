@@ -220,6 +220,12 @@ class PantheonPlusShoesLadderDataset:
             dm = one_hot_levels(self.idsurvey, levels=self.idsurvey_levels, prefix="hf_survey_offset_", reference=ref, drop_reference=True)
             X = X.append(DesignMatrix(X=dm.X * hf[:, None], names=dm.names))
 
+        def add_cal_survey_offsets() -> None:
+            nonlocal X
+            ref = prior_cfg.get("survey_reference")
+            dm = one_hot_levels(self.idsurvey, levels=self.idsurvey_levels, prefix="cal_survey_offset_", reference=ref, drop_reference=True)
+            X = X.append(DesignMatrix(X=dm.X * cal[:, None], names=dm.names))
+
         def add_mwebv_linear() -> None:
             nonlocal X
             x = np.asarray(self.mwebv, dtype=float)
@@ -440,6 +446,8 @@ class PantheonPlusShoesLadderDataset:
                 add_calibrator_offset()
             if bool(mech_cfg.get("hf_survey_offsets", False)):
                 add_hf_survey_offsets()
+            if bool(mech_cfg.get("cal_survey_offsets", False)):
+                add_cal_survey_offsets()
             if bool(mech_cfg.get("mwebv_linear", False)):
                 add_mwebv_linear()
             if bool(mech_cfg.get("host_mass_step", False)):
@@ -474,6 +482,8 @@ class PantheonPlusShoesLadderDataset:
                 sigmas.append(float(prior_cfg.get("sigma_calibrator_offset_mag", 0.2)))
             elif n.startswith("hf_survey_offset_"):
                 sigmas.append(float(prior_cfg.get("sigma_hf_survey_offset_mag", 0.2)))
+            elif n.startswith("cal_survey_offset_"):
+                sigmas.append(float(prior_cfg.get("sigma_cal_survey_offset_mag", 0.2)))
             elif n == "mwebv_linear_mag":
                 sigmas.append(float(prior_cfg.get("sigma_mwebv_linear_mag", 0.2)))
             elif n == "host_mass_step_mag":

@@ -72,6 +72,34 @@ compatible by introducing a large calibrator↔Hubble-flow offset:
 
 See: `outputs/stack_sn_bao_cc_siren_plus_ladder_cal_offset_v2/report.md`.
 
+## External-probe bracketing (TRGB / strong lenses / megamasers)
+
+As a **stress test** (not an independence claim), we added a small set of published, approximately-Gaussian
+late-time `H0` constraints via the `gaussian_measurement` adapter:
+
+- Low-H0 leaning: TRGB (Freedman 2021 review summary) + TDCOSMO+SLACS (Birrer 2020)
+- High-H0 leaning: H0LiCOW (Wong 2020) + Megamaser Cosmology Project (Pesce 2020)
+
+Result: the joint fit still requires essentially the same **calibrator↔Hubble-flow offset** (`~0.15–0.16 mag`).
+The low-H0 constraints are consistent with the stack; the high-H0 constraints show visible tension (large per-part chi2),
+but they do not pull the combined `H0_eff` up to ~73.
+
+See:
+- `outputs/stack_sn_bao_cc_siren_plus_ladder_cal_offset_extH0_low_v1/report.md`
+- `outputs/stack_sn_bao_cc_siren_plus_ladder_cal_offset_extH0_high_v1/report.md`
+- `outputs/stack_sn_bao_cc_siren_plus_ladder_cal_offset_extH0_all_v1/report.md`
+
+## “Mechanism replacements” for the calibrator offset (so far: no)
+
+We tested a few simple, metadata-shaped alternatives in the joint stack (e.g. calibrator-only time trends,
+calibrator-by-survey offsets). None reduced the required ~0.16 mag offset, and evidence typically worsened
+(consistent with “extra flexibility, no real explanatory power”).
+
+See:
+- `outputs/stack_sn_bao_cc_siren_plus_ladder_cal_offset_plus_calTimeLinear_v1/report.md`
+- `outputs/stack_sn_bao_cc_siren_plus_ladder_calSurvey_only_v1/report.md`
+- `outputs/stack_sn_bao_cc_siren_plus_ladder_cal_offset_plus_calSurvey_v1/report.md`
+
 ## “Are any of these probable yet?”
 
 Not yet. The tests so far *don’t* pick out a specific small/metadata‑tracked distortion that can explain most of the ~0.19 mag ladder shift.
