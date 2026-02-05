@@ -168,6 +168,53 @@ See:
 - Gate sweep: `outputs/stack_sn_bao_cc_plus_ladder_calibcov_gates_v1/report.md`
 - Holdout: `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_calibcov_v1/report.md`
 
+### Systematic-group covariance blocks (full set in `sytematic_groupings/`)
+
+Pantheon+SH0ES ships **many** systematic-group covariance blocks (e.g. `BS21`, `C11`, `SPECEFF`,
+`SCATTERMOD`, …). If we repeat the *same* “derive a coherent-scale sigma from the covariance”
+construction on each block independently, the implied coherent-step scale is consistently small:
+σ(`calibrator_offset_mag`) is typically about **0.02 mag** across all groupings.
+
+When we rerun the joint anchor-consistency stack with each grouping’s implied priors:
+
+- the fit supports only `calibrator_offset_mag ≈ 0.04–0.05` (not ~0.16),
+- the corresponding “tension reduction fraction” stays small (≈0.07–0.09),
+- calibrator-holdout predictive scoring still prefers a calibrator offset, but with reduced gains
+  (Δlogp ≈ +3.6–+4.1 vs +5.2 when the offset is effectively unconstrained).
+
+See:
+- Gate sweep: `outputs/stack_sn_bao_cc_plus_ladder_groupings_gates_extgrid_all_v1/report.md`
+- Holdout: `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_groupings_extgrid_all_v1/report.md`
+
+Interpretation (plain English): if you take *any* of the shipped systematic-group covariance blocks
+as a “budget” for coherent calibration-like shifts, none of them are remotely large enough to
+permit the ~0.16–0.19 mag step that would be needed to fully explain the ladder-vs-anchor gap.
+
+### Per-survey/epoch (“survey×time”) calibration constraints
+
+To test a more granular “per survey, per observing epoch” failure mode, we also derived a
+survey×time-bin sigma file from `CALIB.cov` and enabled the corresponding mechanism
+`survey_pkmjd_bins` (per-survey time-bin offsets on calibrators).
+
+Result:
+
+- In the joint anchor-consistency stack, `survey_pkmjd_bins` does **not** meaningfully reduce the
+  tension under CALIB.cov-derived bounds.
+- In calibrator-holdout predictive scoring, `survey_pkmjd_bins` gives only a small improvement when
+  unconstrained (Δlogp ≈ +1.1) and an even smaller one when constrained (Δlogp ≈ +0.5).
+
+See:
+- Gate sweep: `outputs/stack_sn_bao_cc_plus_ladder_surveytime_gates_extgrid_all_v1/report.md`
+- Holdout: `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_surveytime_calibcov_extgrid_all_v1/report.md`
+
+We also ran an injection map: inject a magnitude shift into a **single** survey×time bin and ask
+how much it leaks into `delta_lnH0` when the model does not include that mechanism. The required
+amplitudes to fake the full ladder-vs-anchor `delta_lnH0` are **multiple magnitudes** (≫0.1 mag),
+which is not physically plausible as a calibration error.
+
+See:
+- Injection mapping: `outputs/pantheon_plus_shoes_ladder_injection_calibcov_survey_pkmjd_bins_misspec_v1/report.md`
+
 ### External calibration covariance (Brout+21 “FRAGILISTIC”; survey-level)
 
 Pantheon+ ships an external calibration product in its DataRelease calibration folder:

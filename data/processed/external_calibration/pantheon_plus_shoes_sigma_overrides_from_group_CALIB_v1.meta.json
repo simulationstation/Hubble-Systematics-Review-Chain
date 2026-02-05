@@ -1,0 +1,65 @@
+{
+  "created_by": "scripts/derive_pantheon_shoes_cov_priors.py",
+  "inputs": {
+    "processed_dir": "data/processed/pantheon_plus_shoes_ladder",
+    "raw_cov_path": "data/raw/pantheon_plus_shoes/sytematic_groupings/Pantheon+SH0ES_122221_CALIB.cov",
+    "raw_dat_path": "data/raw/pantheon_plus_shoes/Pantheon+SH0ES.dat",
+    "tag": "cal+hf_group_CALIB_zHD"
+  },
+  "meta": {
+    "counts_cal": {
+      "1": 0,
+      "5": 11,
+      "15": 0,
+      "18": 4,
+      "50": 9,
+      "51": 7,
+      "56": 12,
+      "57": 13,
+      "61": 2,
+      "62": 4,
+      "63": 4,
+      "64": 4,
+      "65": 2,
+      "66": 1,
+      "150": 4
+    },
+    "counts_hf": {
+      "1": 37,
+      "5": 27,
+      "15": 20,
+      "18": 1,
+      "50": 10,
+      "51": 14,
+      "56": 8,
+      "57": 26,
+      "61": 4,
+      "62": 4,
+      "63": 10,
+      "64": 25,
+      "65": 17,
+      "66": 2,
+      "150": 72
+    },
+    "method": "median",
+    "min_cal_per_survey": 4,
+    "min_hf_per_survey": 20,
+    "min_per_time_bin": 10,
+    "n_pkmjd_bins": 5,
+    "pkmjd_edges": [
+      44672.6,
+      53410.4,
+      54131.12,
+      54885.0,
+      57269.22,
+      59385.6
+    ],
+    "scale": 1.0
+  },
+  "notes": [
+    "This file encodes per-parameter sigma overrides estimated from a Pantheon+SH0ES covariance file.",
+    "Method: estimate sigma as sqrt(median positive off-diagonal cov) within each group.",
+    "Use as model.priors.sigma_overrides_path in the pantheon_plus_shoes_ladder adapter.",
+    "This is not an independent external calibration log; it is a covariance-implied bound from the public data product."
+  ]
+}

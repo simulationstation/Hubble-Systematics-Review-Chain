@@ -59,7 +59,36 @@
         "title": "The Megamaser Cosmology Project. XIII. H0 from Angular-diameter Distances",
         "note": "Quoted as an approximately Gaussian constraint for this audit-chain stress test."
       }
+    },
+    {
+      "label": "sbf_blakeslee_2021",
+      "quantity": "H0",
+      "mean": 73.3,
+      "sigma_stat": 0.7,
+      "sigma_sys": 2.4,
+      "sigma": 2.5,
+      "space": "ln",
+      "reference": {
+        "arxiv": "2101.02221",
+        "doi": "10.3847/1538-4357/abe86a",
+        "title": "The Carnegie-Chicago Hubble Program. VIII. ... SBF and H0",
+        "note": "SBF determination with separate stat/sys errors; combined in quadrature for this stress-test."
+      }
+    },
+    {
+      "label": "strides_shajib_2020",
+      "quantity": "H0",
+      "mean": 74.2,
+      "sigma_plus": 2.7,
+      "sigma_minus": 3.0,
+      "sigma": 2.85,
+      "space": "ln",
+      "reference": {
+        "arxiv": "1910.06306",
+        "doi": "10.1093/mnras/staa828",
+        "title": "STRIDES: H0 from the STRIDES lens DES J0408-5354",
+        "note": "Asymmetric errors approximated symmetrically for this stress-test."
+      }
     }
   ]
 }
-

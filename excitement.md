@@ -81,9 +81,11 @@ predictive improvements persist.
 Artifacts:
 - Baseline fits: `outputs/stack_sn_bao_cc_plus_ladder_cal_offset_extgrid_low_v1/report.md`,
   `outputs/stack_sn_bao_cc_plus_ladder_cal_offset_extgrid_high_v1/report.md`,
-  `outputs/stack_sn_bao_cc_plus_ladder_cal_offset_extgrid_all_v1/report.md`
+  `outputs/stack_sn_bao_cc_plus_ladder_cal_offset_extgrid_all_v1/report.md`,
+  and with additional grids (SBF + STRIDES): `outputs/stack_sn_bao_cc_plus_ladder_cal_offset_extgrid_more_v1/report.md`
 - Holdouts: `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_extgrid_all_v1/report.md`,
-  `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_survey_holdout_extgrid_all_v1/report.md`
+  `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_survey_holdout_extgrid_all_v1/report.md`,
+  and the expanded-grid holdout: `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_extgrid_more_v1/report.md`
 
 ## 2026-02-05 — Covariance-implied “realistic” per-survey/epoch bounds still too small (real data)
 
@@ -135,6 +137,32 @@ Under that bound, the joint anchor-consistency stack can only support a much sma
 Artifacts:
 - Gate sweep: `outputs/stack_sn_bao_cc_plus_ladder_calibcov_gates_v1/report.md`
 - Holdout: `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_calibcov_v1/report.md`
+
+## 2026-02-05 — All systematic-group covariance blocks imply ~0.02 mag coherent scale (real data)
+
+Pantheon+SH0ES ships many systematic-group covariance blocks under `sytematic_groupings/`. Deriving
+sigma overrides from each grouping separately yields very similar coherent-step scales:
+σ(`calibrator_offset_mag`)≈0.019–0.022 mag across the full set.
+
+Under those grouping-implied bounds, the joint stack only supports a small step
+(`calibrator_offset_mag ≈ 0.04–0.05`) and tension reduction fractions stay at the ~0.07–0.09 level.
+
+Artifacts:
+- Gate sweep: `outputs/stack_sn_bao_cc_plus_ladder_groupings_gates_extgrid_all_v1/report.md`
+- Holdout: `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_groupings_extgrid_all_v1/report.md`
+
+## 2026-02-05 — Per-survey×epoch offsets are too weak to matter (real data + injection map)
+
+Allowing per-survey time-bin offsets (`survey_pkmjd_bins`) provides only a small calibrator-holdout
+gain (Δlogp ≈ +1.1 when unconstrained; ≈ +0.5 under CALIB.cov-derived bounds).
+
+An injection map shows that shifting `delta_lnH0` by the full ladder-vs-anchor amount via a **single**
+survey×time-bin would require an implausibly large offset (multiple magnitudes).
+
+Artifacts:
+- Gate sweep: `outputs/stack_sn_bao_cc_plus_ladder_surveytime_gates_extgrid_all_v1/report.md`
+- Holdout: `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_surveytime_calibcov_extgrid_all_v1/report.md`
+- Injection: `outputs/pantheon_plus_shoes_ladder_injection_calibcov_survey_pkmjd_bins_misspec_v1/report.md`
 
 ## 2026-02-05 — SH0ES linear-system σ(fivelogH0) used as a calibrator-step prior (real data product)
 

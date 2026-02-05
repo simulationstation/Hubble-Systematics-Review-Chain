@@ -173,6 +173,61 @@ def _injection_delta(*, n: int, dataset, mechanism: str, amp: float, inj_cfg: di
         elif apply_to != "all":
             raise ValueError(f"Unsupported apply_to: {apply_to}")
         return float(amp) * m.astype(float)
+    if mechanism in {"survey_pkmjd_bin_offset_mag", "survey_time_bin_offset_mag"}:
+        if not hasattr(dataset, "pkmjd"):
+            raise ValueError("survey_pkmjd_bin_offset_mag requires dataset.pkmjd")
+        if not hasattr(dataset, "idsurvey"):
+            raise ValueError("survey_pkmjd_bin_offset_mag requires dataset.idsurvey")
+        if "idsurvey" not in inj_cfg:
+            raise ValueError("survey_pkmjd_bin_offset_mag requires inj_cfg['idsurvey']")
+
+        sid = int(inj_cfg["idsurvey"])
+        t = np.asarray(getattr(dataset, "pkmjd"), dtype=float).reshape(-1)
+        ids = np.asarray(getattr(dataset, "idsurvey"), dtype=int).reshape(-1)
+        if t.shape != (n,):
+            raise ValueError("dataset.pkmjd shape mismatch")
+        if ids.shape != (n,):
+            raise ValueError("dataset.idsurvey shape mismatch")
+
+        good = np.isfinite(t) & (t > 0.0)
+        if not np.any(good):
+            raise ValueError("No finite positive pkmjd values")
+
+        edges = inj_cfg.get("edges")
+        if edges is None:
+            edges = getattr(dataset, "pkmjd_edges", None)
+            if edges is None:
+                n_bins = int(inj_cfg.get("n_bins", 6))
+                if n_bins < 2:
+                    raise ValueError("survey_pkmjd_bin_offset_mag n_bins must be >=2")
+                qs = np.linspace(0.0, 1.0, n_bins + 1)
+                edges = np.quantile(t[good], qs).tolist()
+        edges = [float(x) for x in edges]
+        if len(edges) < 3:
+            raise ValueError("survey_pkmjd_bin_offset_mag edges must have length >=3")
+        edges = sorted(edges)
+
+        inner = np.asarray(edges[1:-1], dtype=float)
+        bid = np.zeros_like(t, dtype=int)
+        bid[good] = np.digitize(t[good], inner, right=False)
+        k = int(inj_cfg.get("bin", 1))
+        if k < 0 or k >= (len(edges) - 1):
+            raise ValueError(f"survey_pkmjd_bin_offset_mag bin out of range: {k} for n_bins={len(edges)-1}")
+
+        m = (ids == sid) & (bid == k)
+
+        apply_to = str(inj_cfg.get("apply_to", "cal")).lower()
+        if apply_to == "hf":
+            if not hasattr(dataset, "is_hubble_flow"):
+                raise ValueError("survey_pkmjd_bin_offset_mag apply_to=hf requires dataset.is_hubble_flow")
+            m &= np.asarray(getattr(dataset, "is_hubble_flow"), dtype=bool).reshape(-1)
+        elif apply_to == "cal":
+            if not hasattr(dataset, "is_calibrator"):
+                raise ValueError("survey_pkmjd_bin_offset_mag apply_to=cal requires dataset.is_calibrator")
+            m &= np.asarray(getattr(dataset, "is_calibrator"), dtype=bool).reshape(-1)
+        elif apply_to != "all":
+            raise ValueError(f"Unsupported apply_to: {apply_to}")
+        return float(amp) * m.astype(float)
     if mechanism in {"mwebv_linear_mag", "mwebv_linear"}:
         if not hasattr(dataset, "mwebv"):
             raise ValueError("mwebv_linear_mag requires dataset.mwebv")

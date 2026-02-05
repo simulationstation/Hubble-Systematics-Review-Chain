@@ -87,6 +87,9 @@ This file maps the “systematics-first” spec you described (CatWISE-style sta
   `data/raw/pantheon_plus_shoes/sytematic_groupings/Pantheon+SH0ES_122221_CALIB.cov`,
   `configs/stack_sn_bao_cc_plus_ladder_calibcov_gates_v1.yaml`,
   `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_calibcov_v1.yaml`
+- **Systematic-group covariance gates (all `sytematic_groupings/*.cov` blocks):**
+  `configs/stack_sn_bao_cc_plus_ladder_groupings_gates_extgrid_all_v1.yaml`,
+  `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_groupings_extgrid_all_v1.yaml`
 - **SH0ES linear-system prior scale (fivelogH0 σ → calibrator_offset_mag σ):**
   `data/raw/shoes_linear_system/`,
   `scripts/derive_shoes_linear_system_fivelogh0_prior.py`,
@@ -94,8 +97,12 @@ This file maps the “systematics-first” spec you described (CatWISE-style sta
   `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_fragilistic_shoes_v1.yaml`
 - **Injection suite (adds new metadata proxies):**
   `configs/pantheon_plus_shoes_ladder_injection_misspec_v4.yaml`
+- **Injection suite (survey×time-bin proxy):**
+  `configs/pantheon_plus_shoes_ladder_injection_calibcov_survey_pkmjd_bins_misspec_v1.yaml`
 - **SBC (new metadata proxies):**
   `configs/pantheon_plus_shoes_ladder_sbc_new_proxies_v1.yaml`
+- **SBC (survey×time-bin proxy):**
+  `configs/pantheon_plus_shoes_ladder_sbc_survey_pkmjd_bins_calibcov_v1.yaml`
 - **Injection/SBC under CALIB-only priors (survey/time injections):**
   `configs/pantheon_plus_shoes_ladder_injection_calibcov_misspec_v1.yaml`,
   `configs/pantheon_plus_shoes_ladder_injection_calibcov_modeled_v1.yaml`,
@@ -105,6 +112,11 @@ This file maps the “systematics-first” spec you described (CatWISE-style sta
   `configs/stack_sn_bao_cc_plus_ladder_cal_offset_extgrid_low_v1.yaml`,
   `configs/stack_sn_bao_cc_plus_ladder_cal_offset_extgrid_high_v1.yaml`,
   `configs/stack_sn_bao_cc_plus_ladder_cal_offset_extgrid_all_v1.yaml`
+- **External H0 probes (expanded; includes SBF + STRIDES):**
+  `data/processed/external_constraints/h0_constraints_2026-02-05.json`,
+  `scripts/build_h0_grids_from_external_constraints.py`,
+  `configs/stack_sn_bao_cc_plus_ladder_cal_offset_extgrid_more_v1.yaml`,
+  `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_extgrid_more_v1.yaml`
 - **Holdout battery with external H0 grids included:**
   `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_extgrid_all_v1.yaml` and
   `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_survey_holdout_extgrid_all_v1.yaml`

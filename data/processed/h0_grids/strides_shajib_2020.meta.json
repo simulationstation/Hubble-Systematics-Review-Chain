@@ -1,0 +1,23 @@
+{
+  "created_by": "scripts/build_h0_grids_from_external_constraints.py",
+  "grid": {
+    "n_grid": 401,
+    "nsig": 6.0
+  },
+  "label": "strides_shajib_2020",
+  "mean": 74.2,
+  "notes": [
+    "This is an approximately-Gaussian external constraint encoded as an H0_grid posterior for use by probe.name=h0_grid.",
+    "For space='ln' we interpret the published symmetric sigma in linear H0 units and use sigma_ln\u2248sigma/mean."
+  ],
+  "quantity": "H0",
+  "reference": {
+    "arxiv": "1910.06306",
+    "doi": "10.1093/mnras/staa828",
+    "note": "Asymmetric errors approximated symmetrically for this stress-test.",
+    "title": "STRIDES: H0 from the STRIDES lens DES J0408-5354"
+  },
+  "sigma": 2.85,
+  "source_constraints_file": "/home/primary/Hubble-Systematics-Review-Chain/data/processed/external_constraints/h0_constraints_2026-02-05.json",
+  "space": "ln"
+}

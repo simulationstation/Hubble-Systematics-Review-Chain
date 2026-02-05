@@ -311,3 +311,42 @@ def test_injection_suite_pkmjd_bin_offset_runs() -> None:
     assert res.mechanism == "pkmjd_bin_offset_mag"
     assert res.param_of_interest == "delta_lnH0"
     assert len(res.rows) == 1
+
+
+def test_injection_suite_survey_pkmjd_bin_offset_runs() -> None:
+    root = Path(__file__).resolve().parents[1]
+    cfg = {
+        "raw_dat_path": str(root / "data/raw/pantheon_plus_shoes/Pantheon+SH0ES.dat"),
+        "raw_cov_path": str(root / "data/raw/pantheon_plus_shoes/Pantheon+SH0ES_STAT+SYS.cov"),
+        "include_calibrators": True,
+        "include_hubble_flow": True,
+        "z_column": "zHD",
+        "z_hf_min": 0.023,
+        "z_hf_max": 0.15,
+        "tag": "pytest_cal+hf_zHD",
+        "processed_dir": str(root / "data/processed/pantheon_plus_shoes_ladder"),
+    }
+    ds = load_pantheon_plus_shoes_ladder_dataset(cfg)
+    anchor = AnchorLCDM(H0=67.4, Omega_m=0.315, Omega_k=0.0, rd_Mpc=147.09)
+
+    model_cfg = {
+        "shared_scale": {"enable": True, "params": ["delta_lnH0"], "prior_sigma": 0.5},
+        "priors": {"sigma_global_offset_mag": 10.0},
+    }
+    inj_cfg = {
+        "mechanism": "survey_pkmjd_bin_offset_mag",
+        "idsurvey": 5,
+        "edges": [44672.6, 53410.4, 54131.12, 54885.0, 57269.22, 59385.6],
+        "bin": 1,
+        "apply_to": "cal",
+        "amplitudes": [0.0],
+        "n_mc": 3,
+        "use_diagonal_errors": True,
+        "param_of_interest": "delta_lnH0",
+        "seed": 123,
+    }
+    rng = np.random.default_rng(123)
+    res = run_injection_suite(dataset=ds, anchor=anchor, ladder_level="L1", model_cfg=model_cfg, inj_cfg=inj_cfg, rng=rng)
+    assert res.mechanism == "survey_pkmjd_bin_offset_mag"
+    assert res.param_of_interest == "delta_lnH0"
+    assert len(res.rows) == 1

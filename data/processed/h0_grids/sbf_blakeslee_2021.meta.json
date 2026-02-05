@@ -1,0 +1,23 @@
+{
+  "created_by": "scripts/build_h0_grids_from_external_constraints.py",
+  "grid": {
+    "n_grid": 401,
+    "nsig": 6.0
+  },
+  "label": "sbf_blakeslee_2021",
+  "mean": 73.3,
+  "notes": [
+    "This is an approximately-Gaussian external constraint encoded as an H0_grid posterior for use by probe.name=h0_grid.",
+    "For space='ln' we interpret the published symmetric sigma in linear H0 units and use sigma_ln\u2248sigma/mean."
+  ],
+  "quantity": "H0",
+  "reference": {
+    "arxiv": "2101.02221",
+    "doi": "10.3847/1538-4357/abe86a",
+    "note": "SBF determination with separate stat/sys errors; combined in quadrature for this stress-test.",
+    "title": "The Carnegie-Chicago Hubble Program. VIII. ... SBF and H0"
+  },
+  "sigma": 2.5,
+  "source_constraints_file": "/home/primary/Hubble-Systematics-Review-Chain/data/processed/external_constraints/h0_constraints_2026-02-05.json",
+  "space": "ln"
+}
