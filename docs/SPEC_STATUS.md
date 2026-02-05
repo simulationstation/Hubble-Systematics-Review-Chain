@@ -52,6 +52,13 @@ This file maps the “systematics-first” spec you described (CatWISE-style sta
   `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_fullcov_v1.yaml`
 - **Predictive scoring (stack; mechanism scan on calibrator-only proxies):**
   `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_mechanism_scan_v1.yaml`
+- **Mechanism attribution scans (stack; compare cal_offset vs time-bin proxies):**
+  `configs/stack_sn_bao_cc_plus_ladder_mechanism_attribution_extgrid_more_v1.yaml`,
+  `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_mechanism_attribution_extgrid_more_v1.yaml`,
+  and the CALIB.cov-bounded variants
+  `configs/stack_sn_bao_cc_plus_ladder_mechanism_attribution_calibcov_bounded_extgrid_more_v1.yaml`,
+  `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_mechanism_attribution_calibcov_bounded_extgrid_more_v1.yaml`,
+  `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_survey_holdout_mechanism_attribution_calibcov_bounded_extgrid_more_v1.yaml`
 - **Predictive scoring (stack; survey holdout + mechanism scan on calibrator-only proxies):**
   `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_survey_holdout_mechanism_scan_v1.yaml`
   and the full-cov variant
@@ -99,10 +106,15 @@ This file maps the “systematics-first” spec you described (CatWISE-style sta
   `configs/pantheon_plus_shoes_ladder_injection_misspec_v4.yaml`
 - **Injection suite (survey×time-bin proxy):**
   `configs/pantheon_plus_shoes_ladder_injection_calibcov_survey_pkmjd_bins_misspec_v1.yaml`
+- **Injection suite (global calibrator time-bin proxy):**
+  `configs/pantheon_plus_shoes_ladder_injection_calibcov_pkmjd_bins_misspec_v1.yaml`,
+  `configs/pantheon_plus_shoes_ladder_injection_calibcov_pkmjd_bins_modeled_v1.yaml`
 - **SBC (new metadata proxies):**
   `configs/pantheon_plus_shoes_ladder_sbc_new_proxies_v1.yaml`
 - **SBC (survey×time-bin proxy):**
   `configs/pantheon_plus_shoes_ladder_sbc_survey_pkmjd_bins_calibcov_v1.yaml`
+- **SBC (global calibrator time-bin proxy):**
+  `configs/pantheon_plus_shoes_ladder_sbc_pkmjd_bins_calibcov_v1.yaml`
 - **Injection/SBC under CALIB-only priors (survey/time injections):**
   `configs/pantheon_plus_shoes_ladder_injection_calibcov_misspec_v1.yaml`,
   `configs/pantheon_plus_shoes_ladder_injection_calibcov_modeled_v1.yaml`,

@@ -215,6 +215,25 @@ which is not physically plausible as a calibration error.
 See:
 - Injection mapping: `outputs/pantheon_plus_shoes_ladder_injection_calibcov_survey_pkmjd_bins_misspec_v1/report.md`
 
+### Global time-bin offsets on calibrators (`pkmjd_bins`)
+
+The same CALIB.cov-derived priors also bound **global** (survey-agnostic) calibrator time-bin offsets
+(`pkmjd_bins` on calibrators) at the ~0.02 mag level per bin.
+
+Result:
+
+- In the joint anchor-consistency stack, constrained calibrator time-bin offsets reduce the tension
+  only slightly (tension-reduction fraction ≈0.02) and improve held-out calibrators modestly
+  (Δlogp ≈ +1.4).
+- Injection mapping shows that faking the full ladder-vs-anchor offset via a **single** calibrator
+  time bin would require an offset of order **~1 mag** (≈0.9–1.5 mag depending on the bin), which is
+  far beyond any reasonable calibration drift.
+
+See:
+- Stack mechanism scan (bounded): `outputs/stack_sn_bao_cc_plus_ladder_mechanism_attribution_calibcov_bounded_extgrid_more_v1/report.md`
+- Stack calibrator holdout (bounded): `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_mechanism_attribution_calibcov_bounded_extgrid_more_v1/report.md`
+- Injection mapping: `outputs/pantheon_plus_shoes_ladder_injection_calibcov_pkmjd_bins_misspec_v1/report.md`
+
 ### External calibration covariance (Brout+21 “FRAGILISTIC”; survey-level)
 
 Pantheon+ ships an external calibration product in its DataRelease calibration folder:
