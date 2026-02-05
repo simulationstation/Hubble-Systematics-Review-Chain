@@ -94,6 +94,233 @@ def _component_masks(
             raise ValueError("dataset.is_calibrator shape mismatch")
         return {"calibrator_offset_mag": w.astype(float)}
 
+    if mechanism in {"survey_offset_mag", "idsurvey_offset_mag"}:
+        if not hasattr(dataset, "idsurvey"):
+            raise ValueError("survey_offset_mag requires dataset.idsurvey")
+        ids = np.asarray(getattr(dataset, "idsurvey"), dtype=int).reshape(-1)
+        if ids.shape != (n,):
+            raise ValueError("dataset.idsurvey shape mismatch")
+        levels = cfg.get("levels")
+        if levels is None:
+            levels = getattr(dataset, "idsurvey_levels", None)
+        if levels is None:
+            levels = np.unique(ids).tolist()
+        levels = [int(x) for x in list(levels)]
+        if not levels:
+            return {}
+        ref = cfg.get("survey_reference")
+        if ref is None:
+            ref = levels[0]
+        ref = int(ref)
+        apply_to = str(cfg.get("apply_to", "all")).lower()
+        base = np.ones(n, dtype=bool)
+        if apply_to == "cal":
+            if not hasattr(dataset, "is_calibrator"):
+                raise ValueError("survey_offset_mag apply_to=cal requires dataset.is_calibrator")
+            base &= np.asarray(getattr(dataset, "is_calibrator"), dtype=bool).reshape(-1)
+        elif apply_to == "hf":
+            if not hasattr(dataset, "is_hubble_flow"):
+                raise ValueError("survey_offset_mag apply_to=hf requires dataset.is_hubble_flow")
+            base &= np.asarray(getattr(dataset, "is_hubble_flow"), dtype=bool).reshape(-1)
+        elif apply_to != "all":
+            raise ValueError(f"Unsupported apply_to: {apply_to}")
+
+        out: dict[str, np.ndarray] = {}
+        for sid in levels:
+            sid = int(sid)
+            if sid == ref:
+                continue
+            out[f"survey_offset_{sid}"] = (base & (ids == sid)).astype(float)
+        return out
+
+    if mechanism == "cal_survey_offset_mag":
+        if not hasattr(dataset, "idsurvey"):
+            raise ValueError("cal_survey_offset_mag requires dataset.idsurvey")
+        if not hasattr(dataset, "is_calibrator"):
+            raise ValueError("cal_survey_offset_mag requires dataset.is_calibrator")
+        ids = np.asarray(getattr(dataset, "idsurvey"), dtype=int).reshape(-1)
+        cal = np.asarray(getattr(dataset, "is_calibrator"), dtype=bool).reshape(-1)
+        if ids.shape != (n,) or cal.shape != (n,):
+            raise ValueError("dataset.idsurvey/is_calibrator shape mismatch")
+        levels = cfg.get("levels")
+        if levels is None:
+            levels = getattr(dataset, "idsurvey_levels", None)
+        if levels is None:
+            levels = np.unique(ids).tolist()
+        levels = [int(x) for x in list(levels)]
+        if not levels:
+            return {}
+        ref = cfg.get("survey_reference")
+        if ref is None:
+            ref = levels[0]
+        ref = int(ref)
+        out: dict[str, np.ndarray] = {}
+        for sid in levels:
+            sid = int(sid)
+            if sid == ref:
+                continue
+            out[f"cal_survey_offset_{sid}"] = (cal & (ids == sid)).astype(float)
+        return out
+
+    if mechanism == "hf_survey_offset_mag":
+        if not hasattr(dataset, "idsurvey"):
+            raise ValueError("hf_survey_offset_mag requires dataset.idsurvey")
+        if not hasattr(dataset, "is_hubble_flow"):
+            raise ValueError("hf_survey_offset_mag requires dataset.is_hubble_flow")
+        ids = np.asarray(getattr(dataset, "idsurvey"), dtype=int).reshape(-1)
+        hf = np.asarray(getattr(dataset, "is_hubble_flow"), dtype=bool).reshape(-1)
+        if ids.shape != (n,) or hf.shape != (n,):
+            raise ValueError("dataset.idsurvey/is_hubble_flow shape mismatch")
+        levels = cfg.get("levels")
+        if levels is None:
+            levels = getattr(dataset, "idsurvey_levels", None)
+        if levels is None:
+            levels = np.unique(ids).tolist()
+        levels = [int(x) for x in list(levels)]
+        if not levels:
+            return {}
+        ref = cfg.get("survey_reference")
+        if ref is None:
+            ref = levels[0]
+        ref = int(ref)
+        out: dict[str, np.ndarray] = {}
+        for sid in levels:
+            sid = int(sid)
+            if sid == ref:
+                continue
+            out[f"hf_survey_offset_{sid}"] = (hf & (ids == sid)).astype(float)
+        return out
+
+    if mechanism in {"mwebv_linear_mag", "mwebv_linear"}:
+        if not hasattr(dataset, "mwebv"):
+            raise ValueError("mwebv_linear_mag requires dataset.mwebv")
+        x = np.asarray(getattr(dataset, "mwebv"), dtype=float).reshape(-1)
+        if x.shape != (n,):
+            raise ValueError("dataset.mwebv shape mismatch")
+        good = np.isfinite(x) & (x >= 0.0)
+        if not np.any(good):
+            raise ValueError("No finite nonnegative mwebv values")
+        mu_x = float(getattr(dataset, "mwebv_mu", float(np.mean(x[good]))))
+        sd_x = float(getattr(dataset, "mwebv_sd", float(np.std(x[good]) + 1e-12)))
+        xz = np.zeros_like(x, dtype=float)
+        xz[good] = (x[good] - mu_x) / sd_x
+        apply_to = str(cfg.get("apply_to", "all")).lower()
+        if apply_to == "cal":
+            if not hasattr(dataset, "is_calibrator"):
+                raise ValueError("mwebv_linear_mag apply_to=cal requires dataset.is_calibrator")
+            xz *= np.asarray(getattr(dataset, "is_calibrator"), dtype=bool).astype(float).reshape(-1)
+        elif apply_to == "hf":
+            if not hasattr(dataset, "is_hubble_flow"):
+                raise ValueError("mwebv_linear_mag apply_to=hf requires dataset.is_hubble_flow")
+            xz *= np.asarray(getattr(dataset, "is_hubble_flow"), dtype=bool).astype(float).reshape(-1)
+        elif apply_to != "all":
+            raise ValueError(f"Unsupported apply_to: {apply_to}")
+        return {"mwebv_linear_mag": xz.astype(float)}
+
+    if mechanism in {"pkmjd_err_linear_mag", "pkmjd_err_linear"}:
+        if not hasattr(dataset, "pkmjd_err"):
+            raise ValueError("pkmjd_err_linear_mag requires dataset.pkmjd_err")
+        x = np.asarray(getattr(dataset, "pkmjd_err"), dtype=float).reshape(-1)
+        if x.shape != (n,):
+            raise ValueError("dataset.pkmjd_err shape mismatch")
+        good = np.isfinite(x) & (x > 0.0)
+        if not np.any(good):
+            raise ValueError("No finite positive pkmjd_err values")
+        mu_x = float(getattr(dataset, "pkmjd_err_mu", float(np.mean(x[good]))))
+        sd_x = float(getattr(dataset, "pkmjd_err_sd", float(np.std(x[good]) + 1e-12)))
+        xz = np.zeros_like(x, dtype=float)
+        xz[good] = (x[good] - mu_x) / sd_x
+        apply_to = str(cfg.get("apply_to", "all")).lower()
+        if apply_to == "cal":
+            if not hasattr(dataset, "is_calibrator"):
+                raise ValueError("pkmjd_err_linear_mag apply_to=cal requires dataset.is_calibrator")
+            xz *= np.asarray(getattr(dataset, "is_calibrator"), dtype=bool).astype(float).reshape(-1)
+        elif apply_to == "hf":
+            if not hasattr(dataset, "is_hubble_flow"):
+                raise ValueError("pkmjd_err_linear_mag apply_to=hf requires dataset.is_hubble_flow")
+            xz *= np.asarray(getattr(dataset, "is_hubble_flow"), dtype=bool).astype(float).reshape(-1)
+        elif apply_to != "all":
+            raise ValueError(f"Unsupported apply_to: {apply_to}")
+        return {"pkmjd_err_linear_mag": xz.astype(float)}
+
+    if mechanism in {"c_linear_mag", "c_linear"}:
+        if not hasattr(dataset, "c"):
+            raise ValueError("c_linear_mag requires dataset.c")
+        x = np.asarray(getattr(dataset, "c"), dtype=float).reshape(-1)
+        if x.shape != (n,):
+            raise ValueError("dataset.c shape mismatch")
+        good = np.isfinite(x)
+        if not np.any(good):
+            raise ValueError("No finite c values")
+        mu_x = float(getattr(dataset, "c_mu", float(np.mean(x[good]))))
+        sd_x = float(getattr(dataset, "c_sd", float(np.std(x[good]) + 1e-12)))
+        xz = np.zeros_like(x, dtype=float)
+        xz[good] = (x[good] - mu_x) / sd_x
+        apply_to = str(cfg.get("apply_to", "all")).lower()
+        if apply_to == "cal":
+            if not hasattr(dataset, "is_calibrator"):
+                raise ValueError("c_linear_mag apply_to=cal requires dataset.is_calibrator")
+            xz *= np.asarray(getattr(dataset, "is_calibrator"), dtype=bool).astype(float).reshape(-1)
+        elif apply_to == "hf":
+            if not hasattr(dataset, "is_hubble_flow"):
+                raise ValueError("c_linear_mag apply_to=hf requires dataset.is_hubble_flow")
+            xz *= np.asarray(getattr(dataset, "is_hubble_flow"), dtype=bool).astype(float).reshape(-1)
+        elif apply_to != "all":
+            raise ValueError(f"Unsupported apply_to: {apply_to}")
+        return {"c_linear_mag": xz.astype(float)}
+
+    if mechanism in {"x1_linear_mag", "x1_linear"}:
+        if not hasattr(dataset, "x1"):
+            raise ValueError("x1_linear_mag requires dataset.x1")
+        x = np.asarray(getattr(dataset, "x1"), dtype=float).reshape(-1)
+        if x.shape != (n,):
+            raise ValueError("dataset.x1 shape mismatch")
+        good = np.isfinite(x)
+        if not np.any(good):
+            raise ValueError("No finite x1 values")
+        mu_x = float(getattr(dataset, "x1_mu", float(np.mean(x[good]))))
+        sd_x = float(getattr(dataset, "x1_sd", float(np.std(x[good]) + 1e-12)))
+        xz = np.zeros_like(x, dtype=float)
+        xz[good] = (x[good] - mu_x) / sd_x
+        apply_to = str(cfg.get("apply_to", "all")).lower()
+        if apply_to == "cal":
+            if not hasattr(dataset, "is_calibrator"):
+                raise ValueError("x1_linear_mag apply_to=cal requires dataset.is_calibrator")
+            xz *= np.asarray(getattr(dataset, "is_calibrator"), dtype=bool).astype(float).reshape(-1)
+        elif apply_to == "hf":
+            if not hasattr(dataset, "is_hubble_flow"):
+                raise ValueError("x1_linear_mag apply_to=hf requires dataset.is_hubble_flow")
+            xz *= np.asarray(getattr(dataset, "is_hubble_flow"), dtype=bool).astype(float).reshape(-1)
+        elif apply_to != "all":
+            raise ValueError(f"Unsupported apply_to: {apply_to}")
+        return {"x1_linear_mag": xz.astype(float)}
+
+    if mechanism in {"biascor_m_b_linear_mag", "biascor_m_b_linear"}:
+        if not hasattr(dataset, "biascor_m_b"):
+            raise ValueError("biascor_m_b_linear_mag requires dataset.biascor_m_b")
+        x = np.asarray(getattr(dataset, "biascor_m_b"), dtype=float).reshape(-1)
+        if x.shape != (n,):
+            raise ValueError("dataset.biascor_m_b shape mismatch")
+        good = np.isfinite(x)
+        if not np.any(good):
+            raise ValueError("No finite biascor_m_b values")
+        mu_x = float(getattr(dataset, "biascor_m_b_mu", float(np.mean(x[good]))))
+        sd_x = float(getattr(dataset, "biascor_m_b_sd", float(np.std(x[good]) + 1e-12)))
+        xz = np.zeros_like(x, dtype=float)
+        xz[good] = (x[good] - mu_x) / sd_x
+        apply_to = str(cfg.get("apply_to", "all")).lower()
+        if apply_to == "cal":
+            if not hasattr(dataset, "is_calibrator"):
+                raise ValueError("biascor_m_b_linear_mag apply_to=cal requires dataset.is_calibrator")
+            xz *= np.asarray(getattr(dataset, "is_calibrator"), dtype=bool).astype(float).reshape(-1)
+        elif apply_to == "hf":
+            if not hasattr(dataset, "is_hubble_flow"):
+                raise ValueError("biascor_m_b_linear_mag apply_to=hf requires dataset.is_hubble_flow")
+            xz *= np.asarray(getattr(dataset, "is_hubble_flow"), dtype=bool).astype(float).reshape(-1)
+        elif apply_to != "all":
+            raise ValueError(f"Unsupported apply_to: {apply_to}")
+        return {"biascor_m_b_linear_mag": xz.astype(float)}
+
     if mechanism == "pkmjd_bin_offset_mag":
         if not hasattr(dataset, "pkmjd"):
             raise ValueError("pkmjd_bin_offset_mag requires dataset.pkmjd")

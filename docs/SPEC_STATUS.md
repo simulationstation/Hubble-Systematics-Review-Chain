@@ -97,6 +97,12 @@ This file maps the “systematics-first” spec you described (CatWISE-style sta
 - **External calibration metadata proxy (SNANA kcor variants; per-survey(+time-bin) priors):**
   `data/raw/pantheon_plus_calibration/SNANA_kcor/`,
   `scripts/derive_pantheon_shoes_kcor_variant_priors.py`,
+  extended cal/hf survey-offset variant:
+  `data/processed/external_calibration/pantheon_plus_shoes_sigma_overrides_from_kcor_variants_calhf_v1.json`,
+  merged multi-source gate helper:
+  `scripts/merge_sigma_overrides.py`,
+  combined kcor+SH0ES-linear-system gate:
+  `data/processed/external_calibration/pantheon_plus_shoes_sigma_overrides_kcor_calhf_plus_shoeslin_v1.json`,
   `configs/stack_sn_bao_cc_plus_ladder_surveytime_kcor_gates_extgrid_more_v1.yaml`,
   `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_surveytime_kcor_extgrid_more_v1.yaml`,
   `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_surveytime_kcor_extgrid_more_fullcov_v1.yaml`,
@@ -116,6 +122,9 @@ This file maps the “systematics-first” spec you described (CatWISE-style sta
   `configs/pantheon_plus_shoes_ladder_injection_kcor_survey_pkmjd_bins_misspec_fullcov_v1.yaml`,
   `configs/pantheon_plus_shoes_ladder_injection_kcor_survey_pkmjd_bins_modeled_fullcov_v1.yaml`,
   `configs/pantheon_plus_shoes_ladder_sbc_survey_pkmjd_bins_kcor_fullcov_v1.yaml`
+  plus constrained-decomposition sweeps/holdouts under the combined kcor+SH0ES-linear-system gate:
+  `configs/stack_sn_bao_cc_plus_ladder_constrained_decomp_kcor_calhf_shoeslin_extgrid_more_v1.yaml`,
+  `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cid_holdout_constrained_decomp_kcor_calhf_shoeslin_extgrid_more_v1.yaml`
 - **Calibration-only covariance grouping (Pantheon+SH0ES `CALIB.cov`; per-survey + calibrator/time priors):**
   `data/raw/pantheon_plus_shoes/sytematic_groupings/Pantheon+SH0ES_122221_CALIB.cov`,
   `configs/stack_sn_bao_cc_plus_ladder_calibcov_gates_v1.yaml`,
@@ -143,6 +152,8 @@ This file maps the “systematics-first” spec you described (CatWISE-style sta
   `configs/pantheon_plus_shoes_ladder_sbc_pkmjd_bins_calibcov_v1.yaml`
 - **Prior-MC bias bound (kcor time-bin priors):**
   `configs/pantheon_plus_shoes_ladder_prior_mc_kcor_timebins_v1.yaml`
+- **Prior-MC bias bound (combined kcor cal/hf + SH0ES-linear-system):**
+  `configs/pantheon_plus_shoes_ladder_prior_mc_constrained_kcor_calhf_shoeslin_v1.yaml`
 - **Injection/SBC under CALIB-only priors (survey/time injections):**
   `configs/pantheon_plus_shoes_ladder_injection_calibcov_misspec_v1.yaml`,
   `configs/pantheon_plus_shoes_ladder_injection_calibcov_modeled_v1.yaml`,

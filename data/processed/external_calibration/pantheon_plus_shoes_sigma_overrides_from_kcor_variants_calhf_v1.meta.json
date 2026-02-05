@@ -1,0 +1,369 @@
+{
+  "kcor_summaries": {
+    "ASASSN": {
+      "key": "ASASSN",
+      "max_abs_zpoff": 0.08908703923225403,
+      "median_zpoff": 0.0181752797216177,
+      "n": 8,
+      "path": "/home/primary/Hubble-Systematics-Review-Chain/data/raw/pantheon_plus_calibration/SNANA_kcor/kcor_ASASSN_v6_1.fits",
+      "robust_sigma_zpoff": 0.015305062098498455
+    },
+    "CSPDR3": {
+      "key": "CSPDR3",
+      "max_abs_zpoff": 0.12371990084648132,
+      "median_zpoff": 0.008397966623306274,
+      "n": 9,
+      "path": "/home/primary/Hubble-Systematics-Review-Chain/data/raw/pantheon_plus_calibration/SNANA_kcor/kcor_CSPDR3_v6_1.fits",
+      "robust_sigma_zpoff": 0.02300990628451109
+    },
+    "CSPDR3_supercal": {
+      "key": "CSPDR3_supercal",
+      "max_abs_zpoff": 0.1389199048280716,
+      "median_zpoff": 0.029444273561239243,
+      "n": 9,
+      "path": "/home/primary/Hubble-Systematics-Review-Chain/data/raw/pantheon_plus_calibration/SNANA_kcor/kcor_CSPDR3_supercal.fits",
+      "robust_sigma_zpoff": 0.007166714453324675
+    },
+    "DES_3yr": {
+      "key": "DES_3yr",
+      "max_abs_zpoff": 0.017999999225139618,
+      "median_zpoff": -0.0039499999256804585,
+      "n": 4,
+      "path": "/home/primary/Hubble-Systematics-Review-Chain/data/raw/pantheon_plus_calibration/SNANA_kcor/kcor_DES_3yr_v6_1.fits",
+      "robust_sigma_zpoff": 0.005189099858124973
+    },
+    "DES_5yr": {
+      "key": "DES_5yr",
+      "max_abs_zpoff": 0.011599999852478504,
+      "median_zpoff": -0.0048999997961800545,
+      "n": 4,
+      "path": "/home/primary/Hubble-Systematics-Review-Chain/data/raw/pantheon_plus_calibration/SNANA_kcor/kcor_DES_5yr_v6_1.fits",
+      "robust_sigma_zpoff": 0.008006039905623765
+    },
+    "Foundation": {
+      "key": "Foundation",
+      "max_abs_zpoff": 0.018200000748038292,
+      "median_zpoff": -0.004999999888241291,
+      "n": 5,
+      "path": "/home/primary/Hubble-Systematics-Review-Chain/data/raw/pantheon_plus_calibration/SNANA_kcor/kcor_Foundation_v6_1.fits",
+      "robust_sigma_zpoff": 0.007412999834306538
+    },
+    "KAIT_Mo": {
+      "key": "KAIT_Mo",
+      "max_abs_zpoff": 0.1493108719587326,
+      "median_zpoff": 0.03194626420736313,
+      "n": 17,
+      "path": "/home/primary/Hubble-Systematics-Review-Chain/data/raw/pantheon_plus_calibration/SNANA_kcor/kcor_KAIT_Mo_v6_1.fits",
+      "robust_sigma_zpoff": 0.12794809361100196
+    },
+    "KAIT_Stahl": {
+      "key": "KAIT_Stahl",
+      "max_abs_zpoff": 0.14856049418449402,
+      "median_zpoff": 0.04914098419249058,
+      "n": 12,
+      "path": "/home/primary/Hubble-Systematics-Review-Chain/data/raw/pantheon_plus_calibration/SNANA_kcor/kcor_KAIT_Stahl_v6_1.fits",
+      "robust_sigma_zpoff": 0.13181596170030532
+    },
+    "Land2": {
+      "key": "Land2",
+      "max_abs_zpoff": 0.16163818538188934,
+      "median_zpoff": 0.016588201746344566,
+      "n": 3,
+      "path": "/home/primary/Hubble-Systematics-Review-Chain/data/raw/pantheon_plus_calibration/SNANA_kcor/kcor_Land2.fits",
+      "robust_sigma_zpoff": 0.19172972888387738
+    },
+    "PS1": {
+      "key": "PS1",
+      "max_abs_zpoff": 0.037700001150369644,
+      "median_zpoff": -0.026399999856948853,
+      "n": 10,
+      "path": "/home/primary/Hubble-Systematics-Review-Chain/data/raw/pantheon_plus_calibration/SNANA_kcor/kcor_PS1_v6_1.fits",
+      "robust_sigma_zpoff": 0.011564282447844743
+    },
+    "PS1_CFA_COMBINED": {
+      "key": "PS1_CFA_COMBINED",
+      "max_abs_zpoff": 0.1888348013162613,
+      "median_zpoff": 0.016588201746344566,
+      "n": 58,
+      "path": "/home/primary/Hubble-Systematics-Review-Chain/data/raw/pantheon_plus_calibration/SNANA_kcor/kcor_PS1_CFA_COMBINED_v6_1.fits",
+      "robust_sigma_zpoff": 0.0192445950264344
+    },
+    "PS1_CFA_COMBINED_supercal": {
+      "key": "PS1_CFA_COMBINED_supercal",
+      "max_abs_zpoff": 0.172461599111557,
+      "median_zpoff": 0.016588201746344566,
+      "n": 58,
+      "path": "/home/primary/Hubble-Systematics-Review-Chain/data/raw/pantheon_plus_calibration/SNANA_kcor/kcor_PS1_CFA_COMBINED_supercal.fits",
+      "robust_sigma_zpoff": 0.034162394223455336
+    },
+    "PS1_HST_COMBINED_ADAMRECAL": {
+      "key": "PS1_HST_COMBINED_ADAMRECAL",
+      "max_abs_zpoff": 0.06800000369548798,
+      "median_zpoff": 0.0,
+      "n": 38,
+      "path": "/home/primary/Hubble-Systematics-Review-Chain/data/raw/pantheon_plus_calibration/SNANA_kcor/kcor_PS1_HST_COMBINED_ADAMRECAL.fits",
+      "robust_sigma_zpoff": 0.0
+    },
+    "SDSS": {
+      "key": "SDSS",
+      "max_abs_zpoff": 0.012900000438094139,
+      "median_zpoff": 0.0024999999441206455,
+      "n": 20,
+      "path": "/home/primary/Hubble-Systematics-Review-Chain/data/raw/pantheon_plus_calibration/SNANA_kcor/kcor_SDSS_v6_1.fits",
+      "robust_sigma_zpoff": 0.010378199629951268
+    },
+    "SNLS": {
+      "key": "SNLS",
+      "max_abs_zpoff": 0.007600000128149986,
+      "median_zpoff": 0.005750000011175871,
+      "n": 8,
+      "path": "/home/primary/Hubble-Systematics-Review-Chain/data/raw/pantheon_plus_calibration/SNANA_kcor/kcor_SNLS_v6_1.fits",
+      "robust_sigma_zpoff": 0.002446289986744523
+    },
+    "SWIFT": {
+      "key": "SWIFT",
+      "max_abs_zpoff": 0.11630178987979889,
+      "median_zpoff": 0.07543443888425827,
+      "n": 2,
+      "path": "/home/primary/Hubble-Systematics-Review-Chain/data/raw/pantheon_plus_calibration/SNANA_kcor/kcor_SWIFT_v6_1.fits",
+      "robust_sigma_zpoff": 0.06058993458598852
+    }
+  },
+  "meta": {
+    "computed": {
+      "1": {
+        "kcor": {
+          "found": [
+            "SDSS"
+          ],
+          "medians": [
+            0.0024999999441206455
+          ],
+          "missing": []
+        },
+        "name": "SDSS",
+        "sigma_mag": 0.01
+      },
+      "15": {
+        "kcor": {
+          "found": [
+            "PS1"
+          ],
+          "medians": [
+            -0.026399999856948853
+          ],
+          "missing": []
+        },
+        "name": "PS1MD",
+        "sigma_mag": 0.01
+      },
+      "150": {
+        "kcor": {
+          "found": [
+            "Foundation"
+          ],
+          "medians": [
+            -0.004999999888241291
+          ],
+          "missing": []
+        },
+        "name": "FOUND",
+        "sigma_mag": 0.01
+      },
+      "18": {
+        "kcor": {
+          "found": [
+            "ASASSN"
+          ],
+          "medians": [
+            0.0181752797216177
+          ],
+          "missing": []
+        },
+        "name": "CNIa0.02",
+        "sigma_mag": 0.01
+      },
+      "5": {
+        "kcor": {
+          "found": [
+            "CSPDR3",
+            "CSPDR3_supercal"
+          ],
+          "medians": [
+            0.008397966623306274,
+            0.029444273561239243
+          ],
+          "missing": []
+        },
+        "name": "CSP",
+        "sigma_mag": 0.014881986354745884
+      },
+      "50": {
+        "kcor": {
+          "found": [
+            "Land2"
+          ],
+          "medians": [
+            0.016588201746344566
+          ],
+          "missing": []
+        },
+        "name": "LOWZ/JRK07",
+        "sigma_mag": 0.01
+      },
+      "51": {
+        "kcor": {
+          "found": [
+            "KAIT_Mo",
+            "KAIT_Stahl"
+          ],
+          "medians": [
+            0.03194626420736313,
+            0.04914098419249058
+          ],
+          "missing": []
+        },
+        "name": "LOSS1",
+        "sigma_mag": 0.012158503102087471
+      },
+      "56": {
+        "kcor": {
+          "found": [
+            "SWIFT"
+          ],
+          "medians": [
+            0.07543443888425827
+          ],
+          "missing": []
+        },
+        "name": "SOUSA",
+        "sigma_mag": 0.01
+      },
+      "57": {
+        "kcor": {
+          "found": [
+            "KAIT_Mo",
+            "KAIT_Stahl"
+          ],
+          "medians": [
+            0.03194626420736313,
+            0.04914098419249058
+          ],
+          "missing": []
+        },
+        "name": "LOSS2",
+        "sigma_mag": 0.012158503102087471
+      },
+      "61": {
+        "kcor": {
+          "found": [
+            "Land2"
+          ],
+          "medians": [
+            0.016588201746344566
+          ],
+          "missing": []
+        },
+        "name": "CFA1",
+        "sigma_mag": 0.01
+      },
+      "62": {
+        "kcor": {
+          "found": [
+            "Land2"
+          ],
+          "medians": [
+            0.016588201746344566
+          ],
+          "missing": []
+        },
+        "name": "CFA2",
+        "sigma_mag": 0.01
+      },
+      "63": {
+        "kcor": {
+          "found": [
+            "Land2"
+          ],
+          "medians": [
+            0.016588201746344566
+          ],
+          "missing": []
+        },
+        "name": "CFA3S",
+        "sigma_mag": 0.01
+      },
+      "64": {
+        "kcor": {
+          "found": [
+            "Land2"
+          ],
+          "medians": [
+            0.016588201746344566
+          ],
+          "missing": []
+        },
+        "name": "CFA3K",
+        "sigma_mag": 0.01
+      },
+      "65": {
+        "kcor": {
+          "found": [
+            "Land2"
+          ],
+          "medians": [
+            0.016588201746344566
+          ],
+          "missing": []
+        },
+        "name": "CFA4p2",
+        "sigma_mag": 0.01
+      },
+      "66": {
+        "kcor": {
+          "found": [
+            "Land2"
+          ],
+          "medians": [
+            0.016588201746344566
+          ],
+          "missing": []
+        },
+        "name": "CFA4p3",
+        "sigma_mag": 0.01
+      }
+    },
+    "created_by": "scripts/derive_pantheon_shoes_kcor_variant_priors.py",
+    "kcor_keys": [
+      "ASASSN",
+      "CSPDR3",
+      "CSPDR3_supercal",
+      "DES_3yr",
+      "DES_5yr",
+      "Foundation",
+      "KAIT_Mo",
+      "KAIT_Stahl",
+      "Land2",
+      "PS1",
+      "PS1_CFA_COMBINED",
+      "PS1_CFA_COMBINED_supercal",
+      "PS1_HST_COMBINED_ADAMRECAL",
+      "SDSS",
+      "SNLS",
+      "SWIFT"
+    ],
+    "notes": [
+      "This file encodes per-parameter sigma overrides derived from the spread of SNANA_kcor calibration variants (Pantheon+ DataRelease 2_CALIBRATION/SNANA_kcor).",
+      "We summarize each kcor FITS by the median ZPoff(Primary) across filters (after optional clipping) and use the stddev across variants as a heuristic calibration-uncertainty scale per survey.",
+      "This is an external calibration metadata proxy for audit priors; it is not a full photometry-level forward model."
+    ],
+    "pkmjd_edges": [
+      44672.6,
+      53410.4,
+      54131.12,
+      54885.0,
+      57269.22,
+      59385.6
+    ]
+  }
+}

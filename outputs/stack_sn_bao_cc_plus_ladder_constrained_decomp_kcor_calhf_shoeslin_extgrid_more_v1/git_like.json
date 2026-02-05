@@ -1,0 +1,25 @@
+{
+  "branch": "main",
+  "describe": "56c93bd-dirty",
+  "dirty": true,
+  "head": "56c93bd52f798765f31d2f1f35bc145b2f12c856",
+  "ok": true,
+  "remotes": [
+    "origin\tgit@github.com:simulationstation/Hubble-Systematics-Review-Chain.git (fetch)",
+    "origin\tgit@github.com:simulationstation/Hubble-Systematics-Review-Chain.git (push)"
+  ],
+  "status_porcelain": [
+    "M src/hubble_systematics/audit/prior_mc.py",
+    "?? configs/pantheon_plus_shoes_ladder_prior_mc_constrained_kcor_calhf_shoeslin_v1.yaml",
+    "?? configs/stack_sn_bao_cc_plus_ladder_constrained_decomp_kcor_calhf_shoeslin_extgrid_more_v1.yaml",
+    "?? configs/stack_sn_bao_cc_plus_ladder_predictive_score_cid_holdout_constrained_decomp_kcor_calhf_shoeslin_extgrid_more_v1.yaml",
+    "?? data/processed/external_calibration/pantheon_plus_shoes_sigma_overrides_from_kcor_variants_calhf_v1.json",
+    "?? data/processed/external_calibration/pantheon_plus_shoes_sigma_overrides_from_kcor_variants_calhf_v1.meta.json",
+    "?? data/processed/external_calibration/pantheon_plus_shoes_sigma_overrides_kcor_calhf_plus_shoeslin_v1.json",
+    "?? data/processed/external_calibration/pantheon_plus_shoes_sigma_overrides_kcor_calhf_plus_shoeslin_v1.meta.json",
+    "?? outputs/stack_sn_bao_cc_plus_ladder_constrained_decomp_kcor_calhf_shoeslin_extgrid_more_v1/",
+    "?? scripts/merge_sigma_overrides.py",
+    "?? tests/test_prior_mc_new_mechanisms.py"
+  ],
+  "toplevel": "/home/primary/Hubble-Systematics-Review-Chain"
+}

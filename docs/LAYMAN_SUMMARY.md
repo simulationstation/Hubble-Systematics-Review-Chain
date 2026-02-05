@@ -287,6 +287,39 @@ Under the kcor-variant priors, the induced `delta_lnH0` shift has p95(|.|) ≈ 0
 See:
 - `outputs/pantheon_plus_shoes_ladder_prior_mc_kcor_timebins_v1/report.md`
 
+### Combined calibration-gate (kcor cal/hf + SH0ES-linear-system σ(cal_offset))
+
+The kcor-based gates above constrain **survey/epoch** behavior but do *not* constrain a global
+calibrator↔HF step. To add a concrete bound on a global calibrator-step term, we:
+
+1) re-derived the kcor gates to include **calibrator-only** and **HF-only** per-survey offsets
+   (`cal_survey_offset_*`, `hf_survey_offset_*`), writing:
+   `data/processed/external_calibration/pantheon_plus_shoes_sigma_overrides_from_kcor_variants_calhf_v1.json`, and
+2) merged that file with a SH0ES-linear-system-inspired σ(`calibrator_offset_mag`)≈0.028 mag
+   (`data/processed/external_calibration/shoes_linear_system_sigma_overrides_fivelogh0_v1.json`) into:
+   `data/processed/external_calibration/pantheon_plus_shoes_sigma_overrides_kcor_calhf_plus_shoeslin_v1.json`.
+
+Results (real data):
+
+- **Joint stack (SN-only+BAO+CC+ladder):**
+  - bounded survey/epoch calibration fields alone do essentially nothing
+    (tension-reduction fraction ≈0.0–0.7%),
+  - a bounded global `calibrator_offset_mag` reduces `delta_lnH0` by only ≈11%,
+  - a metadata-rich constrained model can move `delta_lnH0` by ≈16% but is disfavored by evidence.
+  See: `outputs/stack_sn_bao_cc_plus_ladder_constrained_decomp_kcor_calhf_shoeslin_extgrid_more_v1/report.md`.
+
+- **CID holdout (calibrators held out; HF fixed in TRAIN):**
+  - bounded calibration fields: Δlogp ≈ +0.03,
+  - bounded `calibrator_offset_mag`: Δlogp ≈ +0.28,
+  - bounded fields + metadata proxies: Δlogp ≈ +0.37 (best in this comparison).
+  See: `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cid_holdout_constrained_decomp_kcor_calhf_shoeslin_extgrid_more_v1/report.md`.
+
+- **Prior-MC “how much could this explain?” (ladder-only):**
+  drawing unmodeled calibrator-step distortions from these combined gates gives
+  p95(|δ`delta_lnH0`|)≈0.031, i.e. ≈39% of a reference full-tension scale ln(73/67.4).
+  In 20k draws, P(>100%)≈0.
+  See: `outputs/pantheon_plus_shoes_ladder_prior_mc_constrained_kcor_calhf_shoeslin_v1/report.md`.
+
 SBC sanity check (does the constrained model behave “normally” under noise?):
 
 - With `survey_pkmjd_bins` enabled under the kcor priors, the SBC coverage for `delta_lnH0` is ≈0.66
