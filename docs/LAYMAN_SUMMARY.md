@@ -153,6 +153,18 @@ We tested a few “explicit proxy” replacements inside the same joint-stack ho
 See:
 - `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_mechanism_scan_v1/report.md`
 
+We also ran a **survey holdout** (hold out calibrators from one survey at a time). Effects persist
+but are smaller, with calibrator time-bin offsets still best among these candidates (Δlogp ≈ +1.9,
+vs +1.7 for `calibrator_offset_mag`, vs +1.5 for `pkmjd_err_linear`):
+
+- `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_survey_holdout_mechanism_scan_v1/report.md`
+
+A full-covariance variant shows the same ordering with slightly larger improvements
+(Δlogp ≈ +2.34 for calibrator time-bin offsets; +2.29 for `calibrator_offset_mag`; +1.45 for
+`pkmjd_err_linear`):
+
+- `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_survey_holdout_mechanism_scan_fullcov_v1/report.md`
+
 This does **not** prove a physical mechanism (we are not modeling the full photometry pipeline), but
 it does say the required calibrator↔HF offset behaves like a **coherent effect**, not a tiny-N
 artifact.

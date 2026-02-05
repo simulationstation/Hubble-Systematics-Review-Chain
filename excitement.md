@@ -43,3 +43,18 @@ improvement:
 
 Artifacts:
 - `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_mechanism_scan_v1/report.md`
+
+## 2026-02-05 — Joint-stack survey holdout persists (robustness; real data)
+
+Holding out calibrator SNe **survey-by-survey** inside the joint anchor-consistency stack
+(SN-only+BAO+CC+ladder) still prefers calibrator-only corrections, though the improvement is smaller
+than random holdout (as expected for a harder generalization test):
+
+- Diagonal errors: Δlogp ≈ +1.92 for `cal_time_bins`, +1.72 for `cal_offset`, +1.51 for
+  `pkmjderr_linear_cal`.
+- Full cov: Δlogp ≈ +2.34 for `cal_time_bins`, +2.29 for `cal_offset`, +1.45 for
+  `pkmjderr_linear_cal`.
+
+Artifacts:
+- `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_survey_holdout_mechanism_scan_v1/report.md`
+- `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_survey_holdout_mechanism_scan_fullcov_v1/report.md`
