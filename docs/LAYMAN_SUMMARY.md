@@ -143,6 +143,15 @@ When we re-run the joint anchor-consistency fit under these bounds:
 
 See: `outputs/stack_sn_bao_cc_plus_ladder_cov_implied_gates_v1/report.md`.
 
+As a cross-validated “does this help on held-out calibrators?” check, the calibrator-holdout
+predictive score still improves when you allow a calibrator offset *even under* the covariance-implied
+prior, but the gain is smaller than when the offset is essentially unconstrained:
+
+- Δlogp ≈ +5.74 for a free (wide-prior) calibrator offset,
+- Δlogp ≈ +4.20 for the covariance-implied calibrator offset.
+
+See: `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_cov_implied_v1/report.md`.
+
 ## Calibrator holdout (cross-validated; real data)
 
 A key “is this just overfitting a few points?” check is to **hold out calibrators** while keeping
