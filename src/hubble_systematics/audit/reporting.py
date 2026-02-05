@@ -137,6 +137,37 @@ def write_report(run_dir: Path) -> None:
         _plot_sbc(sbc, png)
         pieces.append(f"## SBC\n\n- Figure: `{png}`\n")
 
+    prior_mc = _read_json(run_dir / "prior_mc.json")
+    if prior_mc is not None:
+        png = fig_dir / "prior_mc_hist.png"
+        _plot_prior_mc(prior_mc, png)
+        pieces.append("## Prior MC\n\n")
+        pieces.append(f"- Param of interest: {prior_mc.get('param_of_interest')}\n")
+        pieces.append(f"- N MC: {prior_mc.get('n_mc')}\n")
+        pieces.append(f"- use_diagonal_errors: {prior_mc.get('use_diagonal_errors')}\n")
+        if prior_mc.get("tension_target") is not None:
+            pieces.append(f"- Tension target: {prior_mc.get('tension_target')}\n")
+        try:
+            sh = np.asarray(prior_mc.get("shift") or [], dtype=float)
+            sh = sh[np.isfinite(sh)]
+            if sh.size:
+                pieces.append(f"- Shift mean±sd: {float(np.mean(sh)):+.4e} ± {float(np.std(sh)):.4e}\n")
+                pieces.append(f"- Shift p95(|.|): {float(np.quantile(np.abs(sh), 0.95)):.4e}\n")
+        except Exception:
+            pass
+        try:
+            fr = prior_mc.get("fraction_of_tension")
+            if fr is not None:
+                fr = np.asarray(fr, dtype=float)
+                fr = fr[np.isfinite(fr)]
+                if fr.size:
+                    pieces.append(
+                        f"- frac(tension) p50/p95/p99: {float(np.quantile(fr,0.50)):.3f} / {float(np.quantile(fr,0.95)):.3f} / {float(np.quantile(fr,0.99)):.3f}\n"
+                    )
+        except Exception:
+            pass
+        pieces.append(f"- Figure: `{png}`\n")
+
     hemi = _read_json(run_dir / "hemisphere_scan.json")
     if hemi is not None:
         pieces.append("## Hemisphere scan\n\n")
@@ -319,6 +350,29 @@ def _plot_sbc(obj: dict[str, Any], out: Path) -> None:
     plt.ylabel("empirical coverage")
     plt.title("SBC coverage")
     plt.legend()
+    plt.tight_layout()
+    plt.savefig(out, dpi=160)
+    plt.close()
+
+
+def _plot_prior_mc(obj: dict[str, Any], out: Path) -> None:
+    fr = obj.get("fraction_of_tension")
+    if fr is not None:
+        x = np.asarray(fr, dtype=float)
+        x = x[np.isfinite(x)]
+        xlabel = "fraction of tension"
+    else:
+        x = np.asarray(obj.get("shift") or [], dtype=float)
+        x = x[np.isfinite(x)]
+        xlabel = "shift"
+    if x.size == 0:
+        return
+
+    plt.figure(figsize=(6.2, 4.0))
+    plt.hist(x, bins=60, color="#4C72B0", alpha=0.8, histtype="stepfilled")
+    plt.xlabel(xlabel)
+    plt.ylabel("count")
+    plt.title("Prior MC")
     plt.tight_layout()
     plt.savefig(out, dpi=160)
     plt.close()

@@ -502,3 +502,42 @@ predictive_score:
         pantheon_plus_shoes_ladder:
           mechanisms: {calibrator_offset: true}
 ```
+
+## `prior_mc` (prior → bias bound; forward simulator)
+
+Draws random systematic drifts from a specified prior and measures how much they can bias a chosen
+parameter (e.g. `delta_lnH0`) when the model does **not** explicitly include the injected mechanism.
+
+This is a “how much could this explain under realistic calibration bounds?” check, analogous to a
+prior-predictive bound on bias.
+
+```yaml
+run:
+  tasks: [baseline_fit, prior_mc, report]
+
+prior_mc:
+  seed: 123
+  n_mc: 20000
+  use_diagonal_errors: true
+  param_of_interest: delta_lnH0
+  tension_target: baseline_poi_abs   # or a numeric value
+  sigma_overrides_path: data/processed/external_calibration/sigma_overrides.json
+  components:
+    - label: time_bins
+      mechanism: pkmjd_bin_offset_mag
+      edges: [44672.6, 53410.4, 54131.12, 54885.0, 57269.22, 59385.6]
+      bins: [1, 2, 3, 4]
+      apply_to: cal
+      fallback_sigma_mag: 0.02
+```
+
+Supported `mechanism` values:
+
+- `calibrator_offset_mag`
+- `pkmjd_bin_offset_mag` (global time bins)
+- `survey_pkmjd_bin_offset_mag` (per-survey time bins)
+
+Stack probe support:
+
+- `prior_mc.stack_scope_part` (same intent as `predictive_score.stack_scope_part`): restricts
+  metadata columns like `pkmjd` to a single stack part when building component masks.

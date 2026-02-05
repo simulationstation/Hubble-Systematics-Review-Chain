@@ -176,3 +176,23 @@ Artifacts:
 - Gate sweep: `outputs/stack_sn_bao_cc_plus_ladder_fragilistic_shoes_gates_v1/report.md`
 - Holdout: `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_fragilistic_shoes_v1/report.md`
 - Derivation: `scripts/derive_shoes_linear_system_fivelogh0_prior.py`
+
+## 2026-02-05 — SNANA kcor calibration variants bound survey×epoch offsets (real data + metadata)
+
+Pantheon+ ships SNANA kcor calibration FITS files (`data/raw/pantheon_plus_calibration/SNANA_kcor/`)
+that include a `ZPoff` table per file. Using the spread across available calibration variants as a
+heuristic per-survey calibration scale yields σ≈0.01–0.015 mag for the relevant low-z surveys.
+
+Under these bounds:
+- per-survey epoch-bin offsets (`survey_pkmjd_bins`) remain tiny (max |mean| ≈ 0.006 mag),
+- held-out calibrators show essentially no gain from `survey_pkmjd_bins` once constrained (Δlogp ≈ +0.07),
+- and the joint stack still prefers a large global `calibrator_offset_mag` when that is allowed.
+
+Artifacts:
+- Priors: `data/processed/external_calibration/pantheon_plus_shoes_sigma_overrides_from_kcor_variants_v1.json` (derived by `scripts/derive_pantheon_shoes_kcor_variant_priors.py`)
+- Gate sweep: `outputs/stack_sn_bao_cc_plus_ladder_surveytime_kcor_gates_extgrid_more_v1/report.md`
+- Holdout: `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_surveytime_kcor_extgrid_more_v1/report.md`
+
+Follow-on:
+- Use the new `prior_mc` task to translate these bounds into an “explainable fraction” of the ladder
+  offset. (Example: `outputs/pantheon_plus_shoes_ladder_prior_mc_kcor_timebins_v1/report.md`.)

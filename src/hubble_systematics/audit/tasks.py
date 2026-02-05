@@ -13,6 +13,7 @@ from hubble_systematics.audit.group_split_null import run_group_split_null_mc
 from hubble_systematics.audit.injection import run_injection_suite
 from hubble_systematics.audit.hemisphere_scan import run_hemisphere_scan
 from hubble_systematics.audit.predictive_score import run_predictive_score
+from hubble_systematics.audit.prior_mc import run_prior_mc
 from hubble_systematics.audit.stack_predictive_dataset import StackPredictiveDataset, StackPredictivePart
 from hubble_systematics.audit.split_null import run_split_null_mc
 from hubble_systematics.audit.sbc import run_sbc
@@ -519,6 +520,55 @@ def run_predictive_score_task(ctx) -> dict[str, Any]:
     out = res.to_jsonable()
     write_json(ctx.run_dir / "predictive_score.json", out)
     return out
+
+
+def run_prior_mc_task(ctx) -> dict[str, Any]:
+    cfg = ctx.config
+    anchor = _build_anchor(cfg)
+    probe_cfg = cfg.get("probe", {}) or {}
+    probe_name = probe_cfg.get("name")
+
+    dataset = None
+    if probe_name == "stack":
+        items = probe_cfg.get("stack", []) or []
+        if not items:
+            raise ValueError("stack probe requires non-empty probe.stack")
+
+        base_model = cfg.get("model", {}) or {}
+        base_level = str(base_model.get("ladder_level", "L1"))
+        mc_cfg = cfg.get("prior_mc", {}) or {}
+        scope_part = mc_cfg.get("stack_scope_part")
+
+        parts: list[StackPredictivePart] = []
+        for item in items:
+            item = dict(item)
+            name = item.get("name")
+            if name is None:
+                raise ValueError("Each stack item must include a name")
+            ds = _load_probe({"probe": item})
+            parts.append(StackPredictivePart(name=str(name), dataset=ds, base_model=item.get("model", {}) or {}))
+
+        dataset = StackPredictiveDataset.from_parts(
+            parts=parts,
+            anchor=anchor,
+            base_level=base_level,
+            base_model_cfg=base_model,
+            scope_part=str(scope_part) if scope_part is not None else None,
+        )
+    else:
+        dataset = _load_probe(cfg)
+        if not hasattr(dataset, "diag_sigma"):
+            return {"skipped": True, "reason": f"prior_mc requires a diag_sigma-capable dataset (probe={probe_name})"}
+
+    model = cfg.get("model", {}) or {}
+    level = str(model.get("ladder_level", "L1"))
+    mc_cfg = cfg.get("prior_mc", {}) or {}
+    seed = mc_cfg.get("seed")
+    rng = np.random.default_rng(seed)
+
+    res = run_prior_mc(dataset=dataset, anchor=anchor, ladder_level=level, model_cfg=model, prior_mc_cfg=mc_cfg, rng=rng)
+    write_json(ctx.run_dir / "prior_mc.json", res.to_jsonable())
+    return res.to_jsonable()
 
 
 def run_split_fit_task(ctx) -> dict[str, Any]:

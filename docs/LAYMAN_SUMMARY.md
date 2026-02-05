@@ -234,6 +234,62 @@ See:
 - Stack calibrator holdout (bounded): `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_mechanism_attribution_calibcov_bounded_extgrid_more_v1/report.md`
 - Injection mapping: `outputs/pantheon_plus_shoes_ladder_injection_calibcov_pkmjd_bins_misspec_v1/report.md`
 
+### External calibration metadata (SNANA kcor variants)
+
+Pantheon+ ships a calibration bundle (`2_CALIBRATION/`) including SNANA **kcor** files (`SNANA_kcor/`)
+that contain per-filter zeropoint offset tables (`ZPoff` extension in the FITS files).
+
+We ingest those files and build a simple, external-metadata-derived prior:
+for each survey, take the **spread in median zeropoint offsets across available calibration variants**
+(e.g. “supercal” vs baseline, “DES 3yr” vs “DES 5yr”, etc.) and treat that spread as a heuristic
+calibration-uncertainty scale, typically σ≈0.01–0.015 mag in our compression.
+
+Under these bounds:
+
+- per-survey epoch-bin offsets (`survey_pkmjd_bins` on calibrators) remain tiny (max |mean| ≈ 0.006 mag),
+- they give essentially **no held-out calibrator improvement** once constrained (Δlogp ≈ +0.07),
+- and the joint stack still prefers a large global calibrator offset when allowed.
+
+See:
+- Gate sweep: `outputs/stack_sn_bao_cc_plus_ladder_surveytime_kcor_gates_extgrid_more_v1/report.md`
+- Holdout: `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_surveytime_kcor_extgrid_more_v1/report.md`
+- Prior derivation: `scripts/derive_pantheon_shoes_kcor_variant_priors.py` (writes `data/processed/external_calibration/pantheon_plus_shoes_sigma_overrides_from_kcor_variants_v1.json`)
+
+Injection mapping (does this mechanism have enough leverage?):
+
+- If you inject a **single** per-survey epoch-bin magnitude offset into calibrators and do *not* model it,
+  the induced bias in `delta_lnH0` is tiny (slopes ≈0.02–0.03 in `delta_lnH0` per mag), so matching the
+  full ladder-vs-anchor shift would require a **several-magnitude** calibration error in one bin (not plausible).
+- If you *do* model `survey_pkmjd_bins` under the kcor priors, the fitted survey×time coefficients remain tiny
+  (max |mean| ≈ 0.005 mag), and `delta_lnH0` remains essentially unchanged.
+
+See:
+- `outputs/pantheon_plus_shoes_ladder_injection_kcor_survey_pkmjd_bins_misspec_v1/report.md`
+- `outputs/pantheon_plus_shoes_ladder_injection_kcor_survey_pkmjd_bins_modeled_v1/report.md`
+
+### “How much could this explain?” forward simulator (prior MC)
+
+To turn prior bounds into a quantitative “maximum explainable fraction”, we added a **prior-MC forward
+simulator** (`prior_mc` task). It:
+
+1) fits the baseline ladder model once, then
+2) injects random calibration drifts drawn from the prior (time-bin offsets), and
+3) refits to measure how much the inferred `delta_lnH0` shifts.
+
+Under the kcor-variant priors, the induced `delta_lnH0` shift has p95(|.|) ≈ 0.0199, which is about
+**21%** of the full ladder-vs-anchor `delta_lnH0` in this setup (p99 ≈ 28%).
+
+See:
+- `outputs/pantheon_plus_shoes_ladder_prior_mc_kcor_timebins_v1/report.md`
+
+SBC sanity check (does the constrained model behave “normally” under noise?):
+
+- With `survey_pkmjd_bins` enabled under the kcor priors, the SBC coverage for `delta_lnH0` is ≈0.66
+  at the nominal “1σ” level (target is 0.68), i.e. not obviously broken in this compressed model.
+
+See:
+- `outputs/pantheon_plus_shoes_ladder_sbc_survey_pkmjd_bins_kcor_v1/report.md`
+
 ### External calibration covariance (Brout+21 “FRAGILISTIC”; survey-level)
 
 Pantheon+ ships an external calibration product in its DataRelease calibration folder:

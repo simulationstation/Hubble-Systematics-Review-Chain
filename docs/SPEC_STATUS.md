@@ -19,6 +19,7 @@ This file maps the “systematics-first” spec you described (CatWISE-style sta
   - grouped split-null (per-survey): `src/hubble_systematics/audit/group_split_null.py`
 - **Injection / recovery:** `src/hubble_systematics/audit/injection.py`
 - **SBC / coverage:** `src/hubble_systematics/audit/sbc.py`
+- **Prior-MC forward simulator (prior → bias bound):** `src/hubble_systematics/audit/prior_mc.py`
 - **Cross-validated hemisphere scan:** `src/hubble_systematics/audit/hemisphere_scan.py`
 - **Predictive scoring (CV log predictive density):** `src/hubble_systematics/audit/predictive_score.py`
 - **Exact Gaussian log evidence:** `src/hubble_systematics/gaussian_linear_model.py#log_marginal_likelihood`
@@ -93,6 +94,15 @@ This file maps the “systematics-first” spec you described (CatWISE-style sta
   `scripts/derive_pantheon_shoes_fragilistic_priors.py`,
   `configs/stack_sn_bao_cc_plus_ladder_fragilistic_gates_v1.yaml`,
   `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_fragilistic_v1.yaml`
+- **External calibration metadata proxy (SNANA kcor variants; per-survey(+time-bin) priors):**
+  `data/raw/pantheon_plus_calibration/SNANA_kcor/`,
+  `scripts/derive_pantheon_shoes_kcor_variant_priors.py`,
+  `configs/stack_sn_bao_cc_plus_ladder_surveytime_kcor_gates_extgrid_more_v1.yaml`,
+  `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_surveytime_kcor_extgrid_more_v1.yaml`,
+  and kcor-calibrated injection/SBC checks:
+  `configs/pantheon_plus_shoes_ladder_injection_kcor_survey_pkmjd_bins_misspec_v1.yaml`,
+  `configs/pantheon_plus_shoes_ladder_injection_kcor_survey_pkmjd_bins_modeled_v1.yaml`,
+  `configs/pantheon_plus_shoes_ladder_sbc_survey_pkmjd_bins_kcor_v1.yaml`
 - **Calibration-only covariance grouping (Pantheon+SH0ES `CALIB.cov`; per-survey + calibrator/time priors):**
   `data/raw/pantheon_plus_shoes/sytematic_groupings/Pantheon+SH0ES_122221_CALIB.cov`,
   `configs/stack_sn_bao_cc_plus_ladder_calibcov_gates_v1.yaml`,
@@ -118,6 +128,8 @@ This file maps the “systematics-first” spec you described (CatWISE-style sta
   `configs/pantheon_plus_shoes_ladder_sbc_survey_pkmjd_bins_calibcov_v1.yaml`
 - **SBC (global calibrator time-bin proxy):**
   `configs/pantheon_plus_shoes_ladder_sbc_pkmjd_bins_calibcov_v1.yaml`
+- **Prior-MC bias bound (kcor time-bin priors):**
+  `configs/pantheon_plus_shoes_ladder_prior_mc_kcor_timebins_v1.yaml`
 - **Injection/SBC under CALIB-only priors (survey/time injections):**
   `configs/pantheon_plus_shoes_ladder_injection_calibcov_misspec_v1.yaml`,
   `configs/pantheon_plus_shoes_ladder_injection_calibcov_modeled_v1.yaml`,

@@ -16,6 +16,7 @@ from hubble_systematics.audit.tasks import (
     run_group_split_null_task,
     run_hemisphere_scan_task,
     run_injections,
+    run_prior_mc_task,
     run_predictive_score_task,
     run_split_null_task,
     run_split_fit_task,
@@ -63,6 +64,8 @@ def run_from_config_path(config_path: Path) -> Path:
             results["tasks"][task] = run_hemisphere_scan_task(ctx)
         elif task == "predictive_score":
             results["tasks"][task] = run_predictive_score_task(ctx)
+        elif task == "prior_mc":
+            results["tasks"][task] = run_prior_mc_task(ctx)
         elif task == "split_fit":
             results["tasks"][task] = run_split_fit_task(ctx)
         elif task == "split_null":

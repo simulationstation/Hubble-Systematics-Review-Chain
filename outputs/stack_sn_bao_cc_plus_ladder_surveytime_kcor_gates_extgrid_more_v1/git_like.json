@@ -1,0 +1,28 @@
+{
+  "branch": "main",
+  "describe": "f5a274f-dirty",
+  "dirty": true,
+  "head": "f5a274f19fb769fc70e2fb216337e69198f91fe5",
+  "ok": true,
+  "remotes": [
+    "origin\tgit@github.com:simulationstation/Hubble-Systematics-Review-Chain.git (fetch)",
+    "origin\tgit@github.com:simulationstation/Hubble-Systematics-Review-Chain.git (push)"
+  ],
+  "status_porcelain": [
+    "M src/hubble_systematics/audit/reporting.py",
+    " M src/hubble_systematics/audit/runner.py",
+    " M src/hubble_systematics/audit/tasks.py",
+    "?? configs/pantheon_plus_shoes_ladder_prior_mc_kcor_timebins_v1.yaml",
+    "?? configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_surveytime_kcor_extgrid_more_v1.yaml",
+    "?? configs/stack_sn_bao_cc_plus_ladder_surveytime_kcor_gates_extgrid_more_v1.yaml",
+    "?? data/processed/external_calibration/pantheon_plus_shoes_sigma_overrides_from_kcor_variants_v1.json",
+    "?? data/processed/external_calibration/pantheon_plus_shoes_sigma_overrides_from_kcor_variants_v1.meta.json",
+    "?? data/raw/pantheon_plus_calibration/SNANA_kcor/",
+    "?? data/raw/pantheon_plus_calibration/filters/",
+    "?? outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_surveytime_kcor_extgrid_more_v1/",
+    "?? outputs/stack_sn_bao_cc_plus_ladder_surveytime_kcor_gates_extgrid_more_v1/",
+    "?? scripts/derive_pantheon_shoes_kcor_variant_priors.py",
+    "?? src/hubble_systematics/audit/prior_mc.py"
+  ],
+  "toplevel": "/home/primary/Hubble-Systematics-Review-Chain"
+}
