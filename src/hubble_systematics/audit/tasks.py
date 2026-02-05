@@ -26,6 +26,7 @@ from hubble_systematics.probes.gaussian_measurement import load_gaussian_measure
 from hubble_systematics.probes.h0_grid import load_h0_grid_posterior_dataset
 from hubble_systematics.probes.pantheon_plus import load_pantheon_plus_dataset
 from hubble_systematics.probes.pantheon_plus_shoes_ladder import load_pantheon_plus_shoes_ladder_dataset
+from hubble_systematics.probes.siren_gate2_grid import load_siren_gate2_grid_dataset
 from hubble_systematics.shared_scale import apply_shared_scale_prior
 
 
@@ -54,6 +55,8 @@ def _load_probe(cfg: dict[str, Any]):
         return load_h0_grid_posterior_dataset(probe)
     if name == "gaussian_measurement":
         return load_gaussian_measurement_dataset(probe)
+    if name == "siren_gate2_grid":
+        return load_siren_gate2_grid_dataset(probe)
     raise ValueError(f"Unknown probe name: {name}")
 
 

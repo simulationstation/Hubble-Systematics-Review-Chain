@@ -32,6 +32,7 @@ This file maps the “systematics-first” spec you described (CatWISE-style sta
 - `chronometers` (cosmic chronometers): `src/hubble_systematics/probes/chronometers.py`
 - `h0_grid` (a 1D posterior grid / likelihood for H0, linear or ln-space): `src/hubble_systematics/probes/h0_grid.py`
 - `gaussian_measurement` (single-number Gaussian constraint on `H0` or `rd_Mpc`): `src/hubble_systematics/probes/gaussian_measurement.py`
+- `siren_gate2_grid` (Gate-2 dark-siren grid + event metadata; selection-corrected): `src/hubble_systematics/probes/siren_gate2_grid.py`
 - `stack` (combine multiple parts with shared parameters by name): handled in `src/hubble_systematics/audit/tasks.py`
 
 ## “Audit packet” configs (how to run each spec component)
@@ -57,4 +58,3 @@ Start at `docs/LAYMAN_SUMMARY.md` and the latest “real run” reports:
 
 - `outputs/pantheon_plus_shoes_ladder_predictive_score_v2/report.md`
 - `outputs/stack_sn_bao_cc_siren_plus_ladder_cal_offset_v2/report.md`
-

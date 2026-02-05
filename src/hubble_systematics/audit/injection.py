@@ -65,7 +65,7 @@ def run_injection_suite(
     rows: list[dict[str, Any]] = []
     for amp in amps:
         amp = float(amp)
-        delta = _injection_delta(dataset=dataset, mechanism=mechanism, amp=amp, inj_cfg=inj_cfg)
+        delta = _injection_delta(n=y_base.size, dataset=dataset, mechanism=mechanism, amp=amp, inj_cfg=inj_cfg)
         vals = np.empty(n_mc, dtype=float)
         for t in range(n_mc):
             if use_diag:
@@ -88,9 +88,10 @@ def run_injection_suite(
     return InjectionResult(mechanism=mechanism, amplitudes=[float(a) for a in amps], param_of_interest=poi, rows=rows)
 
 
-def _injection_delta(*, dataset, mechanism: str, amp: float, inj_cfg: dict[str, Any]) -> np.ndarray:
-    n = int(dataset.z.size)
+def _injection_delta(*, n: int, dataset, mechanism: str, amp: float, inj_cfg: dict[str, Any]) -> np.ndarray:
     if mechanism == "global_offset_mag":
+        return np.full(n, float(amp))
+    if mechanism in {"y_offset", "y_shift"}:
         return np.full(n, float(amp))
     if mechanism == "calibrator_offset_mag":
         if not hasattr(dataset, "is_calibrator"):

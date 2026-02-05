@@ -108,6 +108,28 @@ probe:
   space: ln        # ln (exact delta_lnH0 mapping) or linear (small-delta approximation)
 ```
 
+### Gate-2 siren grid (event-level metadata; selection-corrected)
+
+Reads a Gate-2 JSON produced by the `Dark_Siren_Ladder_Audit` project and retains per-event metadata
+(`ess_min`, `n_good_min`, event time parsed from name, and PE analysis label).
+
+When evaluating a subset of events, it recomputes the **selection-corrected** posterior on the
+shared `H0_grid`:
+
+- `logpost(H0) = sum_i logL_i(H0) - N * log_alpha_grid(H0) + const`
+
+It then summarizes that subset posterior as a Gaussian moment approximation in either `ln(H0)`
+(default; log-normal style) or linear `H0`, enabling the same cut/epoch drift audits while keeping
+the runner linear-Gaussian.
+
+```yaml
+probe:
+  name: siren_gate2_grid
+  data_path: data/processed/sirens/gr_h0_selection_on_inv_sampling_pdf.json
+  label: gate2_gr_o3_events
+  space: ln   # or: linear
+```
+
 ### Stack (joint fit across probes)
 
 ```yaml

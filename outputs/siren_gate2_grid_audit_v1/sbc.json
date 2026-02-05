@@ -1,0 +1,19 @@
+{
+  "coverage_68": {
+    "delta_lnH0": 0.703125
+  },
+  "coverage_95": {
+    "delta_lnH0": 0.96875
+  },
+  "n_rep": 512,
+  "param_names": [
+    "delta_lnH0"
+  ],
+  "use_diagonal_errors": true,
+  "zscore_mean": {
+    "delta_lnH0": -0.14317745033924667
+  },
+  "zscore_std": {
+    "delta_lnH0": 0.9072833498852527
+  }
+}

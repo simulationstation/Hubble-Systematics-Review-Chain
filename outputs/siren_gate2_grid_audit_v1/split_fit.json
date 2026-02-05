@@ -1,0 +1,17 @@
+{
+  "param": "delta_lnH0",
+  "rows": [
+    {
+      "label": "0",
+      "n": 2,
+      "skipped": true
+    },
+    {
+      "label": "1",
+      "mean": -0.10562980232810747,
+      "n": 31,
+      "sd": 0.20308930678516873
+    }
+  ],
+  "split_var": "pe_analysis_id"
+}

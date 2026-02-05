@@ -22,6 +22,9 @@ using this repo’s **linear-Gaussian audit models** (not a full end-to-end SH0E
   Reproduce: `configs/stack_sn_bao_cc_siren_plus_ladder_cal_offset_v2.yaml`
 - **Anti-overfit gates:** cross-validated predictive scoring and exact Gaussian log-evidence both *penalize* adding flexible closure terms (HF redshift splines / sky low-ℓ modes) on the ladder subset.  
   Reports: `outputs/pantheon_plus_shoes_ladder_predictive_score_v2/report.md`, `outputs/pantheon_plus_shoes_ladder_level_sweep_v2/report.md`
+- **Independent probe adapter (sirens, Gate-2):** selection-corrected per-event `logL(H0)` grid + metadata cut/time drift audit.  
+  Report: `outputs/siren_gate2_grid_audit_v1/report.md`  
+  Reproduce: `configs/siren_gate2_grid_audit_v1.yaml`
 
 For the full status + what’s still missing vs the full ambition, start at:
 - `docs/LAYMAN_SUMMARY.md`

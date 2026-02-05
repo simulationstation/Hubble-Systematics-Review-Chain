@@ -31,6 +31,19 @@ See:
 - `outputs/stack_sn_bao_cc_stress_v2/report.md`
 - `outputs/stack_sn_bao_cc_siren_stress_v2/report.md`
 
+## Independent siren probe (real data; with metadata cuts)
+
+We added a **selection-corrected Gate‑2 dark-siren** adapter that ingests per-event `logL(H0)` curves
+on a common grid (independent of SN/BAO/CC) and enables the same cut/time drift audits using event
+QC metrics (`ess_min`, `n_good_min`) and event time parsed from the event name.
+
+- Baseline (moment summary of the selection-corrected posterior): `H0_eff ≈ 60.84 ± 12.74` (broad).  
+  Cut scan over `ess_min` shows large variation once `N` becomes small, but:
+  - correlated-cut drift null p-values are not small (≈0.81/0.81/0.88), and
+  - a time-bin shuffle null shows no significant time drift (p≈0.58–0.61).
+
+See: `outputs/siren_gate2_grid_audit_v1/report.md`.
+
 ## What we checked (real‑data stability tests)
 
 These are “does the inferred ladder scale drift when we change cuts/epochs?” tests.

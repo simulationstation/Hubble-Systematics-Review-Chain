@@ -1,0 +1,80 @@
+run:
+  run_id: siren_gate2_grid_audit_v1
+  out_base: outputs
+  tasks:
+    - baseline_fit
+    - cut_scan
+    - correlated_cut_null
+    - split_fit
+    - split_null
+    - injection_suite
+    - sbc
+    - report
+
+anchor:
+  H0: 67.4
+  Omega_m: 0.315
+  Omega_k: 0.0
+  rd_Mpc: 147.09
+
+probe:
+  name: siren_gate2_grid
+  data_path: data/processed/sirens/gr_h0_selection_on_inv_sampling_pdf.json
+  label: gate2_gr_o3_events
+  space: ln
+
+model:
+  ladder_level: L0
+  shared_scale:
+    enable: true
+    params: [delta_lnH0]
+    prior_sigma: 0.5
+
+scan:
+  # Quality scan: keep events with ESS >= threshold (nested, correlated cuts).
+  cut_var: ess_min
+  cut_mode: geq
+  n_cuts: 10
+  cut_min: 250
+  cut_max: 4000
+
+"null":
+  seed: 123
+  n_mc: 500
+  drift_param: delta_lnH0
+  use_diagonal_errors: true
+
+split_fit:
+  ladder_level: L0
+  split_var: pe_analysis_id
+  mode: categories
+  param: delta_lnH0
+  use_diagonal_errors: true
+
+split_null:
+  seed: 123
+  n_mc: 500
+  # Time-bin null: drift across event time (MJD).
+  # Edges are rounded quartiles for this Gate-2 run (O3 timeframe).
+  split_var: event_mjd
+  mode: bins
+  edges: [58790, 58822, 58863, 58896, 58925]
+  param: delta_lnH0
+  use_diagonal_errors: true
+  # Shuffle within PE analysis so population mix doesn't fake time drift.
+  shuffle_within: pe_analysis_id
+
+injection:
+  seed: 123
+  n_mc: 500
+  use_diagonal_errors: true
+  # Note: for this probe y is ln(H0); this injection is an ln(H0) bias.
+  mechanism: y_offset
+  amplitudes: [-0.10, -0.05, 0.0, 0.05, 0.10]
+  param_of_interest: delta_lnH0
+
+sbc:
+  seed: 123
+  n_rep: 512
+  use_diagonal_errors: true
+
