@@ -48,6 +48,17 @@ using this repo’s **linear-Gaussian audit models** (not a full end-to-end SH0E
   Reports: `outputs/stack_sn_bao_cc_plus_ladder_fragilistic_gates_v1/report.md`, `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_fragilistic_v1/report.md`  
   Reproduce: `configs/stack_sn_bao_cc_plus_ladder_fragilistic_gates_v1.yaml`, `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_fragilistic_v1.yaml`  
   Derivation: `scripts/derive_pantheon_shoes_fragilistic_priors.py`
+- **Calibration-only covariance gate (Pantheon+SH0ES `CALIB.cov`; real data):** using the Pantheon+SH0ES *calibration-only* covariance grouping (`sytematic_groupings/Pantheon+SH0ES_122221_CALIB.cov`) to derive prior widths gives σ(`calibrator_offset_mag`)≈0.019 mag. Under these bounds, the joint anchor-consistency fit can only support a much smaller step: `calibrator_offset_mag ≈ 0.045 ± 0.016` (tension-reduction frac ≈ 0.09 vs ≈ 0.37 when free). Calibrator-holdout predictive scoring still prefers the mechanism, but with a smaller gain (Δlogp ≈ +4.1 vs +5.7 when free).  
+  Reports: `outputs/stack_sn_bao_cc_plus_ladder_calibcov_gates_v1/report.md`, `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_calibcov_v1/report.md`  
+  Reproduce: `configs/stack_sn_bao_cc_plus_ladder_calibcov_gates_v1.yaml`, `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_calibcov_v1.yaml`  
+  Derivation: `scripts/derive_pantheon_shoes_cov_priors.py --raw-cov-path data/raw/pantheon_plus_shoes/sytematic_groupings/Pantheon+SH0ES_122221_CALIB.cov`
+- **SH0ES calibrator-chain prior scale (linear-system; real data product):** the SH0ES DataRelease includes a compact linear system (`SH0ES_Data/all[LCY]_...fits`, `lstsq_results.txt`) with σ(`fivelogH0`)≈0.028 mag. Treating that as a *calibrator-chain-inspired* prior width for an additional `calibrator_offset_mag`, the joint stack under FRAGILISTIC survey priors supports only `calibrator_offset_mag ≈ 0.074 ± 0.021` (tension-reduction frac ≈ 0.16).  
+  Reports: `outputs/stack_sn_bao_cc_plus_ladder_fragilistic_shoes_gates_v1/report.md`, `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_fragilistic_shoes_v1/report.md`  
+  Reproduce: `configs/stack_sn_bao_cc_plus_ladder_fragilistic_shoes_gates_v1.yaml`, `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_fragilistic_shoes_v1.yaml`  
+  Derivation: `scripts/derive_shoes_linear_system_fivelogh0_prior.py`
+- **Injection mapping (calibrator step → H0 shift):** with an unmodeled calibrator-only magnitude shift injected into the ladder data, the induced bias in `delta_lnH0` follows the expected slope `d(delta_lnH0)/d(Δm)≈0.46`, so faking the full ladder-vs-anchor offset requires Δm≈0.19 mag.  
+  Report: `outputs/pantheon_plus_shoes_ladder_injection_calibcov_misspec_v1/report.md`  
+  Reproduce: `configs/pantheon_plus_shoes_ladder_injection_calibcov_misspec_v1.yaml`
 - **Anti-overfit gates:** cross-validated predictive scoring and exact Gaussian log-evidence both *penalize* adding flexible closure terms (HF redshift splines / sky low-ℓ modes) on the ladder subset.  
   Reports: `outputs/pantheon_plus_shoes_ladder_predictive_score_v2/report.md`, `outputs/pantheon_plus_shoes_ladder_level_sweep_v2/report.md`
 - **External H0 probes as `h0_grid` (TRGB / lenses / masers; stress-test):** adding these does not remove the need for a large calibrator↔HF offset in the joint stack, and calibrator holdout improvements persist.  

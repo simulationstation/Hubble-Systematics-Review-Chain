@@ -119,3 +119,32 @@ Artifacts:
 - Sigma file: `data/processed/external_calibration/pantheon_plus_shoes_sigma_overrides_from_fragilistic_v1.json`
 - Gate sweep: `outputs/stack_sn_bao_cc_plus_ladder_fragilistic_gates_v1/report.md`
 - Holdout: `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_fragilistic_v1/report.md`
+
+## 2026-02-05 — CALIB-only covariance gate sharply bounds the calibrator step (real data)
+
+Pantheon+SH0ES also ships systematic-group covariance blocks. Using the **CALIB-only** grouping
+(`Pantheon+SH0ES_122221_CALIB.cov`) to derive sigma overrides yields a tight bound
+σ(`calibrator_offset_mag`)≈0.019 mag.
+
+Under that bound, the joint anchor-consistency stack can only support a much smaller step:
+
+- `calibrator_offset_mag ≈ 0.045 ± 0.016` (tension-reduction frac ≈ 0.09 vs ≈ 0.37 when free),
+- calibrator-holdout predictive scoring still prefers the mechanism but with smaller gain
+  (Δlogp ≈ +4.1 vs +5.7 when free).
+
+Artifacts:
+- Gate sweep: `outputs/stack_sn_bao_cc_plus_ladder_calibcov_gates_v1/report.md`
+- Holdout: `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_calibcov_v1/report.md`
+
+## 2026-02-05 — SH0ES linear-system σ(fivelogH0) used as a calibrator-step prior (real data product)
+
+The SH0ES DataRelease includes `lstsq_results.txt` with σ(`fivelogH0`)≈0.028 mag. Treating that as a
+calibrator-chain-inspired prior width for an *additional* `calibrator_offset_mag` reduces the step
+supported by the joint stack under FRAGILISTIC survey priors:
+
+- `calibrator_offset_mag ≈ 0.074 ± 0.021` (tension-reduction frac ≈ 0.16).
+
+Artifacts:
+- Gate sweep: `outputs/stack_sn_bao_cc_plus_ladder_fragilistic_shoes_gates_v1/report.md`
+- Holdout: `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_fragilistic_shoes_v1/report.md`
+- Derivation: `scripts/derive_shoes_linear_system_fivelogh0_prior.py`

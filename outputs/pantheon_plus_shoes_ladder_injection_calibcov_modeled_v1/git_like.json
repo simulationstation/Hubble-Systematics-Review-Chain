@@ -1,0 +1,42 @@
+{
+  "branch": "main",
+  "describe": "cff5e5c-dirty",
+  "dirty": true,
+  "head": "cff5e5c27dba9cefcabe7d9c315ada743092103d",
+  "ok": true,
+  "remotes": [
+    "origin\tgit@github.com:simulationstation/Hubble-Systematics-Review-Chain.git (fetch)",
+    "origin\tgit@github.com:simulationstation/Hubble-Systematics-Review-Chain.git (push)"
+  ],
+  "status_porcelain": [
+    "M scripts/derive_pantheon_shoes_cov_priors.py",
+    " M src/hubble_systematics/audit/injection.py",
+    " M tests/test_pantheon_plus_shoes_ladder_dataset.py",
+    "?? configs/pantheon_plus_shoes_ladder_injection_calibcov_misspec_v1.yaml",
+    "?? configs/pantheon_plus_shoes_ladder_injection_calibcov_modeled_v1.yaml",
+    "?? configs/pantheon_plus_shoes_ladder_sbc_calibcov_v1.yaml",
+    "?? configs/stack_sn_bao_cc_plus_ladder_calibcov_gates_extgrid_all_v1.yaml",
+    "?? configs/stack_sn_bao_cc_plus_ladder_calibcov_gates_v1.yaml",
+    "?? configs/stack_sn_bao_cc_plus_ladder_fragilistic_shoes_gates_v1.yaml",
+    "?? configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_calibcov_extgrid_all_v1.yaml",
+    "?? configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_calibcov_v1.yaml",
+    "?? configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_fragilistic_shoes_v1.yaml",
+    "?? data/processed/external_calibration/pantheon_plus_shoes_sigma_overrides_from_calibcov_v1.json",
+    "?? data/processed/external_calibration/pantheon_plus_shoes_sigma_overrides_from_calibcov_v1.meta.json",
+    "?? data/processed/external_calibration/shoes_linear_system_sigma_overrides_fivelogh0_v1.json",
+    "?? data/processed/external_calibration/shoes_linear_system_sigma_overrides_fivelogh0_v1.meta.json",
+    "?? data/processed/pantheon_plus_shoes_ladder/pantheon_plus_shoes_ladder_cal+hf_CALIB_zHD.meta.json",
+    "?? data/processed/pantheon_plus_shoes_ladder/pantheon_plus_shoes_ladder_cal+hf_CALIB_zHD.npz",
+    "?? data/raw/pantheon_plus_shoes/sytematic_groupings/",
+    "?? data/raw/shoes_linear_system/",
+    "?? outputs/pantheon_plus_shoes_ladder_injection_calibcov_modeled_v1/",
+    "?? outputs/stack_sn_bao_cc_plus_ladder_calibcov_gates_extgrid_all_v1/",
+    "?? outputs/stack_sn_bao_cc_plus_ladder_calibcov_gates_v1/",
+    "?? outputs/stack_sn_bao_cc_plus_ladder_fragilistic_shoes_gates_v1/",
+    "?? outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_calibcov_extgrid_all_v1/",
+    "?? outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_calibcov_v1/",
+    "?? outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_fragilistic_shoes_v1/",
+    "?? scripts/derive_shoes_linear_system_fivelogh0_prior.py"
+  ],
+  "toplevel": "/home/primary/Hubble-Systematics-Review-Chain"
+}

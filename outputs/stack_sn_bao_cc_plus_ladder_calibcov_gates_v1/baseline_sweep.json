@@ -1,0 +1,313 @@
+{
+  "base_label": "baseline_no_cal_offset",
+  "rows": [
+    {
+      "chi2": 1514.326116655068,
+      "chi2_per_dof": 0.896581478185357,
+      "delta_log_evidence_vs_first": 0.0,
+      "dof": 1689,
+      "label": "baseline_no_cal_offset",
+      "ladder_level": "stack",
+      "ledger": {
+        "H0_eff": {
+          "mean": 68.71009607258304,
+          "sd_lin": 0.30055035574835903
+        },
+        "anchor": {
+          "H0": 67.4,
+          "rd_Mpc": 147.09
+        },
+        "delta_lnH0": {
+          "mean": 0.019251129356652536,
+          "sd": 0.004374180403282623
+        },
+        "delta_mu_equiv_mag": {
+          "mean": -0.04180329624999947,
+          "sd": 0.009498412059974917
+        }
+      },
+      "log_evidence": 860.1806234857208,
+      "n": 1707,
+      "param_summary": {
+        "cal_survey_offsets": null,
+        "calibrator_offset_mag": null,
+        "hf_survey_offsets": null,
+        "hf_z_spline": null,
+        "sky_modes": null,
+        "survey_time_offsets": null,
+        "time_bin_offsets": null
+      },
+      "tension_reduction_fraction_vs_first": 0.0
+    },
+    {
+      "chi2": 1487.8986222778979,
+      "chi2_per_dof": 0.8814565297854845,
+      "delta_log_evidence_vs_first": 11.042685291165071,
+      "dof": 1688,
+      "label": "baseline_plus_cal_offset",
+      "ladder_level": "stack",
+      "ledger": {
+        "H0_eff": {
+          "mean": 68.22120618034653,
+          "sd_lin": 0.31346738035626864
+        },
+        "anchor": {
+          "H0": 67.4,
+          "rd_Mpc": 147.09
+        },
+        "calibrator_offset_equiv_H0": {
+          "mean": 62.56637216773617,
+          "sd_lin": 0.9173505306407888
+        },
+        "calibrator_offset_equiv_delta_lnH0": {
+          "mean": -0.0744170699671141,
+          "sd": 0.014662038070250176
+        },
+        "calibrator_offset_mag": {
+          "mean": 0.1615946142306293,
+          "sd": 0.03183821113682527
+        },
+        "delta_lnH0": {
+          "mean": 0.012110439659801537,
+          "sd": 0.004594867166780961
+        },
+        "delta_mu_equiv_mag": {
+          "mean": -0.026297485588370504,
+          "sd": 0.009977627278056999
+        }
+      },
+      "log_evidence": 871.2233087768859,
+      "n": 1707,
+      "param_summary": {
+        "cal_survey_offsets": null,
+        "calibrator_offset_mag": {
+          "mean": 0.1615946142306293,
+          "sd": 0.03183821113682527
+        },
+        "hf_survey_offsets": null,
+        "hf_z_spline": null,
+        "sky_modes": null,
+        "survey_time_offsets": null,
+        "time_bin_offsets": null
+      },
+      "tension_reduction_fraction_vs_first": 0.37092315804233167
+    },
+    {
+      "chi2": 1534.8397168816693,
+      "chi2_per_dof": 0.9087268898056065,
+      "delta_log_evidence_vs_first": 13.18468108936213,
+      "dof": 1689,
+      "label": "calibcov_survey_priors_only",
+      "ladder_level": "stack",
+      "ledger": {
+        "H0_eff": {
+          "mean": 68.73101698532037,
+          "sd_lin": 0.30019995607714983
+        },
+        "anchor": {
+          "H0": 67.4,
+          "rd_Mpc": 147.09
+        },
+        "delta_lnH0": {
+          "mean": 0.01955556392406039,
+          "sd": 0.004367750824075058
+        },
+        "delta_mu_equiv_mag": {
+          "mean": -0.042464367513628636,
+          "sd": 0.009484450406120892
+        }
+      },
+      "log_evidence": 873.365304575083,
+      "n": 1707,
+      "param_summary": {
+        "cal_survey_offsets": null,
+        "calibrator_offset_mag": null,
+        "hf_survey_offsets": null,
+        "hf_z_spline": null,
+        "sky_modes": null,
+        "survey_time_offsets": null,
+        "time_bin_offsets": null
+      },
+      "tension_reduction_fraction_vs_first": -0.01581385495717166
+    },
+    {
+      "chi2": 1521.8353288731837,
+      "chi2_per_dof": 0.9015612137874311,
+      "delta_log_evidence_vs_first": 16.778030713210228,
+      "dof": 1688,
+      "label": "calibcov_survey_priors_plus_cal_offset",
+      "ladder_level": "stack",
+      "ledger": {
+        "H0_eff": {
+          "mean": 68.59018129311168,
+          "sd_lin": 0.3039578103436582
+        },
+        "anchor": {
+          "H0": 67.4,
+          "rd_Mpc": 147.09
+        },
+        "calibrator_offset_equiv_H0": {
+          "mean": 66.01250199988587,
+          "sd_lin": 0.5013991923415894
+        },
+        "calibrator_offset_equiv_delta_lnH0": {
+          "mean": -0.02080086958964709,
+          "sd": 0.00759551868436158
+        },
+        "calibrator_offset_mag": {
+          "mean": 0.045168514407864443,
+          "sd": 0.016493459259056407
+        },
+        "delta_lnH0": {
+          "mean": 0.01750437673150311,
+          "sd": 0.004431506151656489
+        },
+        "delta_mu_equiv_mag": {
+          "mean": -0.03801027111823739,
+          "sd": 0.009622893340923639
+        }
+      },
+      "log_evidence": 876.9586541989311,
+      "n": 1707,
+      "param_summary": {
+        "cal_survey_offsets": null,
+        "calibrator_offset_mag": {
+          "mean": 0.045168514407864443,
+          "sd": 0.016493459259056407
+        },
+        "hf_survey_offsets": null,
+        "hf_z_spline": null,
+        "sky_modes": null,
+        "survey_time_offsets": null,
+        "time_bin_offsets": null
+      },
+      "tension_reduction_fraction_vs_first": 0.09073507287746771
+    },
+    {
+      "chi2": 1528.249913681466,
+      "chi2_per_dof": 0.9096725676675393,
+      "delta_log_evidence_vs_first": 13.223728755692036,
+      "dof": 1680,
+      "label": "calibcov_cal_survey_offsets_only",
+      "ladder_level": "stack",
+      "ledger": {
+        "H0_eff": {
+          "mean": 68.71177393173217,
+          "sd_lin": 0.3006888370159654
+        },
+        "anchor": {
+          "H0": 67.4,
+          "rd_Mpc": 147.09
+        },
+        "delta_lnH0": {
+          "mean": 0.019275548456016724,
+          "sd": 0.004376088984614362
+        },
+        "delta_mu_equiv_mag": {
+          "mean": -0.04185632165053404,
+          "sd": 0.009502556491678107
+        }
+      },
+      "log_evidence": 873.4043522414129,
+      "n": 1707,
+      "param_summary": {
+        "cal_survey_offsets": {
+          "max_abs_mean": 0.013817895221374207,
+          "n": 9
+        },
+        "calibrator_offset_mag": null,
+        "hf_survey_offsets": null,
+        "hf_z_spline": null,
+        "sky_modes": null,
+        "survey_time_offsets": null,
+        "time_bin_offsets": null
+      },
+      "tension_reduction_fraction_vs_first": -0.0012684502250123744
+    },
+    {
+      "chi2": 1525.131137609544,
+      "chi2_per_dof": 0.9051223368602636,
+      "delta_log_evidence_vs_first": 14.902177273737834,
+      "dof": 1685,
+      "label": "calibcov_cal_time_bins_only",
+      "ladder_level": "stack",
+      "ledger": {
+        "H0_eff": {
+          "mean": 68.69516388044616,
+          "sd_lin": 0.30087182461611056
+        },
+        "anchor": {
+          "H0": 67.4,
+          "rd_Mpc": 147.09
+        },
+        "delta_lnH0": {
+          "mean": 0.01903378407888431,
+          "sd": 0.004379810857424167
+        },
+        "delta_mu_equiv_mag": {
+          "mean": -0.041331336975987114,
+          "sd": 0.009510638435796326
+        }
+      },
+      "log_evidence": 875.0828007594587,
+      "n": 1707,
+      "param_summary": {
+        "cal_survey_offsets": null,
+        "calibrator_offset_mag": null,
+        "hf_survey_offsets": null,
+        "hf_z_spline": null,
+        "sky_modes": null,
+        "survey_time_offsets": null,
+        "time_bin_offsets": {
+          "max_abs_mean": 0.031753933997235084,
+          "n": 4
+        }
+      },
+      "tension_reduction_fraction_vs_first": 0.011290001419741054
+    },
+    {
+      "chi2": 1522.340740535138,
+      "chi2_per_dof": 0.9083178642811085,
+      "delta_log_evidence_vs_first": 14.543715955452171,
+      "dof": 1676,
+      "label": "calibcov_cal_survey_plus_time_bins",
+      "ladder_level": "stack",
+      "ledger": {
+        "H0_eff": {
+          "mean": 68.68073863983804,
+          "sd_lin": 0.3012703130075619
+        },
+        "anchor": {
+          "H0": 67.4,
+          "rd_Mpc": 147.09
+        },
+        "delta_lnH0": {
+          "mean": 0.018823772855714918,
+          "sd": 0.004386532803431602
+        },
+        "delta_mu_equiv_mag": {
+          "mean": -0.04087530339918602,
+          "sd": 0.00952523495608973
+        }
+      },
+      "log_evidence": 874.724339441173,
+      "n": 1707,
+      "param_summary": {
+        "cal_survey_offsets": {
+          "max_abs_mean": 0.013346656940627026,
+          "n": 9
+        },
+        "calibrator_offset_mag": null,
+        "hf_survey_offsets": null,
+        "hf_z_spline": null,
+        "sky_modes": null,
+        "survey_time_offsets": null,
+        "time_bin_offsets": {
+          "max_abs_mean": 0.03022948160741729,
+          "n": 4
+        }
+      },
+      "tension_reduction_fraction_vs_first": 0.022199035340746808
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "created_by": "scripts/derive_shoes_linear_system_fivelogh0_prior.py",
+  "inputs": {
+    "C_path": "data/raw/shoes_linear_system/allc_shoes_ceph_topantheonwt6.0_112221.fits",
+    "L_path": "data/raw/shoes_linear_system/alll_shoes_ceph_topantheonwt6.0_112221.fits",
+    "lstsq_results_path": "data/raw/shoes_linear_system/lstsq_results.txt",
+    "param_idx": 46,
+    "param_name": "calibrator_offset_mag",
+    "scale": 1.0,
+    "y_path": "data/raw/shoes_linear_system/ally_shoes_ceph_topantheonwt6.0_112221.fits"
+  },
+  "notes": [
+    "This derives a 1D sigma from the published SH0ES linear-system FITS products (L,y,C), assuming y=L.T@q with covariance C.",
+    "The chosen param_idx is treated as fivelog10(H0) for the derived H0 mean/sigma display (per SH0ES example scripts); no parameter-name mapping is bundled in the FITS headers.",
+    "Use this as a *calibrator-chain-inspired* prior scale for calibrator-only mechanisms (e.g. calibrator_offset_mag). It is not an independent external calibration dataset."
+  ],
+  "results": {
+    "H0_if_fivelogH0": {
+      "mean": 73.31587126987915,
+      "sigma_approx": 0.9453697806890075
+    },
+    "q_hat": {
+      "sigma": 0.028,
+      "value": 9.32599
+    },
+    "q_hat_computed": {
+      "sigma": 0.029941256353088936,
+      "value": 9.317887632654008
+    },
+    "q_hat_lstsq_results": {
+      "sigma": 0.028,
+      "value": 9.32599
+    }
+  },
+  "shapes": {
+    "C": [
+      3492,
+      3492
+    ],
+    "L": [
+      47,
+      3492
+    ],
+    "y": [
+      3492
+    ]
+  }
+}

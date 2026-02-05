@@ -160,6 +160,26 @@ def main() -> None:
         default="data/processed/external_calibration/pantheon_plus_shoes_sigma_overrides_from_cov_v1.json",
         help="Output JSON path for sigma_overrides mapping.",
     )
+    ap.add_argument(
+        "--raw-dat-path",
+        default="data/raw/pantheon_plus_shoes/Pantheon+SH0ES.dat",
+        help="Path to the Pantheon+SH0ES .dat file (relative to repo root unless absolute).",
+    )
+    ap.add_argument(
+        "--raw-cov-path",
+        default="data/raw/pantheon_plus_shoes/Pantheon+SH0ES_STAT+SYS.cov",
+        help="Path to the Pantheon+SH0ES .cov file to summarize (relative to repo root unless absolute).",
+    )
+    ap.add_argument(
+        "--processed-dir",
+        default="data/processed/pantheon_plus_shoes_ladder",
+        help="Directory for cached processed Pantheon+SH0ES ladder products (relative to repo root unless absolute).",
+    )
+    ap.add_argument(
+        "--tag",
+        default="cal+hf_stat+sys_zHD",
+        help="Dataset cache tag (change when swapping raw_cov_path / cuts).",
+    )
     ap.add_argument("--method", choices=["median", "mean"], default="median")
     ap.add_argument("--scale", type=float, default=1.0)
     ap.add_argument("--min-cal-per-survey", type=int, default=4)
@@ -185,19 +205,29 @@ def main() -> None:
     out_path.parent.mkdir(parents=True, exist_ok=True)
     meta_path = out_path.with_suffix(".meta.json")
 
+    raw_dat_path = Path(args.raw_dat_path).expanduser()
+    if not raw_dat_path.is_absolute():
+        raw_dat_path = (root / raw_dat_path).resolve()
+    raw_cov_path = Path(args.raw_cov_path).expanduser()
+    if not raw_cov_path.is_absolute():
+        raw_cov_path = (root / raw_cov_path).resolve()
+    processed_dir = Path(args.processed_dir).expanduser()
+    if not processed_dir.is_absolute():
+        processed_dir = (root / processed_dir).resolve()
+
     edges = [float(x) for x in str(args.pkmjd_edges).split(",") if str(x).strip()]
 
     ds = load_pantheon_plus_shoes_ladder_dataset(
         {
-            "raw_dat_path": str(root / "data/raw/pantheon_plus_shoes/Pantheon+SH0ES.dat"),
-            "raw_cov_path": str(root / "data/raw/pantheon_plus_shoes/Pantheon+SH0ES_STAT+SYS.cov"),
+            "raw_dat_path": str(raw_dat_path),
+            "raw_cov_path": str(raw_cov_path),
             "include_calibrators": True,
             "include_hubble_flow": True,
             "z_column": "zHD",
             "z_hf_min": 0.023,
             "z_hf_max": 0.15,
-            "tag": "cal+hf_stat+sys_zHD",
-            "processed_dir": str(root / "data/processed/pantheon_plus_shoes_ladder"),
+            "tag": str(args.tag),
+            "processed_dir": str(processed_dir),
         }
     )
 
@@ -225,11 +255,17 @@ def main() -> None:
     meta_out = {
         "created_by": "scripts/derive_pantheon_shoes_cov_priors.py",
         "notes": [
-            "This file encodes per-parameter sigma overrides estimated from the published Pantheon+SH0ES STAT+SYS covariance.",
+            "This file encodes per-parameter sigma overrides estimated from a Pantheon+SH0ES covariance file.",
             "Method: estimate sigma as sqrt(median positive off-diagonal cov) within each group.",
             "Use as model.priors.sigma_overrides_path in the pantheon_plus_shoes_ladder adapter.",
             "This is not an independent external calibration log; it is a covariance-implied bound from the public data product.",
         ],
+        "inputs": {
+            "raw_dat_path": str(args.raw_dat_path),
+            "raw_cov_path": str(args.raw_cov_path),
+            "processed_dir": str(args.processed_dir),
+            "tag": str(args.tag),
+        },
         "meta": meta,
     }
     meta_path.write_text(json.dumps(meta_out, indent=2, sort_keys=True) + "\n")
@@ -239,4 +275,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

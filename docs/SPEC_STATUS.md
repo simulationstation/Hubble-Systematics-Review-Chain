@@ -83,10 +83,24 @@ This file maps the “systematics-first” spec you described (CatWISE-style sta
   `scripts/derive_pantheon_shoes_fragilistic_priors.py`,
   `configs/stack_sn_bao_cc_plus_ladder_fragilistic_gates_v1.yaml`,
   `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_fragilistic_v1.yaml`
+- **Calibration-only covariance grouping (Pantheon+SH0ES `CALIB.cov`; per-survey + calibrator/time priors):**
+  `data/raw/pantheon_plus_shoes/sytematic_groupings/Pantheon+SH0ES_122221_CALIB.cov`,
+  `configs/stack_sn_bao_cc_plus_ladder_calibcov_gates_v1.yaml`,
+  `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_calibcov_v1.yaml`
+- **SH0ES linear-system prior scale (fivelogH0 σ → calibrator_offset_mag σ):**
+  `data/raw/shoes_linear_system/`,
+  `scripts/derive_shoes_linear_system_fivelogh0_prior.py`,
+  `configs/stack_sn_bao_cc_plus_ladder_fragilistic_shoes_gates_v1.yaml`,
+  `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_fragilistic_shoes_v1.yaml`
 - **Injection suite (adds new metadata proxies):**
   `configs/pantheon_plus_shoes_ladder_injection_misspec_v4.yaml`
 - **SBC (new metadata proxies):**
   `configs/pantheon_plus_shoes_ladder_sbc_new_proxies_v1.yaml`
+- **Injection/SBC under CALIB-only priors (survey/time injections):**
+  `configs/pantheon_plus_shoes_ladder_injection_calibcov_misspec_v1.yaml`,
+  `configs/pantheon_plus_shoes_ladder_injection_calibcov_modeled_v1.yaml`,
+  `configs/pantheon_plus_shoes_ladder_injection_calibcov_modeled_anchor_enforced_v1.yaml`,
+  `configs/pantheon_plus_shoes_ladder_sbc_calibcov_v1.yaml`
 - **External H0 probes as `h0_grid` posteriors (TRGB / lenses / masers):**
   `configs/stack_sn_bao_cc_plus_ladder_cal_offset_extgrid_low_v1.yaml`,
   `configs/stack_sn_bao_cc_plus_ladder_cal_offset_extgrid_high_v1.yaml`,
@@ -94,6 +108,9 @@ This file maps the “systematics-first” spec you described (CatWISE-style sta
 - **Holdout battery with external H0 grids included:**
   `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_extgrid_all_v1.yaml` and
   `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_survey_holdout_extgrid_all_v1.yaml`
+  plus the CALIB-only external-prior variants:
+  `configs/stack_sn_bao_cc_plus_ladder_calibcov_gates_extgrid_all_v1.yaml` and
+  `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_calibcov_extgrid_all_v1.yaml`
 
 ## What’s still incomplete vs the full ambition
 

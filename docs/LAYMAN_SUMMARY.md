@@ -152,6 +152,22 @@ prior, but the gain is smaller than when the offset is essentially unconstrained
 
 See: `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_cov_implied_v1/report.md`.
 
+### Calibration-only covariance grouping (Pantheon+SH0ES `CALIB.cov`)
+
+Pantheon+SH0ES ships *systematic-group* covariance blocks under `sytematic_groupings/`.
+Using the **CALIB-only** covariance (`Pantheon+SH0ES_122221_CALIB.cov`) as the summary source yields
+tighter “instrument-like” bounds, including σ(`calibrator_offset_mag`)≈0.019 mag.
+
+When we rerun the same joint anchor-consistency stack under these CALIB-only bounds:
+
+- the inferred global calibrator offset shrinks to `calibrator_offset_mag ≈ 0.045 ± 0.016`,
+- the “tension reduction fraction” drops to ≈0.09 (vs ≈0.37 when the step is effectively unconstrained),
+- calibrator-holdout predictive scoring still prefers the offset, but with a smaller gain (Δlogp ≈ +4.1).
+
+See:
+- Gate sweep: `outputs/stack_sn_bao_cc_plus_ladder_calibcov_gates_v1/report.md`
+- Holdout: `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_calibcov_v1/report.md`
+
 ### External calibration covariance (Brout+21 “FRAGILISTIC”; survey-level)
 
 Pantheon+ ships an external calibration product in its DataRelease calibration folder:
@@ -177,6 +193,20 @@ When we rerun the joint anchor-consistency stack with these tight **survey** cal
 See:
 - Gate sweep: `outputs/stack_sn_bao_cc_plus_ladder_fragilistic_gates_v1/report.md`
 - Holdout: `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_fragilistic_v1/report.md`
+
+### SH0ES calibrator-chain prior scale (linear-system products)
+
+The Pantheon+/SH0ES DataRelease includes a compact **linear system** for the full ladder
+(`SH0ES_Data/ally_...fits`, `alll_...fits`, `allc_...fits`) plus `lstsq_results.txt`.
+The last entry (index 46, “`fivelogH0`” per the SH0ES example script) reports σ≈0.028 mag.
+
+Treating that σ as a *calibrator-chain-inspired* prior width on an **additional** `calibrator_offset_mag`
+(i.e., “how big could an unmodeled extra calibrator-step effect plausibly be?”), the joint stack under
+FRAGILISTIC survey priors supports only `calibrator_offset_mag ≈ 0.074 ± 0.021` (tension-reduction frac ≈ 0.16).
+
+See:
+- Gate sweep: `outputs/stack_sn_bao_cc_plus_ladder_fragilistic_shoes_gates_v1/report.md`
+- Holdout: `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_fragilistic_shoes_v1/report.md`
 
 ## Calibrator holdout (cross-validated; real data)
 
