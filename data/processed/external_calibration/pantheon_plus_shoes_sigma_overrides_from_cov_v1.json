@@ -1,0 +1,17 @@
+{
+  "cal_survey_offset_150": 0.0218069942908233,
+  "cal_survey_offset_18": 0.01791772865069677,
+  "cal_survey_offset_5": 0.03349970149120735,
+  "cal_survey_offset_50": 0.029249444439168413,
+  "cal_survey_offset_51": 0.02656520280366781,
+  "cal_survey_offset_56": 0.050150772676001716,
+  "cal_survey_offset_57": 0.022933054746369922,
+  "cal_survey_offset_62": 0.036283191700841315,
+  "cal_survey_offset_63": 0.012119405926034494,
+  "cal_survey_offset_64": 0.02442867167899229,
+  "calibrator_offset_mag": 0.02325424692394918,
+  "pkmjd_bin_offset_1": 0.024270764306053485,
+  "pkmjd_bin_offset_2": 0.03239583306538049,
+  "pkmjd_bin_offset_3": 0.027401277342488983,
+  "pkmjd_bin_offset_4": 0.022720255280255987
+}

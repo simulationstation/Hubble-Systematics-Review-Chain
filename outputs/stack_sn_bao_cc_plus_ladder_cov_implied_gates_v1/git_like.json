@@ -1,0 +1,18 @@
+{
+  "branch": "main",
+  "describe": "4cd4ec8",
+  "dirty": true,
+  "head": "4cd4ec832b627c76d1606ffddcd8bd91142da305",
+  "ok": true,
+  "remotes": [
+    "origin\tgit@github.com:simulationstation/Hubble-Systematics-Review-Chain.git (fetch)",
+    "origin\tgit@github.com:simulationstation/Hubble-Systematics-Review-Chain.git (push)"
+  ],
+  "status_porcelain": [
+    "?? configs/stack_sn_bao_cc_plus_ladder_cov_implied_gates_v1.yaml",
+    "?? data/processed/external_calibration/",
+    "?? outputs/stack_sn_bao_cc_plus_ladder_cov_implied_gates_v1/",
+    "?? scripts/derive_pantheon_shoes_cov_priors.py"
+  ],
+  "toplevel": "/home/primary/Hubble-Systematics-Review-Chain"
+}

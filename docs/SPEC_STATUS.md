@@ -76,6 +76,9 @@ This file maps the “systematics-first” spec you described (CatWISE-style sta
   `configs/stack_sn_bao_cc_plus_ladder_cal_offset_prior_sigma_sweep_v1.yaml`
 - **External-prior gates (per-survey / per-epoch mechanisms):**
   `configs/stack_sn_bao_cc_plus_ladder_external_prior_gates_v1.yaml`
+- **Covariance-implied per-survey / per-epoch bounds (derived from published STAT+SYS cov):**
+  `scripts/derive_pantheon_shoes_cov_priors.py` and
+  `configs/stack_sn_bao_cc_plus_ladder_cov_implied_gates_v1.yaml`
 - **Injection suite (adds new metadata proxies):**
   `configs/pantheon_plus_shoes_ladder_injection_misspec_v4.yaml`
 - **SBC (new metadata proxies):**

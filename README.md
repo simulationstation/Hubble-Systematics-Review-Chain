@@ -40,6 +40,10 @@ using this repo’s **linear-Gaussian audit models** (not a full end-to-end SH0E
 - **External-prior “gate” sweep (real data):** if external calibration work can truly bound calibrator-step distortions at the ~0.02 mag level, the joint anchor-consistency fit pays a large evidence penalty and cannot maintain the large ~0.16 mag calibrator↔HF offset.  
   Report: `outputs/stack_sn_bao_cc_plus_ladder_external_prior_gates_v1/report.md`  
   Reproduce: `configs/stack_sn_bao_cc_plus_ladder_external_prior_gates_v1.yaml`
+- **Covariance-implied calibration bounds (real data):** we can also derive “budget-like” bounds for per-survey and per-epoch calibrator offsets from the published Pantheon+SH0ES STAT+SYS covariance. Under these bounds (typical σ≈0.02–0.05 mag), the joint fit cannot sustain a 0.16 mag calibrator↔HF step without a large evidence penalty.  
+  Report: `outputs/stack_sn_bao_cc_plus_ladder_cov_implied_gates_v1/report.md`  
+  Reproduce: `configs/stack_sn_bao_cc_plus_ladder_cov_implied_gates_v1.yaml`  
+  Derivation: `scripts/derive_pantheon_shoes_cov_priors.py`
 - **Anti-overfit gates:** cross-validated predictive scoring and exact Gaussian log-evidence both *penalize* adding flexible closure terms (HF redshift splines / sky low-ℓ modes) on the ladder subset.  
   Reports: `outputs/pantheon_plus_shoes_ladder_predictive_score_v2/report.md`, `outputs/pantheon_plus_shoes_ladder_level_sweep_v2/report.md`
 - **External H0 probes as `h0_grid` (TRGB / lenses / masers; stress-test):** adding these does not remove the need for a large calibrator↔HF offset in the joint stack, and calibrator holdout improvements persist.  

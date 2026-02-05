@@ -120,6 +120,29 @@ step is externally constrained).
 
 See: `outputs/stack_sn_bao_cc_plus_ladder_external_prior_gates_v1/report.md`.
 
+### “Actual” per-survey / per-epoch bounds (covariance-implied)
+
+As a more data-grounded (but still not fully independent) alternative to “assume σ=0.02 mag”, we
+derived per-survey and per-epoch prior widths directly from the *published* Pantheon+SH0ES
+STAT+SYS covariance by measuring typical correlated variance within each group.
+
+This produces a sigma-override file with values like:
+
+- `calibrator_offset_mag ≈ 0.023` mag,
+- per-survey calibrator offsets typically σ≈0.02–0.05 mag,
+- per-epoch time-bin offsets σ≈0.02–0.03 mag,
+
+written to `data/processed/external_calibration/pantheon_plus_shoes_sigma_overrides_from_cov_v1.json`.
+See the derivation script: `scripts/derive_pantheon_shoes_cov_priors.py`.
+
+When we re-run the joint anchor-consistency fit under these bounds:
+
+- the global calibrator offset is forced down from ~0.16 mag to ~0.057 mag (ΔlogZ ≈ -6.7),
+- per-survey calibrator offsets top out around ~0.034 mag (ΔlogZ ≈ -11.3),
+- calibrator time-bin offsets top out around ~0.049 mag (ΔlogZ ≈ -9.1).
+
+See: `outputs/stack_sn_bao_cc_plus_ladder_cov_implied_gates_v1/report.md`.
+
 ## Calibrator holdout (cross-validated; real data)
 
 A key “is this just overfitting a few points?” check is to **hold out calibrators** while keeping

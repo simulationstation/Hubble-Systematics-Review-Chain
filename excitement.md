@@ -84,3 +84,18 @@ Artifacts:
   `outputs/stack_sn_bao_cc_plus_ladder_cal_offset_extgrid_all_v1/report.md`
 - Holdouts: `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_extgrid_all_v1/report.md`,
   `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_survey_holdout_extgrid_all_v1/report.md`
+
+## 2026-02-05 — Covariance-implied “realistic” per-survey/epoch bounds still too small (real data)
+
+If we derive prior widths for calibrator-step distortions directly from the published Pantheon+SH0ES
+STAT+SYS covariance (typical σ≈0.02–0.05 mag), the joint anchor-consistency stack cannot sustain the
+full ~0.16 mag calibrator↔HF step:
+
+- Global `calibrator_offset_mag` is forced down to ~0.057 mag (ΔlogZ ≈ -6.7).
+- Per-survey calibrator offsets top out around ~0.034 mag (ΔlogZ ≈ -11.3).
+- Calibrator time-bin offsets top out around ~0.049 mag (ΔlogZ ≈ -9.1).
+
+Artifacts:
+- Derivation: `scripts/derive_pantheon_shoes_cov_priors.py`
+- Sigma file: `data/processed/external_calibration/pantheon_plus_shoes_sigma_overrides_from_cov_v1.json`
+- Gate sweep: `outputs/stack_sn_bao_cc_plus_ladder_cov_implied_gates_v1/report.md`
