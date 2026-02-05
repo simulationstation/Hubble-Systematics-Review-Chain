@@ -27,6 +27,7 @@ import astropy.units as u
 
 @dataclass(frozen=True)
 class PantheonPlusShoesLadderDataset:
+    cid: np.ndarray
     z: np.ndarray
     m_b_corr: np.ndarray
     m_b_corr_err_diag: np.ndarray
@@ -44,6 +45,12 @@ class PantheonPlusShoesLadderDataset:
     fitprob: np.ndarray
     fitchi2: np.ndarray
     ndof: np.ndarray
+    c: np.ndarray
+    c_err: np.ndarray
+    x1: np.ndarray
+    x1_err: np.ndarray
+    biascor_m_b: np.ndarray
+    biascorerr_m_b: np.ndarray
     mu_shoes: np.ndarray
     mu_shoes_err_diag: np.ndarray
     ceph_dist: np.ndarray
@@ -62,6 +69,12 @@ class PantheonPlusShoesLadderDataset:
     m_b_corr_err_raw_sd: float
     m_b_corr_err_vpec_mu: float
     m_b_corr_err_vpec_sd: float
+    c_mu: float
+    c_sd: float
+    x1_mu: float
+    x1_sd: float
+    biascor_m_b_mu: float
+    biascor_m_b_sd: float
     pkmjd_mu: float
     pkmjd_sd: float
     pkmjd_err_mu: float
@@ -69,8 +82,22 @@ class PantheonPlusShoesLadderDataset:
     pkmjd_edges: np.ndarray | None
 
     def get_column(self, name: str) -> np.ndarray:
+        if name in {"cid", "CID"}:
+            return self.cid
         if name == "z":
             return self.z
+        if name in {"c"}:
+            return self.c
+        if name in {"c_err", "cERR"}:
+            return self.c_err
+        if name in {"x1"}:
+            return self.x1
+        if name in {"x1_err", "x1ERR"}:
+            return self.x1_err
+        if name in {"biascor_m_b", "biasCor_m_b"}:
+            return self.biascor_m_b
+        if name in {"biascorerr_m_b", "biasCorErr_m_b"}:
+            return self.biascorerr_m_b
         if name in {"m_b_corr_err_diag"}:
             return self.m_b_corr_err_diag
         if name in {"m_b_corr_err_raw"}:
@@ -166,6 +193,7 @@ class PantheonPlusShoesLadderDataset:
         idx = np.where(mask)[0]
         cov = self.cov[np.ix_(idx, idx)]
         return PantheonPlusShoesLadderDataset(
+            cid=self.cid[idx],
             z=self.z[idx],
             m_b_corr=self.m_b_corr[idx],
             m_b_corr_err_diag=self.m_b_corr_err_diag[idx],
@@ -183,6 +211,12 @@ class PantheonPlusShoesLadderDataset:
             fitprob=self.fitprob[idx],
             fitchi2=self.fitchi2[idx],
             ndof=self.ndof[idx],
+            c=self.c[idx],
+            c_err=self.c_err[idx],
+            x1=self.x1[idx],
+            x1_err=self.x1_err[idx],
+            biascor_m_b=self.biascor_m_b[idx],
+            biascorerr_m_b=self.biascorerr_m_b[idx],
             mu_shoes=self.mu_shoes[idx],
             mu_shoes_err_diag=self.mu_shoes_err_diag[idx],
             ceph_dist=self.ceph_dist[idx],
@@ -201,6 +235,12 @@ class PantheonPlusShoesLadderDataset:
             m_b_corr_err_raw_sd=self.m_b_corr_err_raw_sd,
             m_b_corr_err_vpec_mu=self.m_b_corr_err_vpec_mu,
             m_b_corr_err_vpec_sd=self.m_b_corr_err_vpec_sd,
+            c_mu=self.c_mu,
+            c_sd=self.c_sd,
+            x1_mu=self.x1_mu,
+            x1_sd=self.x1_sd,
+            biascor_m_b_mu=self.biascor_m_b_mu,
+            biascor_m_b_sd=self.biascor_m_b_sd,
             pkmjd_mu=self.pkmjd_mu,
             pkmjd_sd=self.pkmjd_sd,
             pkmjd_err_mu=self.pkmjd_err_mu,
@@ -397,6 +437,63 @@ class PantheonPlusShoesLadderDataset:
                 raise ValueError(f"Unsupported pkmjd_err_apply_to: {apply_to}")
             X = X.append(DesignMatrix(X=tz.reshape(-1, 1), names=["pkmjd_err_linear_mag"]))
 
+        def add_c_linear() -> None:
+            nonlocal X
+            x = np.asarray(self.c, dtype=float)
+            good = np.isfinite(x)
+            if not np.any(good):
+                raise ValueError("No finite c values for c_linear")
+            mu_x = float(self.c_mu)
+            sd_x = float(self.c_sd)
+            xz = np.zeros_like(x, dtype=float)
+            xz[good] = (x[good] - mu_x) / sd_x
+            apply_to = str((mech_cfg.get("c_apply_to") or "all")).lower()
+            if apply_to == "hf":
+                xz = xz * hf
+            elif apply_to == "cal":
+                xz = xz * cal
+            elif apply_to != "all":
+                raise ValueError(f"Unsupported c_apply_to: {apply_to}")
+            X = X.append(DesignMatrix(X=xz.reshape(-1, 1), names=["c_linear_mag"]))
+
+        def add_x1_linear() -> None:
+            nonlocal X
+            x = np.asarray(self.x1, dtype=float)
+            good = np.isfinite(x)
+            if not np.any(good):
+                raise ValueError("No finite x1 values for x1_linear")
+            mu_x = float(self.x1_mu)
+            sd_x = float(self.x1_sd)
+            xz = np.zeros_like(x, dtype=float)
+            xz[good] = (x[good] - mu_x) / sd_x
+            apply_to = str((mech_cfg.get("x1_apply_to") or "all")).lower()
+            if apply_to == "hf":
+                xz = xz * hf
+            elif apply_to == "cal":
+                xz = xz * cal
+            elif apply_to != "all":
+                raise ValueError(f"Unsupported x1_apply_to: {apply_to}")
+            X = X.append(DesignMatrix(X=xz.reshape(-1, 1), names=["x1_linear_mag"]))
+
+        def add_biascor_m_b_linear() -> None:
+            nonlocal X
+            x = np.asarray(self.biascor_m_b, dtype=float)
+            good = np.isfinite(x)
+            if not np.any(good):
+                raise ValueError("No finite biascor_m_b values for biascor_m_b_linear")
+            mu_x = float(self.biascor_m_b_mu)
+            sd_x = float(self.biascor_m_b_sd)
+            xz = np.zeros_like(x, dtype=float)
+            xz[good] = (x[good] - mu_x) / sd_x
+            apply_to = str((mech_cfg.get("biascor_m_b_apply_to") or "all")).lower()
+            if apply_to == "hf":
+                xz = xz * hf
+            elif apply_to == "cal":
+                xz = xz * cal
+            elif apply_to != "all":
+                raise ValueError(f"Unsupported biascor_m_b_apply_to: {apply_to}")
+            X = X.append(DesignMatrix(X=xz.reshape(-1, 1), names=["biascor_m_b_linear_mag"]))
+
         def add_pkmjd_bins() -> None:
             nonlocal X
             bins_cfg = mech_cfg.get("pkmjd_bins", {}) or {}
@@ -591,6 +688,12 @@ class PantheonPlusShoesLadderDataset:
                 add_pkmjd_linear()
             if bool(mech_cfg.get("pkmjd_err_linear", False)):
                 add_pkmjd_err_linear()
+            if bool(mech_cfg.get("c_linear", False)):
+                add_c_linear()
+            if bool(mech_cfg.get("x1_linear", False)):
+                add_x1_linear()
+            if bool(mech_cfg.get("biascor_m_b_linear", False)):
+                add_biascor_m_b_linear()
             add_survey_pkmjd_bins()
             add_pkmjd_bins()
 
@@ -662,6 +765,12 @@ class PantheonPlusShoesLadderDataset:
                 sigmas.append(float(prior_cfg.get("sigma_pkmjd_linear_mag", 0.2)))
             elif n == "pkmjd_err_linear_mag":
                 sigmas.append(float(prior_cfg.get("sigma_pkmjd_err_linear_mag", 0.2)))
+            elif n == "c_linear_mag":
+                sigmas.append(float(prior_cfg.get("sigma_c_linear_mag", 0.2)))
+            elif n == "x1_linear_mag":
+                sigmas.append(float(prior_cfg.get("sigma_x1_linear_mag", 0.2)))
+            elif n == "biascor_m_b_linear_mag":
+                sigmas.append(float(prior_cfg.get("sigma_biascor_m_b_linear_mag", 0.2)))
             elif n.startswith("pkmjd_bin_offset_"):
                 k = n.removeprefix("pkmjd_bin_offset_")
                 sigma = None
@@ -742,6 +851,7 @@ def load_pantheon_plus_shoes_ladder_dataset(probe_cfg: dict[str, Any]) -> Panthe
         npz = np.load(processed_npz)
         # Backwards compatibility: regenerate cache if required keys are missing.
         required = [
+            "cid",
             "z",
             "m_b_corr",
             "m_b_corr_err_diag",
@@ -759,6 +869,12 @@ def load_pantheon_plus_shoes_ladder_dataset(probe_cfg: dict[str, Any]) -> Panthe
             "fitprob",
             "fitchi2",
             "ndof",
+            "c",
+            "c_err",
+            "x1",
+            "x1_err",
+            "biascor_m_b",
+            "biascorerr_m_b",
             "mu_shoes",
             "mu_shoes_err_diag",
             "ceph_dist",
@@ -815,6 +931,30 @@ def load_pantheon_plus_shoes_ladder_dataset(probe_cfg: dict[str, Any]) -> Panthe
             else:
                 m_b_corr_err_vpec_mu, m_b_corr_err_vpec_sd = 0.0, 1.0
 
+            c = np.asarray(npz["c"], dtype=float)
+            good_c = np.isfinite(c)
+            if np.any(good_c):
+                c_mu = float(np.mean(c[good_c]))
+                c_sd = float(np.std(c[good_c]) + 1e-12)
+            else:
+                c_mu, c_sd = 0.0, 1.0
+
+            x1 = np.asarray(npz["x1"], dtype=float)
+            good_x1 = np.isfinite(x1)
+            if np.any(good_x1):
+                x1_mu = float(np.mean(x1[good_x1]))
+                x1_sd = float(np.std(x1[good_x1]) + 1e-12)
+            else:
+                x1_mu, x1_sd = 0.0, 1.0
+
+            biascor_m_b = np.asarray(npz["biascor_m_b"], dtype=float)
+            good_b = np.isfinite(biascor_m_b)
+            if np.any(good_b):
+                biascor_m_b_mu = float(np.mean(biascor_m_b[good_b]))
+                biascor_m_b_sd = float(np.std(biascor_m_b[good_b]) + 1e-12)
+            else:
+                biascor_m_b_mu, biascor_m_b_sd = 0.0, 1.0
+
             if np.any(good_t):
                 pkmjd_mu = float(np.mean(pkmjd[good_t]))
                 pkmjd_sd = float(np.std(pkmjd[good_t]) + 1e-12)
@@ -833,6 +973,7 @@ def load_pantheon_plus_shoes_ladder_dataset(probe_cfg: dict[str, Any]) -> Panthe
                 pkmjd_err_mu, pkmjd_err_sd = 0.0, 1.0
 
             return PantheonPlusShoesLadderDataset(
+                cid=np.asarray(npz["cid"], dtype=str),
                 z=npz["z"],
                 m_b_corr=npz["m_b_corr"],
                 m_b_corr_err_diag=npz["m_b_corr_err_diag"],
@@ -850,6 +991,12 @@ def load_pantheon_plus_shoes_ladder_dataset(probe_cfg: dict[str, Any]) -> Panthe
                 fitprob=npz["fitprob"],
                 fitchi2=npz["fitchi2"],
                 ndof=npz["ndof"],
+                c=npz["c"],
+                c_err=npz["c_err"],
+                x1=npz["x1"],
+                x1_err=npz["x1_err"],
+                biascor_m_b=npz["biascor_m_b"],
+                biascorerr_m_b=npz["biascorerr_m_b"],
                 mu_shoes=npz["mu_shoes"],
                 mu_shoes_err_diag=npz["mu_shoes_err_diag"],
                 ceph_dist=npz["ceph_dist"],
@@ -868,6 +1015,12 @@ def load_pantheon_plus_shoes_ladder_dataset(probe_cfg: dict[str, Any]) -> Panthe
                 m_b_corr_err_raw_sd=m_b_corr_err_raw_sd,
                 m_b_corr_err_vpec_mu=m_b_corr_err_vpec_mu,
                 m_b_corr_err_vpec_sd=m_b_corr_err_vpec_sd,
+                c_mu=c_mu,
+                c_sd=c_sd,
+                x1_mu=x1_mu,
+                x1_sd=x1_sd,
+                biascor_m_b_mu=biascor_m_b_mu,
+                biascor_m_b_sd=biascor_m_b_sd,
                 pkmjd_mu=pkmjd_mu,
                 pkmjd_sd=pkmjd_sd,
                 pkmjd_err_mu=pkmjd_err_mu,
@@ -910,6 +1063,7 @@ def load_pantheon_plus_shoes_ladder_dataset(probe_cfg: dict[str, Any]) -> Panthe
     cov = cov_full[np.ix_(idx, idx)]
 
     # Extract required columns.
+    cid = df["CID"].to_numpy(dtype=str)[idx]
     ra = df["RA"].to_numpy(dtype=float)[idx]
     dec = df["DEC"].to_numpy(dtype=float)[idx]
     idsurvey = df["IDSURVEY"].to_numpy(dtype=int)[idx]
@@ -923,6 +1077,12 @@ def load_pantheon_plus_shoes_ladder_dataset(probe_cfg: dict[str, Any]) -> Panthe
     m_b_corr_err_diag = df["m_b_corr_err_DIAG"].to_numpy(dtype=float)[idx]
     m_b_corr_err_raw = df["m_b_corr_err_RAW"].to_numpy(dtype=float)[idx]
     m_b_corr_err_vpec = df["m_b_corr_err_VPEC"].to_numpy(dtype=float)[idx]
+    c = df["c"].to_numpy(dtype=float)[idx]
+    c_err = df["cERR"].to_numpy(dtype=float)[idx]
+    x1 = df["x1"].to_numpy(dtype=float)[idx]
+    x1_err = df["x1ERR"].to_numpy(dtype=float)[idx]
+    biascor_m_b = df["biasCor_m_b"].to_numpy(dtype=float)[idx]
+    biascorerr_m_b = df["biasCorErr_m_b"].to_numpy(dtype=float)[idx]
     mu_shoes = df["MU_SH0ES"].to_numpy(dtype=float)[idx]
     mu_shoes_err_diag = df["MU_SH0ES_ERR_DIAG"].to_numpy(dtype=float)[idx]
     ceph_dist = df["CEPH_DIST"].to_numpy(dtype=float)[idx]
@@ -970,6 +1130,27 @@ def load_pantheon_plus_shoes_ladder_dataset(probe_cfg: dict[str, Any]) -> Panthe
     else:
         m_b_corr_err_vpec_mu, m_b_corr_err_vpec_sd = 0.0, 1.0
 
+    good_c = np.isfinite(c)
+    if np.any(good_c):
+        c_mu = float(np.mean(c[good_c]))
+        c_sd = float(np.std(c[good_c]) + 1e-12)
+    else:
+        c_mu, c_sd = 0.0, 1.0
+
+    good_x1 = np.isfinite(x1)
+    if np.any(good_x1):
+        x1_mu = float(np.mean(x1[good_x1]))
+        x1_sd = float(np.std(x1[good_x1]) + 1e-12)
+    else:
+        x1_mu, x1_sd = 0.0, 1.0
+
+    good_b = np.isfinite(biascor_m_b)
+    if np.any(good_b):
+        biascor_m_b_mu = float(np.mean(biascor_m_b[good_b]))
+        biascor_m_b_sd = float(np.std(biascor_m_b[good_b]) + 1e-12)
+    else:
+        biascor_m_b_mu, biascor_m_b_sd = 0.0, 1.0
+
     if np.any(good_t):
         pkmjd_mu = float(np.mean(pkmjd[good_t]))
         pkmjd_sd = float(np.std(pkmjd[good_t]) + 1e-12)
@@ -1005,6 +1186,7 @@ def load_pantheon_plus_shoes_ladder_dataset(probe_cfg: dict[str, Any]) -> Panthe
     processed_meta.write_text(json.dumps(meta, indent=2, sort_keys=True))
     np.savez_compressed(
         processed_npz,
+        cid=cid,
         z=z[idx],
         m_b_corr=m_b_corr,
         m_b_corr_err_diag=m_b_corr_err_diag,
@@ -1022,6 +1204,12 @@ def load_pantheon_plus_shoes_ladder_dataset(probe_cfg: dict[str, Any]) -> Panthe
         fitprob=fitprob,
         fitchi2=fitchi2,
         ndof=ndof,
+        c=c,
+        c_err=c_err,
+        x1=x1,
+        x1_err=x1_err,
+        biascor_m_b=biascor_m_b,
+        biascorerr_m_b=biascorerr_m_b,
         mu_shoes=mu_shoes,
         mu_shoes_err_diag=mu_shoes_err_diag,
         ceph_dist=ceph_dist,
@@ -1030,6 +1218,7 @@ def load_pantheon_plus_shoes_ladder_dataset(probe_cfg: dict[str, Any]) -> Panthe
     )
 
     return PantheonPlusShoesLadderDataset(
+        cid=cid,
         z=z[idx],
         m_b_corr=m_b_corr,
         m_b_corr_err_diag=m_b_corr_err_diag,
@@ -1047,6 +1236,12 @@ def load_pantheon_plus_shoes_ladder_dataset(probe_cfg: dict[str, Any]) -> Panthe
         fitprob=fitprob,
         fitchi2=fitchi2,
         ndof=ndof,
+        c=c,
+        c_err=c_err,
+        x1=x1,
+        x1_err=x1_err,
+        biascor_m_b=biascor_m_b,
+        biascorerr_m_b=biascorerr_m_b,
         mu_shoes=mu_shoes,
         mu_shoes_err_diag=mu_shoes_err_diag,
         ceph_dist=ceph_dist,
@@ -1065,6 +1260,12 @@ def load_pantheon_plus_shoes_ladder_dataset(probe_cfg: dict[str, Any]) -> Panthe
         m_b_corr_err_raw_sd=m_b_corr_err_raw_sd,
         m_b_corr_err_vpec_mu=m_b_corr_err_vpec_mu,
         m_b_corr_err_vpec_sd=m_b_corr_err_vpec_sd,
+        c_mu=c_mu,
+        c_sd=c_sd,
+        x1_mu=x1_mu,
+        x1_sd=x1_sd,
+        biascor_m_b_mu=biascor_m_b_mu,
+        biascor_m_b_sd=biascor_m_b_sd,
         pkmjd_mu=pkmjd_mu,
         pkmjd_sd=pkmjd_sd,
         pkmjd_err_mu=pkmjd_err_mu,

@@ -260,6 +260,99 @@ def _injection_delta(*, n: int, dataset, mechanism: str, amp: float, inj_cfg: di
         elif apply_to != "all":
             raise ValueError(f"Unsupported apply_to: {apply_to}")
         return float(amp) * xz
+    if mechanism in {"c_linear_mag", "c_linear"}:
+        if not hasattr(dataset, "c"):
+            raise ValueError("c_linear_mag requires dataset.c")
+        x = np.asarray(getattr(dataset, "c"), dtype=float).reshape(-1)
+        if x.shape != (n,):
+            raise ValueError("dataset.c shape mismatch")
+        good = np.isfinite(x)
+        if not np.any(good):
+            raise ValueError("No finite c values")
+
+        if hasattr(dataset, "c_mu") and hasattr(dataset, "c_sd"):
+            mu = float(getattr(dataset, "c_mu"))
+            sd = float(getattr(dataset, "c_sd"))
+        else:
+            mu = float(np.mean(x[good]))
+            sd = float(np.std(x[good]) + 1e-12)
+
+        xz = np.zeros_like(x, dtype=float)
+        xz[good] = (x[good] - mu) / sd
+        apply_to = str(inj_cfg.get("apply_to", "all")).lower()
+        if apply_to == "hf":
+            if not hasattr(dataset, "is_hubble_flow"):
+                raise ValueError("c_linear_mag apply_to=hf requires dataset.is_hubble_flow")
+            xz *= np.asarray(getattr(dataset, "is_hubble_flow"), dtype=bool).astype(float)
+        elif apply_to == "cal":
+            if not hasattr(dataset, "is_calibrator"):
+                raise ValueError("c_linear_mag apply_to=cal requires dataset.is_calibrator")
+            xz *= np.asarray(getattr(dataset, "is_calibrator"), dtype=bool).astype(float)
+        elif apply_to != "all":
+            raise ValueError(f"Unsupported apply_to: {apply_to}")
+        return float(amp) * xz
+    if mechanism in {"x1_linear_mag", "x1_linear"}:
+        if not hasattr(dataset, "x1"):
+            raise ValueError("x1_linear_mag requires dataset.x1")
+        x = np.asarray(getattr(dataset, "x1"), dtype=float).reshape(-1)
+        if x.shape != (n,):
+            raise ValueError("dataset.x1 shape mismatch")
+        good = np.isfinite(x)
+        if not np.any(good):
+            raise ValueError("No finite x1 values")
+
+        if hasattr(dataset, "x1_mu") and hasattr(dataset, "x1_sd"):
+            mu = float(getattr(dataset, "x1_mu"))
+            sd = float(getattr(dataset, "x1_sd"))
+        else:
+            mu = float(np.mean(x[good]))
+            sd = float(np.std(x[good]) + 1e-12)
+
+        xz = np.zeros_like(x, dtype=float)
+        xz[good] = (x[good] - mu) / sd
+        apply_to = str(inj_cfg.get("apply_to", "all")).lower()
+        if apply_to == "hf":
+            if not hasattr(dataset, "is_hubble_flow"):
+                raise ValueError("x1_linear_mag apply_to=hf requires dataset.is_hubble_flow")
+            xz *= np.asarray(getattr(dataset, "is_hubble_flow"), dtype=bool).astype(float)
+        elif apply_to == "cal":
+            if not hasattr(dataset, "is_calibrator"):
+                raise ValueError("x1_linear_mag apply_to=cal requires dataset.is_calibrator")
+            xz *= np.asarray(getattr(dataset, "is_calibrator"), dtype=bool).astype(float)
+        elif apply_to != "all":
+            raise ValueError(f"Unsupported apply_to: {apply_to}")
+        return float(amp) * xz
+    if mechanism in {"biascor_m_b_linear_mag", "biascor_m_b_linear"}:
+        if not hasattr(dataset, "biascor_m_b"):
+            raise ValueError("biascor_m_b_linear_mag requires dataset.biascor_m_b")
+        x = np.asarray(getattr(dataset, "biascor_m_b"), dtype=float).reshape(-1)
+        if x.shape != (n,):
+            raise ValueError("dataset.biascor_m_b shape mismatch")
+        good = np.isfinite(x)
+        if not np.any(good):
+            raise ValueError("No finite biascor_m_b values")
+
+        if hasattr(dataset, "biascor_m_b_mu") and hasattr(dataset, "biascor_m_b_sd"):
+            mu = float(getattr(dataset, "biascor_m_b_mu"))
+            sd = float(getattr(dataset, "biascor_m_b_sd"))
+        else:
+            mu = float(np.mean(x[good]))
+            sd = float(np.std(x[good]) + 1e-12)
+
+        xz = np.zeros_like(x, dtype=float)
+        xz[good] = (x[good] - mu) / sd
+        apply_to = str(inj_cfg.get("apply_to", "all")).lower()
+        if apply_to == "hf":
+            if not hasattr(dataset, "is_hubble_flow"):
+                raise ValueError("biascor_m_b_linear_mag apply_to=hf requires dataset.is_hubble_flow")
+            xz *= np.asarray(getattr(dataset, "is_hubble_flow"), dtype=bool).astype(float)
+        elif apply_to == "cal":
+            if not hasattr(dataset, "is_calibrator"):
+                raise ValueError("biascor_m_b_linear_mag apply_to=cal requires dataset.is_calibrator")
+            xz *= np.asarray(getattr(dataset, "is_calibrator"), dtype=bool).astype(float)
+        elif apply_to != "all":
+            raise ValueError(f"Unsupported apply_to: {apply_to}")
+        return float(amp) * xz
     if mechanism in {"m_b_corr_err_linear_mag", "m_b_corr_err_linear"}:
         if not hasattr(dataset, "m_b_corr_err_diag"):
             raise ValueError("m_b_corr_err_linear_mag requires dataset.m_b_corr_err_diag")

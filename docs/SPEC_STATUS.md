@@ -100,10 +100,17 @@ This file maps the “systematics-first” spec you described (CatWISE-style sta
   `configs/stack_sn_bao_cc_plus_ladder_surveytime_kcor_gates_extgrid_more_v1.yaml`,
   `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_surveytime_kcor_extgrid_more_v1.yaml`,
   `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_surveytime_kcor_extgrid_more_fullcov_v1.yaml`,
+  plus kcor-gated mechanism-attribution scans:
+  `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_mechanism_attribution_kcor_extgrid_more_v1.yaml`,
+  `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_mechanism_attribution_kcor_extgrid_more_fullcov_v1.yaml`,
+  `configs/stack_sn_bao_cc_plus_ladder_surveytime_kcor_gates_mechanism_attribution_extgrid_more_v1.yaml`,
   and kcor-calibrated injection/SBC checks:
   `configs/pantheon_plus_shoes_ladder_injection_kcor_survey_pkmjd_bins_misspec_v1.yaml`,
   `configs/pantheon_plus_shoes_ladder_injection_kcor_survey_pkmjd_bins_modeled_v1.yaml`,
+  `configs/pantheon_plus_shoes_ladder_injection_kcor_c_x1_biascor_misspec_v1.yaml`,
+  `configs/pantheon_plus_shoes_ladder_injection_kcor_c_x1_biascor_modeled_v1.yaml`,
   `configs/pantheon_plus_shoes_ladder_sbc_survey_pkmjd_bins_kcor_v1.yaml`,
+  `configs/pantheon_plus_shoes_ladder_sbc_kcor_c_x1_biascor_v1.yaml`,
   plus full-cov variants:
   `configs/pantheon_plus_shoes_ladder_injection_kcor_survey_pkmjd_bins_misspec_fullcov_v1.yaml`,
   `configs/pantheon_plus_shoes_ladder_injection_kcor_survey_pkmjd_bins_modeled_fullcov_v1.yaml`,

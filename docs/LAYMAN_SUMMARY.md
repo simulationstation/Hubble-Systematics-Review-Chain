@@ -79,8 +79,10 @@ Examples (all in magnitudes, in our parameterization):
 - A pure sky dipole needs **~0.40 mag**.
 - A pure time trend needs **~0.68 mag per 1σ(time)**.
 - A host-mass step needs **~2.35 mag**.
+- Calibrator-only linear dependencies on SALT2 metadata would need **~0.6–0.9 mag per 1σ** in `c` / `x1` / `biasCor_m_b` to fake the full ladder offset (very large / likely implausible as calibration drift).
 
 See: `outputs/pantheon_plus_shoes_ladder_injection_misspec_v4/report.md`.
+See also: `outputs/pantheon_plus_shoes_ladder_injection_kcor_c_x1_biascor_misspec_v1/report.md`.
 
 ## Joint “anchor-consistency” inference (real data)
 
@@ -380,9 +382,15 @@ We tested a few “explicit proxy” replacements inside the same joint-stack ho
   time-bin offsets Δlogp ≈ +5.0, but below `calibrator_offset_mag` Δlogp ≈ +5.7).
 - `m_b_corr_err_VPEC` linear term on calibrators (`m_b_corr_err_vpec_linear`) gives essentially **no**
   improvement (Δlogp ≈ +0.1).
+- **SALT2 metadata attribution:** a calibrator-only linear term in `x1` improves held-out calibrators
+  modestly (Δlogp ≈ +1.0 in the full-cov joint stack under kcor gates), but does not replace
+  `calibrator_offset_mag` (Δlogp ≈ +5.4).
 
 See:
 - `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_mechanism_scan_v1/report.md`
+  and the kcor-gated attribution runs:
+  `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_mechanism_attribution_kcor_extgrid_more_v1/report.md`,
+  `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_mechanism_attribution_kcor_extgrid_more_fullcov_v1/report.md`
 
 We also ran a **survey holdout** (hold out calibrators from one survey at a time). Effects persist
 but are smaller, with calibrator time-bin offsets still best among these candidates (Δlogp ≈ +1.9,
@@ -435,6 +443,11 @@ See:
 We tested a few simple, metadata-shaped alternatives in the joint stack (e.g. calibrator-only time trends,
 calibrator-by-survey offsets). None reduced the required ~0.16 mag offset, and evidence typically worsened
 (consistent with “extra flexibility, no real explanatory power”).
+
+We also tried calibrator-only linear terms in SALT2 metadata (`c`, `x1`, `biasCor_m_b`). These can help
+held-out calibrators a bit, but in baseline-sweep they reduce the inferred H0 shift by only **~1–2%**
+(vs **~24%** for `calibrator_offset_mag`):
+- `outputs/stack_sn_bao_cc_plus_ladder_surveytime_kcor_gates_mechanism_attribution_extgrid_more_v1/report.md`
 
 See:
 - `outputs/stack_sn_bao_cc_siren_plus_ladder_cal_offset_plus_calTimeLinear_v1/report.md`
