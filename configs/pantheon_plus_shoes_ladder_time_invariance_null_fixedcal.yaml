@@ -1,0 +1,58 @@
+run:
+  run_id: pantheon_plus_shoes_ladder_time_invariance_null_fixedcal_v1
+  out_base: outputs
+  tasks:
+    - baseline_fit
+    - split_fit
+    - split_null
+    - report
+
+anchor:
+  H0: 67.4
+  Omega_m: 0.315
+  Omega_k: 0.0
+  rd_Mpc: 147.09
+
+probe:
+  name: pantheon_plus_shoes_ladder
+  raw_dat_path: data/raw/pantheon_plus_shoes/Pantheon+SH0ES.dat
+  raw_cov_path: data/raw/pantheon_plus_shoes/Pantheon+SH0ES_STAT+SYS.cov
+  include_calibrators: true
+  include_hubble_flow: true
+  z_column: zHD
+  z_hf_min: 0.023
+  z_hf_max: 0.15
+
+model:
+  ladder_level: L2
+  shared_scale:
+    enable: true
+    params: [delta_lnH0]
+    prior_sigma: 0.5
+  priors:
+    sigma_global_offset_mag: 10.0
+    sigma_survey_offset_mag: 0.2
+
+split_fit:
+  - label: by_time_hf_fixedcal
+    ladder_level: L2
+    # Hubble-flow-only times; calibrators are NaN and included in every bin.
+    split_var: pkmjd_hf
+    mode: bins
+    edges: [44672.6, 53410.4, 54131.12, 54885.0, 57269.22, 59385.6]
+    include_nan: true
+    param: delta_lnH0
+    use_diagonal_errors: true
+
+split_null:
+  seed: 123
+  n_mc: 200
+  ladder_level: L2
+  split_var: pkmjd_hf
+  mode: bins
+  edges: [44672.6, 53410.4, 54131.12, 54885.0, 57269.22, 59385.6]
+  include_nan: true
+  param: delta_lnH0
+  use_diagonal_errors: true
+  shuffle_within: idsurvey
+

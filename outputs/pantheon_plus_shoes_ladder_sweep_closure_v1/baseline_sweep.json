@@ -1,0 +1,86 @@
+{
+  "base_label": "L2_baseline",
+  "rows": [
+    {
+      "chi2": 275.230295964039,
+      "chi2_per_dof": 0.8142908164616538,
+      "dof": 338,
+      "label": "L2_baseline",
+      "ladder_level": "L2",
+      "ledger": {
+        "H0_eff": {
+          "mean": 73.55190380521644,
+          "sd_lin": 1.0777466264562923
+        },
+        "anchor": {
+          "H0": 67.4,
+          "rd_Mpc": 147.09
+        },
+        "delta_lnH0": {
+          "mean": 0.08734631329746985,
+          "sd": 0.014652871927155425
+        },
+        "delta_mu_equiv_mag": {
+          "mean": -0.18967010939841888,
+          "sd": 0.03181830710999334
+        }
+      },
+      "n": 354,
+      "tension_reduction_fraction_vs_first": 0.0
+    },
+    {
+      "chi2": 270.70721304864,
+      "chi2_per_dof": 0.8253268690507318,
+      "dof": 328,
+      "label": "L3_hf_z_spline",
+      "ladder_level": "L3",
+      "ledger": {
+        "H0_eff": {
+          "mean": 73.5751097663834,
+          "sd_lin": 1.275947601995855
+        },
+        "anchor": {
+          "H0": 67.4,
+          "rd_Mpc": 147.09
+        },
+        "delta_lnH0": {
+          "mean": 0.08766176809799978,
+          "sd": 0.017342109390624895
+        },
+        "delta_mu_equiv_mag": {
+          "mean": -0.19035511079421907,
+          "sd": 0.03765791206455478
+        }
+      },
+      "n": 354,
+      "tension_reduction_fraction_vs_first": -0.003611541101404042
+    },
+    {
+      "chi2": 261.32791037013806,
+      "chi2_per_dof": 0.8269870581333483,
+      "dof": 316,
+      "label": "L4_hf_z_spline+sky_l2-3",
+      "ladder_level": "L4",
+      "ledger": {
+        "H0_eff": {
+          "mean": 73.67615109250649,
+          "sd_lin": 1.3020385842584494
+        },
+        "anchor": {
+          "H0": 67.4,
+          "rd_Mpc": 147.09
+        },
+        "delta_lnH0": {
+          "mean": 0.08903413450616604,
+          "sd": 0.01767245662200286
+        },
+        "delta_mu_equiv_mag": {
+          "mean": -0.19333516658529906,
+          "sd": 0.03837525196305211
+        }
+      },
+      "n": 354,
+      "tension_reduction_fraction_vs_first": -0.0193233251064425
+    }
+  ]
+}

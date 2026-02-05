@@ -1,0 +1,198 @@
+{
+  "base_label": "anchor_enforced_default",
+  "rows": [
+    {
+      "chi2": 251.58767404686668,
+      "chi2_per_dof": 0.8386255801562222,
+      "dof": 300,
+      "label": "anchor_enforced_default",
+      "ladder_level": "L4",
+      "ledger": {
+        "H0_eff": {
+          "mean": 67.4000072008089,
+          "sd_lin": 0.0067399969305237456
+        },
+        "anchor": {
+          "H0": 67.4,
+          "rd_Mpc": 147.09
+        },
+        "delta_lnH0": {
+          "mean": 1.0683692149835028e-07,
+          "sd": 9.999994377512256e-05
+        },
+        "delta_mu_equiv_mag": {
+          "mean": -2.3199342735132207e-07,
+          "sd": 0.00021714711886085578
+        }
+      },
+      "n": 354,
+      "param_summary": {
+        "calibrator_offset_mag": {
+          "mean": 0.189023995481712,
+          "sd": 0.043112766480317935
+        },
+        "hf_z_spline": {
+          "max_abs_mean": 0.032813063860313955,
+          "n": 10
+        },
+        "sky_modes": {
+          "max_abs_mean": 0.04518459528971741,
+          "n": 12
+        },
+        "survey_time_offsets": {
+          "max_abs_mean": 0.06596892603226485,
+          "n": 11
+        },
+        "time_bin_offsets": {
+          "max_abs_mean": 0.02709055190971115,
+          "n": 4
+        }
+      },
+      "tension_reduction_fraction_vs_first": null
+    },
+    {
+      "chi2": 265.7909141678868,
+      "chi2_per_dof": 0.8830262929165674,
+      "dof": 301,
+      "label": "no_calibrator_offset",
+      "ladder_level": "L4",
+      "ledger": {
+        "H0_eff": {
+          "mean": 67.40014912334541,
+          "sd_lin": 0.006739933391914406
+        },
+        "anchor": {
+          "H0": 67.4,
+          "rd_Mpc": 147.09
+        },
+        "delta_lnH0": {
+          "mean": 2.2125100955234307e-06,
+          "sd": 9.999879050089361e-05
+        },
+        "delta_mu_equiv_mag": {
+          "mean": -4.804404628205312e-06,
+          "sd": 0.00021714461455768703
+        }
+      },
+      "n": 354,
+      "param_summary": {
+        "calibrator_offset_mag": null,
+        "hf_z_spline": {
+          "max_abs_mean": 0.08216069984807424,
+          "n": 10
+        },
+        "sky_modes": {
+          "max_abs_mean": 0.041345635387903014,
+          "n": 12
+        },
+        "survey_time_offsets": {
+          "max_abs_mean": 0.08308506904298177,
+          "n": 11
+        },
+        "time_bin_offsets": {
+          "max_abs_mean": 0.08734949100552362,
+          "n": 4
+        }
+      },
+      "tension_reduction_fraction_vs_first": null
+    },
+    {
+      "chi2": 254.29422394776194,
+      "chi2_per_dof": 0.8476474131592064,
+      "dof": 300,
+      "label": "tight_cal_offset_0p05",
+      "ladder_level": "L4",
+      "ledger": {
+        "H0_eff": {
+          "mean": 67.4000654926919,
+          "sd_lin": 0.0067399708334213064
+        },
+        "anchor": {
+          "H0": 67.4,
+          "rd_Mpc": 147.09
+        },
+        "delta_lnH0": {
+          "mean": 9.7170118799812e-07,
+          "sd": 9.999947009179262e-05
+        },
+        "delta_mu_equiv_mag": {
+          "mean": -2.1100223200320888e-06,
+          "sd": 0.00021714609027057396
+        }
+      },
+      "n": 354,
+      "param_summary": {
+        "calibrator_offset_mag": {
+          "mean": 0.1113860689412662,
+          "sd": 0.03309503623078953
+        },
+        "hf_z_spline": {
+          "max_abs_mean": 0.05308164472486911,
+          "n": 10
+        },
+        "sky_modes": {
+          "max_abs_mean": 0.04360781724051134,
+          "n": 12
+        },
+        "survey_time_offsets": {
+          "max_abs_mean": 0.07299904858541115,
+          "n": 11
+        },
+        "time_bin_offsets": {
+          "max_abs_mean": 0.05184073812286059,
+          "n": 4
+        }
+      },
+      "tension_reduction_fraction_vs_first": null
+    },
+    {
+      "chi2": 261.35962050844677,
+      "chi2_per_dof": 0.8711987350281559,
+      "dof": 300,
+      "label": "tight_cal_offset_0p02",
+      "ladder_level": "L4",
+      "ledger": {
+        "H0_eff": {
+          "mean": 67.40012378141091,
+          "sd_lin": 0.006739944737556543
+        },
+        "anchor": {
+          "H0": 67.4,
+          "rd_Mpc": 147.09
+        },
+        "delta_lnH0": {
+          "mean": 1.8365177632417382e-06,
+          "sd": 9.999899643233939e-05
+        },
+        "delta_mu_equiv_mag": {
+          "mean": -3.987947652465947e-06,
+          "sd": 0.00021714506173213977
+        }
+      },
+      "n": 354,
+      "param_summary": {
+        "calibrator_offset_mag": {
+          "mean": 0.033752423593124366,
+          "sd": 0.018217966694052054
+        },
+        "hf_z_spline": {
+          "max_abs_mean": 0.07334910791799393,
+          "n": 10
+        },
+        "sky_modes": {
+          "max_abs_mean": 0.042031126139660986,
+          "n": 12
+        },
+        "survey_time_offsets": {
+          "max_abs_mean": 0.08002878347613639,
+          "n": 11
+        },
+        "time_bin_offsets": {
+          "max_abs_mean": 0.076589559535178,
+          "n": 4
+        }
+      },
+      "tension_reduction_fraction_vs_first": null
+    }
+  ]
+}

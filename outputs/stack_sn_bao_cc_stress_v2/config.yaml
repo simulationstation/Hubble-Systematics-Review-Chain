@@ -1,0 +1,45 @@
+run:
+  run_id: stack_sn_bao_cc_stress_v2
+  out_base: outputs
+  tasks:
+    - baseline_fit
+
+anchor:
+  # Early-time style anchor.
+  H0: 67.4
+  Omega_m: 0.315
+  Omega_k: 0.0
+  rd_Mpc: 147.09
+
+model:
+  # Shared-scale stress-test: infer the H0-like scale distortion required by late-time probes.
+  shared_scale:
+    enable: true
+    params: [delta_lnH0]
+    prior_sigma: 0.5
+  priors:
+    # Wide prior for the SN absolute offset (natural scale ~-19 mag).
+    sigma_global_offset_mag: 10.0
+
+probe:
+  name: stack
+  stack:
+    - name: pantheon_plus
+      data_path: data/processed/pantheon_plus/pantheon_plus_sky_cosmology_stat+sys_zHD.npz
+      z_min: 0.02
+      z_max: 0.62
+      model:
+        ladder_level: L1
+        priors:
+          sigma_global_offset_mag: 10.0
+
+    - name: bao
+      data_path: data/processed/bao/bao_desi_2024_bao_all.npz
+      meta_path: data/processed/bao/bao_desi_2024_bao_all.meta.json
+      model:
+        ladder_level: L0
+
+    - name: chronometers
+      data_path: data/processed/chronometers/chronometers_BC03_all.npz
+      model:
+        ladder_level: L0

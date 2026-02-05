@@ -1,0 +1,116 @@
+run:
+  run_id: pantheon_plus_shoes_ladder_external_prior_sweep_v1
+  out_base: outputs
+  tasks:
+    - baseline_sweep
+
+anchor:
+  H0: 67.4
+  Omega_m: 0.315
+  Omega_k: 0.0
+  rd_Mpc: 147.09
+
+probe:
+  name: pantheon_plus_shoes_ladder
+  raw_dat_path: data/raw/pantheon_plus_shoes/Pantheon+SH0ES.dat
+  raw_cov_path: data/raw/pantheon_plus_shoes/Pantheon+SH0ES_STAT+SYS.cov
+  include_calibrators: true
+  include_hubble_flow: true
+  z_column: zHD
+  z_hf_min: 0.023
+  z_hf_max: 0.15
+
+model:
+  ladder_level: L2
+  shared_scale:
+    enable: true
+    params: [delta_lnH0]
+    prior_sigma: 0.5
+  priors:
+    sigma_global_offset_mag: 10.0
+    sigma_survey_offset_mag: 0.2
+    sigma_calibrator_offset_mag: 0.2
+    sigma_pkmjd_bin_offset_mag: 0.05
+    sigma_survey_pkmjd_bin_offset_mag: 0.05
+    sigma_z_spline_mag: 0.05
+    sigma_z_spline_d2_mag: 0.05
+    sigma_sky_mode_mag: 0.05
+
+sweep:
+  - label: L2_baseline
+    ladder_level: L2
+    model: {}
+
+  - label: L2_cal_offset_loose
+    ladder_level: L2
+    model:
+      mechanisms:
+        calibrator_offset: true
+      priors:
+        sigma_calibrator_offset_mag: 0.2
+
+  - label: L2_cal_offset_tight_0p02
+    ladder_level: L2
+    model:
+      mechanisms:
+        calibrator_offset: true
+      priors:
+        sigma_calibrator_offset_mag: 0.02
+
+  - label: L2_epoch_offsets_tight
+    ladder_level: L2
+    model:
+      mechanisms:
+        pkmjd_bins:
+          enable: true
+          edges: [44672.6, 53410.4, 54131.12, 54885.0, 57269.22, 59385.6]
+          apply_to: hf
+        survey_pkmjd_bins:
+          enable: true
+          edges: [44672.6, 53410.4, 54131.12, 54885.0, 57269.22, 59385.6]
+          apply_to: hf
+          min_hf_per_survey: 25
+      priors:
+        sigma_pkmjd_bin_offset_mag: 0.05
+        sigma_survey_pkmjd_bin_offset_mag: 0.05
+
+  - label: L4_closure_tight
+    ladder_level: L4
+    model:
+      sky:
+        lmin: 2
+        lmax: 3
+      z_spline:
+        n_internal_knots: 6
+      priors:
+        sigma_z_spline_mag: 0.05
+        sigma_z_spline_d2_mag: 0.05
+        sigma_sky_mode_mag: 0.05
+
+  - label: L4_all_tight
+    ladder_level: L4
+    model:
+      sky:
+        lmin: 2
+        lmax: 3
+      z_spline:
+        n_internal_knots: 6
+      mechanisms:
+        calibrator_offset: true
+        pkmjd_bins:
+          enable: true
+          edges: [44672.6, 53410.4, 54131.12, 54885.0, 57269.22, 59385.6]
+          apply_to: hf
+        survey_pkmjd_bins:
+          enable: true
+          edges: [44672.6, 53410.4, 54131.12, 54885.0, 57269.22, 59385.6]
+          apply_to: hf
+          min_hf_per_survey: 25
+      priors:
+        sigma_calibrator_offset_mag: 0.02
+        sigma_pkmjd_bin_offset_mag: 0.05
+        sigma_survey_pkmjd_bin_offset_mag: 0.05
+        sigma_z_spline_mag: 0.05
+        sigma_z_spline_d2_mag: 0.05
+        sigma_sky_mode_mag: 0.05
+

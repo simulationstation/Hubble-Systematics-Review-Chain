@@ -1,0 +1,94 @@
+run:
+  run_id: pantheon_plus_demo_v2
+  out_base: outputs
+  tasks:
+    - baseline_fit
+    - cut_scan
+    - correlated_cut_null
+    - injection_suite
+    - split_fit
+    - hemisphere_scan
+    - sbc
+    - report
+
+anchor:
+  # Default early-time style anchor (Planck18-ish flat LCDM).
+  H0: 67.4
+  Omega_m: 0.315
+  Omega_k: 0.0
+  rd_Mpc: 147.09
+
+probe:
+  name: pantheon_plus
+  data_path: data/processed/pantheon_plus/pantheon_plus_sky_cosmology_stat+sys_zHD.npz
+  meta_path: data/processed/pantheon_plus/pantheon_plus_sky_cosmology_stat+sys_zHD.meta.json
+  # Standard SN Hubble-flow cut (kept configurable).
+  z_min: 0.02
+  z_max: 0.62
+
+model:
+  # Mechanism ladder level:
+  # - L0: no systematics parameters (diagnostic only)
+  # - L1: global offset only
+  # - L2: global offset + survey offsets (calibration ladder)
+  # - L3: L2 + smooth z-residual closure (spline, regularized)
+  # - L4: L3 + sky low-ℓ modes (regularized)
+  ladder_level: L2
+  priors:
+    # Gaussian priors (1σ) on coefficients, by name. Unlisted => "wide".
+    # Use a very wide prior for the absolute offset (M_B-like) because its natural scale is ~-19 mag.
+    sigma_global_offset_mag: 10.0
+    sigma_survey_offset_mag: 0.2
+    sigma_z_spline_mag: 0.2
+    sigma_z_spline_d2_mag: 0.2
+    sigma_sky_mode_mag: 0.2
+
+scan:
+  cut_var: z
+  n_cuts: 12
+  cut_min: 0.02
+  cut_max: 0.62
+
+"null":
+  n_mc: 200
+  seed: 123
+  drift_param: global_offset_mag
+  # For speed/robustness, the null uses diagonal errors by default.
+  use_diagonal_errors: true
+
+injection:
+  seed: 123
+  n_mc: 200
+  use_diagonal_errors: true
+  mechanism: sky_dipole_mag
+  frame: galactic
+  # Default: CMB dipole axis, for a concrete non-instrumental reference.
+  axis_lon_deg: 264.021
+  axis_lat_deg: 48.253
+  # Amplitudes are in magnitudes of an additive dipolar calibration field.
+  amplitudes: [-0.10, -0.05, 0.0, 0.05, 0.10]
+  param_of_interest: global_offset_mag
+
+sbc:
+  seed: 123
+  n_rep: 256
+  use_diagonal_errors: true
+
+split_fit:
+  ladder_level: L1
+  split_var: idsurvey
+  mode: categories
+  param: global_offset_mag
+  use_diagonal_errors: true
+
+hemisphere_scan:
+  seed: 123
+  ladder_level: L1
+  frame: galactic
+  nside: 4
+  param: global_offset_mag
+  train_frac: 0.7
+  z_match: true
+  z_match_bins: 10
+  use_diagonal_errors: true
+  top_k: 10

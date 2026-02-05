@@ -1,0 +1,167 @@
+{
+  "base_label": "baseline",
+  "rows": [
+    {
+      "chi2": 275.230295964039,
+      "chi2_per_dof": 0.8142908164616538,
+      "dof": 338,
+      "label": "baseline",
+      "ladder_level": "L2",
+      "ledger": {
+        "H0_eff": {
+          "mean": 73.55190380521644,
+          "sd_lin": 1.0777466264562923
+        },
+        "anchor": {
+          "H0": 67.4,
+          "rd_Mpc": 147.09
+        },
+        "delta_lnH0": {
+          "mean": 0.08734631329746985,
+          "sd": 0.014652871927155425
+        },
+        "delta_mu_equiv_mag": {
+          "mean": -0.18967010939841888,
+          "sd": 0.03181830710999334
+        }
+      },
+      "n": 354,
+      "tension_reduction_fraction_vs_first": 0.0
+    },
+    {
+      "chi2": 275.2302951086225,
+      "chi2_per_dof": 0.8167071071472478,
+      "dof": 337,
+      "label": "+cal_offset",
+      "ladder_level": "L2",
+      "ledger": {
+        "H0_eff": {
+          "mean": 73.59348882026626,
+          "sd_lin": 6.745821678974215
+        },
+        "anchor": {
+          "H0": 67.4,
+          "rd_Mpc": 147.09
+        },
+        "delta_lnH0": {
+          "mean": 0.08791153678717545,
+          "sd": 0.09166329504297863
+        },
+        "delta_mu_equiv_mag": {
+          "mean": -0.1908974766115251,
+          "sd": 0.19904431615117654
+        }
+      },
+      "n": 354,
+      "tension_reduction_fraction_vs_first": -0.006471062926040771
+    },
+    {
+      "chi2": 273.97377688496806,
+      "chi2_per_dof": 0.8129785664242376,
+      "dof": 337,
+      "label": "+dust_mwebv",
+      "ladder_level": "L2",
+      "ledger": {
+        "H0_eff": {
+          "mean": 73.57251136797487,
+          "sd_lin": 1.078211578749482
+        },
+        "anchor": {
+          "H0": 67.4,
+          "rd_Mpc": 147.09
+        },
+        "delta_lnH0": {
+          "mean": 0.08762645120481766,
+          "sd": 0.014655087324079207
+        },
+        "delta_mu_equiv_mag": {
+          "mean": -0.19027842113508428,
+          "sd": 0.03182311778328946
+        }
+      },
+      "n": 354,
+      "tension_reduction_fraction_vs_first": -0.003207209288773983
+    },
+    {
+      "chi2": 274.0109393912231,
+      "chi2_per_dof": 0.8130888409235106,
+      "dof": 337,
+      "label": "+host_mass_step",
+      "ladder_level": "L2",
+      "ledger": {
+        "H0_eff": {
+          "mean": 73.51076802181684,
+          "sd_lin": 1.0778002997583156
+        },
+        "anchor": {
+          "H0": 67.4,
+          "rd_Mpc": 147.09
+        },
+        "delta_lnH0": {
+          "mean": 0.08678688126809922,
+          "sd": 0.014661801648412125
+        },
+        "delta_mu_equiv_mag": {
+          "mean": -0.18845531818164088,
+          "sd": 0.031837697753326934
+        }
+      },
+      "n": 354,
+      "tension_reduction_fraction_vs_first": 0.006404758349278086
+    },
+    {
+      "chi2": 275.237094854733,
+      "chi2_per_dof": 0.8167272844354095,
+      "dof": 337,
+      "label": "+time_pkmjd",
+      "ladder_level": "L2",
+      "ledger": {
+        "H0_eff": {
+          "mean": 73.53545177571056,
+          "sd_lin": 1.0819249467509604
+        },
+        "anchor": {
+          "H0": 67.4,
+          "rd_Mpc": 147.09
+        },
+        "delta_lnH0": {
+          "mean": 0.08712260909788702,
+          "sd": 0.014712970691346595
+        },
+        "delta_mu_equiv_mag": {
+          "mean": -0.18918434190113187,
+          "sd": 0.03194880991828049
+        }
+      },
+      "n": 354,
+      "tension_reduction_fraction_vs_first": 0.0025611178209774266
+    },
+    {
+      "chi2": 272.6264103876435,
+      "chi2_per_dof": 0.8162467376875554,
+      "dof": 334,
+      "label": "+all_four",
+      "ladder_level": "L2",
+      "ledger": {
+        "H0_eff": {
+          "mean": 73.54184442494814,
+          "sd_lin": 6.741958681256335
+        },
+        "anchor": {
+          "H0": 67.4,
+          "rd_Mpc": 147.09
+        },
+        "delta_lnH0": {
+          "mean": 0.0872095382080451,
+          "sd": 0.09167513724974256
+        },
+        "delta_mu_equiv_mag": {
+          "mean": -0.18937310606542393,
+          "sd": 0.1990700311764322
+        }
+      },
+      "n": 354,
+      "tension_reduction_fraction_vs_first": 0.001565894246262515
+    }
+  ]
+}

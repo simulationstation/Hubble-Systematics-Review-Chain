@@ -1,0 +1,131 @@
+{
+  "created_utc": "2026-02-05T07:51:59.813287+00:00",
+  "run_id": "pantheon_plus_shoes_ladder_level_sweep_v2",
+  "tasks": {
+    "baseline_sweep": {
+      "base_label": "L2_baseline",
+      "rows": [
+        {
+          "chi2": 275.230295964039,
+          "chi2_per_dof": 0.8142908164616538,
+          "delta_log_evidence_vs_first": 0.0,
+          "dof": 338,
+          "label": "L2_baseline",
+          "ladder_level": "L2",
+          "ledger": {
+            "H0_eff": {
+              "mean": 73.55190380521644,
+              "sd_lin": 1.0777466264562923
+            },
+            "anchor": {
+              "H0": 67.4,
+              "rd_Mpc": 147.09
+            },
+            "delta_lnH0": {
+              "mean": 0.08734631329746985,
+              "sd": 0.014652871927155425
+            },
+            "delta_mu_equiv_mag": {
+              "mean": -0.18967010939841888,
+              "sd": 0.03181830710999334
+            }
+          },
+          "log_evidence": 207.84857193675577,
+          "n": 354,
+          "param_summary": {
+            "calibrator_offset_mag": null,
+            "hf_z_spline": null,
+            "sky_modes": null,
+            "survey_time_offsets": null,
+            "time_bin_offsets": null
+          },
+          "tension_reduction_fraction_vs_first": 0.0
+        },
+        {
+          "chi2": 268.12809539011363,
+          "chi2_per_dof": 0.8174637054576634,
+          "delta_log_evidence_vs_first": -4.187972459863943,
+          "dof": 328,
+          "label": "L3_plus_z_spline",
+          "ladder_level": "L3",
+          "ledger": {
+            "H0_eff": {
+              "mean": 73.55085448115864,
+              "sd_lin": 2.48056883259609
+            },
+            "anchor": {
+              "H0": 67.4,
+              "rd_Mpc": 147.09
+            },
+            "delta_lnH0": {
+              "mean": 0.08733204675250428,
+              "sd": 0.033725900944244394
+            },
+            "delta_mu_equiv_mag": {
+              "mean": -0.18963912998964702,
+              "sd": 0.07323486338650505
+            }
+          },
+          "log_evidence": 203.66059947689183,
+          "n": 354,
+          "param_summary": {
+            "calibrator_offset_mag": null,
+            "hf_z_spline": {
+              "max_abs_mean": 0.06048418611347954,
+              "n": 10
+            },
+            "sky_modes": null,
+            "survey_time_offsets": null,
+            "time_bin_offsets": null
+          },
+          "tension_reduction_fraction_vs_first": 0.00016333310962976633
+        },
+        {
+          "chi2": 255.76782976576678,
+          "chi2_per_dof": 0.8093918663473633,
+          "delta_log_evidence_vs_first": -20.067898904012566,
+          "dof": 316,
+          "label": "L4_plus_z_and_sky",
+          "ladder_level": "L4",
+          "ledger": {
+            "H0_eff": {
+              "mean": 73.91357907088702,
+              "sd_lin": 2.5224044147551723
+            },
+            "anchor": {
+              "H0": 67.4,
+              "rd_Mpc": 147.09
+            },
+            "delta_lnH0": {
+              "mean": 0.09225154242381982,
+              "sd": 0.03412640067579535
+            },
+            "delta_mu_equiv_mag": {
+              "mean": -0.20032167910864337,
+              "sd": 0.07410453750358661
+            }
+          },
+          "log_evidence": 187.7806730327432,
+          "n": 354,
+          "param_summary": {
+            "calibrator_offset_mag": null,
+            "hf_z_spline": {
+              "max_abs_mean": 0.05772655077008387,
+              "n": 10
+            },
+            "sky_modes": {
+              "max_abs_mean": 0.0844858327247793,
+              "n": 12
+            },
+            "survey_time_offsets": null,
+            "time_bin_offsets": null
+          },
+          "tension_reduction_fraction_vs_first": -0.05615839914896624
+        }
+      ]
+    },
+    "report": {
+      "ok": true
+    }
+  }
+}
