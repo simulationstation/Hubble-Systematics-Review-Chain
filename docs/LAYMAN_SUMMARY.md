@@ -99,6 +99,10 @@ if external calibration work can truly bound the calibrator↔HF offset at the ~
 joint stack would no longer be able to reconcile the ladder subset without paying a strong
 likelihood/evidence penalty.
 
+A small prior-width sweep confirms this trend: once `sigma_calibrator_offset_mag` is pushed below
+~0.05 mag, the log evidence falls quickly (ΔlogZ ≈ -2.3 at 0.05, ≈ -7.5 at 0.02, ≈ -9.9 at 0.01).
+See: `outputs/stack_sn_bao_cc_plus_ladder_cal_offset_prior_sigma_sweep_v1/report.md`.
+
 ## External-probe bracketing (TRGB / strong lenses / megamasers)
 
 As a **stress test** (not an independence claim), we added a small set of published, approximately-Gaussian

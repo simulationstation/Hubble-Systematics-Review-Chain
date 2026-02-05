@@ -179,6 +179,10 @@ Notes:
 variant reduces the inferred `delta_lnH0` relative to the first entry (a simple “percent of tension
 absorbed” diagnostic).
 
+For `probe.name: stack`, each sweep entry can optionally include `stack_overrides`, a mapping from
+stack-part name to an additional model override dict applied to that part (useful for scanning a
+single prior like `sigma_calibrator_offset_mag`).
+
 ```yaml
 run:
   tasks: [baseline_sweep]

@@ -55,6 +55,8 @@ This file maps the “systematics-first” spec you described (CatWISE-style sta
   `configs/stack_sn_bao_cc_plus_ladder_calTimeBins_only_v1.yaml`,
   `configs/stack_sn_bao_cc_plus_ladder_cal_offset_plus_calTimeBins_v1.yaml`,
   and `configs/stack_sn_bao_cc_plus_ladder_calSurvey_only_min4_v1.yaml`
+- **External-prior gates (scan):**
+  `configs/stack_sn_bao_cc_plus_ladder_cal_offset_prior_sigma_sweep_v1.yaml`
 
 ## What’s still incomplete vs the full ambition
 

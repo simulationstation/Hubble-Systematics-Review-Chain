@@ -153,15 +153,20 @@ def run_baseline_sweep_task(ctx) -> dict[str, Any]:
     anchor = _build_anchor(cfg)
     probe_cfg = cfg.get("probe", {}) or {}
     probe_name = probe_cfg.get("name")
-    if probe_name == "stack":
-        return {"skipped": True, "reason": "baseline_sweep is not implemented for stack probes"}
 
-    dataset = _load_probe(cfg)
     base_model = cfg.get("model", {}) or {}
     base_level = str(base_model.get("ladder_level", "L1"))
     sweep = cfg.get("sweep", []) or []
     if not isinstance(sweep, list) or not sweep:
         return {"skipped": True, "reason": "baseline_sweep requires a non-empty top-level sweep: [...] list"}
+
+    stack_items = None
+    if probe_name == "stack":
+        stack_items = probe_cfg.get("stack", []) or []
+        if not stack_items:
+            raise ValueError("stack probe requires non-empty probe.stack")
+    else:
+        dataset = _load_probe(cfg)
 
     rows: list[dict[str, Any]] = []
     base_delta_lnH0 = None
@@ -172,9 +177,33 @@ def run_baseline_sweep_task(ctx) -> dict[str, Any]:
             raise ValueError("sweep entries must be mappings")
         label = str(item.get("label", f"var{i}"))
         model_cfg = _deep_merge_dicts(base_model, item.get("model", {}) or {})
-        level = str(item.get("ladder_level", model_cfg.get("ladder_level", base_level)))
-        y, y0, cov, X, prior = dataset.build_design(anchor=anchor, ladder_level=level, cfg=model_cfg)
-        prior = apply_shared_scale_prior(prior, model_cfg=model_cfg)
+
+        if stack_items is not None:
+            # Stack-aware sweep: allow per-part overrides via sweep_item.stack_overrides.
+            stack_overrides = item.get("stack_overrides", {}) or {}
+            if not isinstance(stack_overrides, dict):
+                raise ValueError("sweep.stack_overrides must be a mapping of stack-part-name -> model override dict")
+            parts: list[Part] = []
+            for part_cfg in stack_items:
+                part_cfg = dict(part_cfg)
+                part_name = part_cfg.get("name")
+                if part_name is None:
+                    raise ValueError("Each stack item must include a name")
+                part_override = stack_overrides.get(str(part_name), {}) or {}
+                part_model = _deep_merge_dicts(_deep_merge_dicts(model_cfg, part_cfg.get("model", {}) or {}), part_override)
+                level = str(part_model.get("ladder_level", base_level))
+                ds = _load_probe({"probe": part_cfg})
+                y_p, y0_p, cov_p, X_p, prior_p = ds.build_design(anchor=anchor, ladder_level=level, cfg=part_model)
+                parts.append(Part(y=y_p, y0=y0_p, cov=cov_p, X=X_p, prior=prior_p))
+            stacked = stack_parts(parts)
+            y, y0, cov, X, prior = stacked.y, stacked.y0, stacked.cov, stacked.X, stacked.prior
+            prior = apply_shared_scale_prior(prior, model_cfg=model_cfg)
+            level = "stack"
+        else:
+            level = str(item.get("ladder_level", model_cfg.get("ladder_level", base_level)))
+            y, y0, cov, X, prior = dataset.build_design(anchor=anchor, ladder_level=level, cfg=model_cfg)
+            prior = apply_shared_scale_prior(prior, model_cfg=model_cfg)
+
         spec = GaussianLinearModelSpec(y=y, y0=y0, cov=cov, X=X, prior=prior)
         fit = fit_gaussian_linear_model(spec)
         logZ = log_marginal_likelihood(spec)

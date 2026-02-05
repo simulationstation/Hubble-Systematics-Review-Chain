@@ -1,0 +1,17 @@
+{
+  "branch": "main",
+  "describe": "927dbee-dirty",
+  "dirty": true,
+  "head": "927dbee30aeafd3fabd3eb185c7ea11252310639",
+  "ok": true,
+  "remotes": [
+    "origin\tgit@github.com:simulationstation/Hubble-Systematics-Review-Chain.git (fetch)",
+    "origin\tgit@github.com:simulationstation/Hubble-Systematics-Review-Chain.git (push)"
+  ],
+  "status_porcelain": [
+    "M src/hubble_systematics/audit/tasks.py",
+    "?? configs/stack_sn_bao_cc_plus_ladder_cal_offset_prior_sigma_sweep_v1.yaml",
+    "?? outputs/stack_sn_bao_cc_plus_ladder_cal_offset_prior_sigma_sweep_v1/"
+  ],
+  "toplevel": "/home/primary/Hubble-Systematics-Review-Chain"
+}
