@@ -224,7 +224,7 @@ Result:
 
 - In the joint anchor-consistency stack, constrained calibrator time-bin offsets reduce the tension
   only slightly (tension-reduction fraction ≈0.02) and improve held-out calibrators modestly
-  (Δlogp ≈ +1.4).
+  (Δlogp ≈ +1.1–+1.4, fullcov/diag).
 - Injection mapping shows that faking the full ladder-vs-anchor offset via a **single** calibrator
   time bin would require an offset of order **~1 mag** (≈0.9–1.5 mag depending on the bin), which is
   far beyond any reasonable calibration drift.

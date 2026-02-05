@@ -1,0 +1,68 @@
+{
+  "created_utc": "2026-02-05T21:10:03.248368+00:00",
+  "run_id": "stack_sn_bao_cc_plus_ladder_predictive_score_cal_survey_holdout_mechanism_attribution_calibcov_bounded_extgrid_more_fullcov_v1",
+  "tasks": {
+    "predictive_score": {
+      "always_include_calibrators": false,
+      "always_include_hubble_flow": true,
+      "mode": "group_holdout",
+      "models": {
+        "+cal_offset": {
+          "ladder_level": "L1",
+          "logp": [
+            -1.3124626820282934,
+            3.1513923456219146,
+            1.6429030357591543
+          ],
+          "mean_delta_logp_vs_base": 1.8788792191036796,
+          "mean_logp": 1.1606108997842586,
+          "sd_delta_logp_vs_base": 0.8719899972109738,
+          "sd_logp": 1.8539965309724702
+        },
+        "+cal_offset_plus_cal_time_bins": {
+          "ladder_level": "L1",
+          "logp": [
+            -0.23429659934874358,
+            3.4304382013555816,
+            2.638796910658641
+          ],
+          "mean_delta_logp_vs_base": 2.6632478235412473,
+          "mean_logp": 1.9449795042218263,
+          "sd_delta_logp_vs_base": 1.2158774035312383,
+          "sd_logp": 1.574506744979598
+        },
+        "+cal_time_bins": {
+          "ladder_level": "L1",
+          "logp": [
+            -1.9776247364996635,
+            2.948797411412998,
+            0.25482926962173025
+          ],
+          "mean_delta_logp_vs_base": 1.1269356341644425,
+          "mean_logp": 0.4086673148450215,
+          "sd_delta_logp_vs_base": 0.4631146486298781,
+          "sd_logp": 2.0141430606223403
+        },
+        "baseline": {
+          "ladder_level": "L1",
+          "logp": [
+            -3.523970752085935,
+            2.4672089834148894,
+            -1.0980431892872176
+          ],
+          "mean_delta_logp_vs_base": 0.0,
+          "mean_logp": -0.7182683193194211,
+          "sd_delta_logp_vs_base": 0.0,
+          "sd_logp": 2.460586700994057
+        }
+      },
+      "n_rep": 3,
+      "seed": 123,
+      "train_frac": null,
+      "use_diagonal_errors": false
+    },
+    "report": {
+      "ok": true
+    }
+  }
+}

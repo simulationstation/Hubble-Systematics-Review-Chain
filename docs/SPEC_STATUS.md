@@ -58,7 +58,10 @@ This file maps the “systematics-first” spec you described (CatWISE-style sta
   and the CALIB.cov-bounded variants
   `configs/stack_sn_bao_cc_plus_ladder_mechanism_attribution_calibcov_bounded_extgrid_more_v1.yaml`,
   `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_mechanism_attribution_calibcov_bounded_extgrid_more_v1.yaml`,
-  `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_survey_holdout_mechanism_attribution_calibcov_bounded_extgrid_more_v1.yaml`
+  `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_survey_holdout_mechanism_attribution_calibcov_bounded_extgrid_more_v1.yaml`,
+  plus full-cov variants:
+  `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_mechanism_attribution_calibcov_bounded_extgrid_more_fullcov_v1.yaml`,
+  `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_survey_holdout_mechanism_attribution_calibcov_bounded_extgrid_more_fullcov_v1.yaml`
 - **Predictive scoring (stack; survey holdout + mechanism scan on calibrator-only proxies):**
   `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_survey_holdout_mechanism_scan_v1.yaml`
   and the full-cov variant
