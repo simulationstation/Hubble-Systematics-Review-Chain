@@ -77,12 +77,12 @@ def _grid_mean_sd(H0: np.ndarray, p: np.ndarray) -> tuple[float, float]:
     if not np.any(p > 0):
         raise ValueError("Posterior has no positive support")
     # Normalize on the grid using trapezoid integration.
-    Z = float(np.trapz(p, H0))
+    Z = float(np.trapezoid(p, H0))
     if Z <= 0 or not np.isfinite(Z):
         raise ValueError("Posterior normalization failed")
     p = p / Z
-    m = float(np.trapz(p * H0, H0))
-    v = float(np.trapz(p * (H0 - m) ** 2, H0))
+    m = float(np.trapezoid(p * H0, H0))
+    v = float(np.trapezoid(p * (H0 - m) ** 2, H0))
     return m, float(np.sqrt(max(v, 0.0)))
 
 
@@ -95,11 +95,11 @@ def _grid_mean_sd_ln(H0: np.ndarray, p: np.ndarray) -> tuple[float, float]:
         raise ValueError("Non-finite values in H0 grid or posterior")
     if not np.any(p > 0):
         raise ValueError("Posterior has no positive support")
-    Z = float(np.trapz(p, H0))
+    Z = float(np.trapezoid(p, H0))
     if Z <= 0 or not np.isfinite(Z):
         raise ValueError("Posterior normalization failed")
     p = p / Z
     x = np.log(H0)
-    m = float(np.trapz(p * x, H0))
-    v = float(np.trapz(p * (x - m) ** 2, H0))
+    m = float(np.trapezoid(p * x, H0))
+    v = float(np.trapezoid(p * (x - m) ** 2, H0))
     return m, float(np.sqrt(max(v, 0.0)))

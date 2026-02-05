@@ -18,6 +18,7 @@ from hubble_systematics.design import (
     sky_real_harmonics,
 )
 from hubble_systematics.gaussian_linear_model import GaussianPrior
+from hubble_systematics.prior_overrides import load_sigma_overrides, sigma_from_mapping
 from hubble_systematics.shared_scale import shared_scale_params
 
 from astropy.coordinates import SkyCoord
@@ -608,8 +609,19 @@ class PantheonPlusShoesLadderDataset:
                 if k in names:
                     mu_prior[names.index(k)] = float(v)
 
+        sigma_overrides = load_sigma_overrides(prior_cfg)
+        sigma_survey_by_id = prior_cfg.get("sigma_survey_offset_mag_by_idsurvey")
+        sigma_hf_survey_by_id = prior_cfg.get("sigma_hf_survey_offset_mag_by_idsurvey")
+        sigma_cal_survey_by_id = prior_cfg.get("sigma_cal_survey_offset_mag_by_idsurvey")
+        sigma_pkmjd_bin_by_k = prior_cfg.get("sigma_pkmjd_bin_offset_mag_by_bin")
+        sigma_survey_pkmjd_bin_by_s = prior_cfg.get("sigma_survey_pkmjd_bin_offset_mag_by_idsurvey")
+        sigma_survey_pkmjd_bin_by_sk = prior_cfg.get("sigma_survey_pkmjd_bin_offset_mag_by_survey_bin")
+
         sigmas = []
         for n in names:
+            if n in sigma_overrides:
+                sigmas.append(float(sigma_overrides[n]))
+                continue
             if n == "global_offset_mag":
                 sigmas.append(float(prior_cfg.get("sigma_global_offset_mag", 10.0)))
             elif n in shared_params:
@@ -617,9 +629,25 @@ class PantheonPlusShoesLadderDataset:
             elif n == "calibrator_offset_mag":
                 sigmas.append(float(prior_cfg.get("sigma_calibrator_offset_mag", 0.2)))
             elif n.startswith("hf_survey_offset_"):
-                sigmas.append(float(prior_cfg.get("sigma_hf_survey_offset_mag", 0.2)))
+                sid = n.removeprefix("hf_survey_offset_")
+                sigma = None
+                try:
+                    sigma = sigma_from_mapping(sigma_hf_survey_by_id, int(sid))
+                except Exception:
+                    sigma = None
+                if sigma is None:
+                    sigma = float(prior_cfg.get("sigma_hf_survey_offset_mag", 0.2))
+                sigmas.append(float(sigma))
             elif n.startswith("cal_survey_offset_"):
-                sigmas.append(float(prior_cfg.get("sigma_cal_survey_offset_mag", 0.2)))
+                sid = n.removeprefix("cal_survey_offset_")
+                sigma = None
+                try:
+                    sigma = sigma_from_mapping(sigma_cal_survey_by_id, int(sid))
+                except Exception:
+                    sigma = None
+                if sigma is None:
+                    sigma = float(prior_cfg.get("sigma_cal_survey_offset_mag", 0.2))
+                sigmas.append(float(sigma))
             elif n == "mwebv_linear_mag":
                 sigmas.append(float(prior_cfg.get("sigma_mwebv_linear_mag", 0.2)))
             elif n == "m_b_corr_err_linear_mag":
@@ -635,11 +663,42 @@ class PantheonPlusShoesLadderDataset:
             elif n == "pkmjd_err_linear_mag":
                 sigmas.append(float(prior_cfg.get("sigma_pkmjd_err_linear_mag", 0.2)))
             elif n.startswith("pkmjd_bin_offset_"):
-                sigmas.append(float(prior_cfg.get("sigma_pkmjd_bin_offset_mag", 0.2)))
+                k = n.removeprefix("pkmjd_bin_offset_")
+                sigma = None
+                try:
+                    sigma = sigma_from_mapping(sigma_pkmjd_bin_by_k, int(k))
+                except Exception:
+                    sigma = None
+                if sigma is None:
+                    sigma = float(prior_cfg.get("sigma_pkmjd_bin_offset_mag", 0.2))
+                sigmas.append(float(sigma))
             elif n.startswith("survey_pkmjd_bin_offset_"):
-                sigmas.append(float(prior_cfg.get("sigma_survey_pkmjd_bin_offset_mag", 0.2)))
+                # Name schema: survey_pkmjd_bin_offset_<idsurvey>_<k>
+                tail = n.removeprefix("survey_pkmjd_bin_offset_")
+                parts = tail.split("_")
+                sid = parts[0] if parts else ""
+                k = parts[1] if len(parts) > 1 else ""
+                sigma = None
+                try:
+                    if sigma_survey_pkmjd_bin_by_sk is not None:
+                        sigma = sigma_from_mapping(sigma_survey_pkmjd_bin_by_sk, f"{int(sid)}_{int(k)}")
+                    if sigma is None:
+                        sigma = sigma_from_mapping(sigma_survey_pkmjd_bin_by_s, int(sid))
+                except Exception:
+                    sigma = None
+                if sigma is None:
+                    sigma = float(prior_cfg.get("sigma_survey_pkmjd_bin_offset_mag", 0.2))
+                sigmas.append(float(sigma))
             elif n.startswith("survey_offset_"):
-                sigmas.append(float(prior_cfg.get("sigma_survey_offset_mag", 0.1)))
+                sid = n.removeprefix("survey_offset_")
+                sigma = None
+                try:
+                    sigma = sigma_from_mapping(sigma_survey_by_id, int(sid))
+                except Exception:
+                    sigma = None
+                if sigma is None:
+                    sigma = float(prior_cfg.get("sigma_survey_offset_mag", 0.1))
+                sigmas.append(float(sigma))
             elif n.startswith("hf_z_spline_"):
                 sigmas.append(float(prior_cfg.get("sigma_z_spline_mag", 0.1)))
             elif n.startswith("sky_"):

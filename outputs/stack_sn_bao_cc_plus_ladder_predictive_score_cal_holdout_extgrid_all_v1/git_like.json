@@ -1,0 +1,38 @@
+{
+  "branch": "main",
+  "describe": "f64d174-dirty",
+  "dirty": true,
+  "head": "f64d174299edb31058c43a4cd9f3ab8543c396c0",
+  "ok": true,
+  "remotes": [
+    "origin\tgit@github.com:simulationstation/Hubble-Systematics-Review-Chain.git (fetch)",
+    "origin\tgit@github.com:simulationstation/Hubble-Systematics-Review-Chain.git (push)"
+  ],
+  "status_porcelain": [
+    "M docs/CONFIG.md",
+    " M src/hubble_systematics/audit/injection.py",
+    " M src/hubble_systematics/probes/h0_grid.py",
+    " M src/hubble_systematics/probes/pantheon_plus_shoes_ladder.py",
+    " M tests/test_pantheon_plus_shoes_ladder_dataset.py",
+    "?? configs/pantheon_plus_shoes_ladder_injection_misspec_v4.yaml",
+    "?? configs/pantheon_plus_shoes_ladder_sbc_new_proxies_v1.yaml",
+    "?? configs/stack_sn_bao_cc_plus_ladder_cal_offset_extgrid_all_v1.yaml",
+    "?? configs/stack_sn_bao_cc_plus_ladder_cal_offset_extgrid_high_v1.yaml",
+    "?? configs/stack_sn_bao_cc_plus_ladder_cal_offset_extgrid_low_v1.yaml",
+    "?? configs/stack_sn_bao_cc_plus_ladder_external_prior_gates_v1.yaml",
+    "?? configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_extgrid_all_v1.yaml",
+    "?? configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_survey_holdout_extgrid_all_v1.yaml",
+    "?? data/processed/h0_grids/",
+    "?? outputs/pantheon_plus_shoes_ladder_injection_misspec_v4/",
+    "?? outputs/pantheon_plus_shoes_ladder_sbc_new_proxies_v1/",
+    "?? outputs/stack_sn_bao_cc_plus_ladder_cal_offset_extgrid_all_v1/",
+    "?? outputs/stack_sn_bao_cc_plus_ladder_cal_offset_extgrid_high_v1/",
+    "?? outputs/stack_sn_bao_cc_plus_ladder_cal_offset_extgrid_low_v1/",
+    "?? outputs/stack_sn_bao_cc_plus_ladder_external_prior_gates_v1/",
+    "?? outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_extgrid_all_v1/",
+    "?? scripts/",
+    "?? src/hubble_systematics/prior_overrides.py",
+    "?? tests/test_h0_grid_dataset.py"
+  ],
+  "toplevel": "/home/primary/Hubble-Systematics-Review-Chain"
+}

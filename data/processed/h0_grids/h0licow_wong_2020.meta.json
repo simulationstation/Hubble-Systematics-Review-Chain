@@ -1,0 +1,22 @@
+{
+  "created_by": "scripts/build_h0_grids_from_external_constraints.py",
+  "grid": {
+    "n_grid": 401,
+    "nsig": 6.0
+  },
+  "label": "h0licow_wong_2020",
+  "mean": 73.3,
+  "notes": [
+    "This is an approximately-Gaussian external constraint encoded as an H0_grid posterior for use by probe.name=h0_grid.",
+    "For space='ln' we interpret the published symmetric sigma in linear H0 units and use sigma_ln\u2248sigma/mean."
+  ],
+  "quantity": "H0",
+  "reference": {
+    "doi": "10.1093/mnras/stz3094",
+    "note": "Uses time-delay strong lensing; asymmetric errors approximated symmetrically for this stress-test.",
+    "title": "H0LiCOW XIII. A 2.4% measurement of H0 from lensed quasars"
+  },
+  "sigma": 1.75,
+  "source_constraints_file": "/home/primary/Hubble-Systematics-Review-Chain/data/processed/external_constraints/h0_constraints_2026-02-05.json",
+  "space": "ln"
+}

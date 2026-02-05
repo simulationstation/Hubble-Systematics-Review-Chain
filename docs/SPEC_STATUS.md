@@ -74,6 +74,19 @@ This file maps the “systematics-first” spec you described (CatWISE-style sta
   and `configs/stack_sn_bao_cc_plus_ladder_pkmjderr_linear_cal_v1.yaml`
 - **External-prior gates (scan):**
   `configs/stack_sn_bao_cc_plus_ladder_cal_offset_prior_sigma_sweep_v1.yaml`
+- **External-prior gates (per-survey / per-epoch mechanisms):**
+  `configs/stack_sn_bao_cc_plus_ladder_external_prior_gates_v1.yaml`
+- **Injection suite (adds new metadata proxies):**
+  `configs/pantheon_plus_shoes_ladder_injection_misspec_v4.yaml`
+- **SBC (new metadata proxies):**
+  `configs/pantheon_plus_shoes_ladder_sbc_new_proxies_v1.yaml`
+- **External H0 probes as `h0_grid` posteriors (TRGB / lenses / masers):**
+  `configs/stack_sn_bao_cc_plus_ladder_cal_offset_extgrid_low_v1.yaml`,
+  `configs/stack_sn_bao_cc_plus_ladder_cal_offset_extgrid_high_v1.yaml`,
+  `configs/stack_sn_bao_cc_plus_ladder_cal_offset_extgrid_all_v1.yaml`
+- **Holdout battery with external H0 grids included:**
+  `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_extgrid_all_v1.yaml` and
+  `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_survey_holdout_extgrid_all_v1.yaml`
 
 ## What’s still incomplete vs the full ambition
 
@@ -86,4 +99,5 @@ This file maps the “systematics-first” spec you described (CatWISE-style sta
 Start at `docs/LAYMAN_SUMMARY.md` and the latest “real run” reports:
 
 - `outputs/pantheon_plus_shoes_ladder_predictive_score_v2/report.md`
-- `outputs/stack_sn_bao_cc_siren_plus_ladder_cal_offset_v2/report.md`
+- `outputs/stack_sn_bao_cc_plus_ladder_cal_offset_v1/report.md`
+- `outputs/stack_sn_bao_cc_plus_ladder_external_prior_gates_v1/report.md`

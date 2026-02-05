@@ -58,3 +58,29 @@ than random holdout (as expected for a harder generalization test):
 Artifacts:
 - `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_survey_holdout_mechanism_scan_v1/report.md`
 - `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_survey_holdout_mechanism_scan_fullcov_v1/report.md`
+
+## 2026-02-05 — External-prior “gate” is strong (real data; per-survey/per-epoch variants)
+
+If external calibration work can really bound calibrator-step distortions at the ~0.02 mag level,
+the joint anchor-consistency stack cannot maintain the large ~0.16 mag calibrator↔HF correction
+without paying a big evidence penalty:
+
+- Tight `sigma_calibrator_offset_mag=0.02`: ΔlogZ ≈ -7.5.
+- Tight per-survey calibrator offsets (`sigma_cal_survey_offset_mag=0.02`): max |offset| ≈ 0.008 mag and ΔlogZ ≈ -11.3.
+- Tight calibrator time-bin offsets (`sigma_pkmjd_bin_offset_mag=0.02`): max |offset| ≈ 0.021 mag and ΔlogZ ≈ -10.1.
+
+Artifact:
+- `outputs/stack_sn_bao_cc_plus_ladder_external_prior_gates_v1/report.md`
+
+## 2026-02-05 — External H0 grids don’t remove the calibrator↔HF mismatch (stress-test; real data)
+
+Adding TRGB / strong-lens / megamaser H0 constraints as `h0_grid` posteriors does not remove the need
+for a large calibrator↔HF offset in the joint stack (still ~0.15–0.16 mag), and calibrator-holdout
+predictive improvements persist.
+
+Artifacts:
+- Baseline fits: `outputs/stack_sn_bao_cc_plus_ladder_cal_offset_extgrid_low_v1/report.md`,
+  `outputs/stack_sn_bao_cc_plus_ladder_cal_offset_extgrid_high_v1/report.md`,
+  `outputs/stack_sn_bao_cc_plus_ladder_cal_offset_extgrid_all_v1/report.md`
+- Holdouts: `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_extgrid_all_v1/report.md`,
+  `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_survey_holdout_extgrid_all_v1/report.md`

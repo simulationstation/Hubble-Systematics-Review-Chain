@@ -1,0 +1,22 @@
+{
+  "created_by": "scripts/build_h0_grids_from_external_constraints.py",
+  "grid": {
+    "n_grid": 401,
+    "nsig": 6.0
+  },
+  "label": "trgb_freedman_2021_review",
+  "mean": 69.8,
+  "notes": [
+    "This is an approximately-Gaussian external constraint encoded as an H0_grid posterior for use by probe.name=h0_grid.",
+    "For space='ln' we interpret the published symmetric sigma in linear H0 units and use sigma_ln\u2248sigma/mean."
+  ],
+  "quantity": "H0",
+  "reference": {
+    "arxiv": "2106.15656",
+    "note": "Review summarizing TRGB-based H0 with separate stat/sys components.",
+    "title": "Measurements of the Hubble Constant: Tensions in Perspective"
+  },
+  "sigma": 1.7088007490635064,
+  "source_constraints_file": "/home/primary/Hubble-Systematics-Review-Chain/data/processed/external_constraints/h0_constraints_2026-02-05.json",
+  "space": "ln"
+}

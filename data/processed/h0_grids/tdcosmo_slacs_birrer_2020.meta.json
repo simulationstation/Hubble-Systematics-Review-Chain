@@ -1,0 +1,22 @@
+{
+  "created_by": "scripts/build_h0_grids_from_external_constraints.py",
+  "grid": {
+    "n_grid": 401,
+    "nsig": 6.0
+  },
+  "label": "tdcosmo_slacs_birrer_2020",
+  "mean": 67.4,
+  "notes": [
+    "This is an approximately-Gaussian external constraint encoded as an H0_grid posterior for use by probe.name=h0_grid.",
+    "For space='ln' we interpret the published symmetric sigma in linear H0 units and use sigma_ln\u2248sigma/mean."
+  ],
+  "quantity": "H0",
+  "reference": {
+    "doi": "10.1051/0004-6361/202038861",
+    "note": "Constraint reported for the combined TDCOSMO+SLACS analysis; asymmetric errors approximated symmetrically for this stress-test.",
+    "title": "TDCOSMO IV. Hierarchical time-delay cosmography: mass models and H0"
+  },
+  "sigma": 3.65,
+  "source_constraints_file": "/home/primary/Hubble-Systematics-Review-Chain/data/processed/external_constraints/h0_constraints_2026-02-05.json",
+  "space": "ln"
+}

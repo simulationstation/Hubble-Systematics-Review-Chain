@@ -37,8 +37,14 @@ using this repo’s **linear-Gaussian audit models** (not a full end-to-end SH0E
 - **External-prior stress test:** forcing a tight prior on `calibrator_offset_mag` degrades evidence and shifts the fit (does *not* recover `H0≈73`).  
   Report: `outputs/stack_sn_bao_cc_plus_ladder_cal_offset_tight_v1/report.md`  
   Reproduce: `configs/stack_sn_bao_cc_plus_ladder_cal_offset_tight_v1.yaml`
+- **External-prior “gate” sweep (real data):** if external calibration work can truly bound calibrator-step distortions at the ~0.02 mag level, the joint anchor-consistency fit pays a large evidence penalty and cannot maintain the large ~0.16 mag calibrator↔HF offset.  
+  Report: `outputs/stack_sn_bao_cc_plus_ladder_external_prior_gates_v1/report.md`  
+  Reproduce: `configs/stack_sn_bao_cc_plus_ladder_external_prior_gates_v1.yaml`
 - **Anti-overfit gates:** cross-validated predictive scoring and exact Gaussian log-evidence both *penalize* adding flexible closure terms (HF redshift splines / sky low-ℓ modes) on the ladder subset.  
   Reports: `outputs/pantheon_plus_shoes_ladder_predictive_score_v2/report.md`, `outputs/pantheon_plus_shoes_ladder_level_sweep_v2/report.md`
+- **External H0 probes as `h0_grid` (TRGB / lenses / masers; stress-test):** adding these does not remove the need for a large calibrator↔HF offset in the joint stack, and calibrator holdout improvements persist.  
+  Reports: `outputs/stack_sn_bao_cc_plus_ladder_cal_offset_extgrid_low_v1/report.md`, `outputs/stack_sn_bao_cc_plus_ladder_cal_offset_extgrid_high_v1/report.md`, `outputs/stack_sn_bao_cc_plus_ladder_cal_offset_extgrid_all_v1/report.md`, `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_extgrid_all_v1/report.md`, `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_survey_holdout_extgrid_all_v1/report.md`  
+  Reproduce: `configs/stack_sn_bao_cc_plus_ladder_cal_offset_extgrid_low_v1.yaml`, `configs/stack_sn_bao_cc_plus_ladder_cal_offset_extgrid_high_v1.yaml`, `configs/stack_sn_bao_cc_plus_ladder_cal_offset_extgrid_all_v1.yaml`, `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_extgrid_all_v1.yaml`, `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_survey_holdout_extgrid_all_v1.yaml`
 - **Independent probe adapter (sirens, Gate-2):** selection-corrected per-event `logL(H0)` grid + metadata cut/time drift audit (experimental; upstream Gate-2 product not complete yet).  
   Report: `outputs/siren_gate2_grid_audit_v2/report.md`  
   Reproduce: `configs/siren_gate2_grid_audit_v2.yaml`

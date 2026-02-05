@@ -219,6 +219,49 @@ model:
     sigma_survey_offset_mag: 0.2
 ```
 
+### Per-survey / per-epoch external prior “gates” (Pantheon+SH0ES ladder)
+
+To encode **external calibration constraints** at the level of specific nuisance parameters, the
+Pantheon+SH0ES ladder adapter supports optional sigma overrides for groups of parameters:
+
+```yaml
+model:
+  priors:
+    # Global fallback sigmas (existing behavior)
+    sigma_survey_offset_mag: 0.10
+    sigma_hf_survey_offset_mag: 0.20
+    sigma_cal_survey_offset_mag: 0.20
+    sigma_pkmjd_bin_offset_mag: 0.20
+
+    # Optional fine-grained overrides
+    sigma_survey_offset_mag_by_idsurvey: {51: 0.02, 56: 0.02}
+    sigma_hf_survey_offset_mag_by_idsurvey: {51: 0.02, 56: 0.02}
+    sigma_cal_survey_offset_mag_by_idsurvey: {51: 0.02, 56: 0.02}
+    sigma_pkmjd_bin_offset_mag_by_bin: {0: 0.02, 1: 0.02, 2: 0.02}
+
+    # For survey×time-bin offsets: name is survey_pkmjd_bin_offset_<idsurvey>_<k>
+    sigma_survey_pkmjd_bin_offset_mag_by_idsurvey: {51: 0.02}
+    sigma_survey_pkmjd_bin_offset_mag_by_survey_bin: {"51_1": 0.02, "51_2": 0.02}
+```
+
+You can also override individual parameter sigmas by name:
+
+```yaml
+model:
+  priors:
+    sigma_overrides:
+      calibrator_offset_mag: 0.02
+      survey_offset_51: 0.01
+```
+
+Or load the same mapping from a JSON file:
+
+```yaml
+model:
+  priors:
+    sigma_overrides_path: data/processed/external_calibration/sigma_overrides.json
+```
+
 ## `scan` (cut scans)
 
 ```yaml
