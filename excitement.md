@@ -15,6 +15,9 @@ large out-of-sample predictive improvement from **calibrator-only** mechanisms:
 Artifacts:
 - `outputs/pantheon_plus_shoes_ladder_predictive_score_cal_holdout_v1/report.md`
 - `outputs/pantheon_plus_shoes_ladder_predictive_score_cal_survey_holdout_v1/report.md`
+- Full-cov robustness:
+  - `outputs/pantheon_plus_shoes_ladder_predictive_score_cal_holdout_fullcov_v1/report.md`
+  - `outputs/pantheon_plus_shoes_ladder_predictive_score_cal_survey_holdout_fullcov_v1/report.md`
 
 Caveats:
 - This is a **linear-Gaussian audit model** on the public Pantheon+SH0ES table, not an end-to-end

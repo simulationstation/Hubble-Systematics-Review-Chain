@@ -119,6 +119,13 @@ See:
 - `outputs/pantheon_plus_shoes_ladder_predictive_score_cal_holdout_v1/report.md`
 - `outputs/pantheon_plus_shoes_ladder_predictive_score_cal_survey_holdout_v1/report.md`
 
+A full-covariance robustness check (fewer reps due to cost) shows similar behavior:
+Δlogp ≈ **+8.5** (random) and ≈ **+3.2** (survey holdout) for `calibrator_offset_mag`.
+
+See:
+- `outputs/pantheon_plus_shoes_ladder_predictive_score_cal_holdout_fullcov_v1/report.md`
+- `outputs/pantheon_plus_shoes_ladder_predictive_score_cal_survey_holdout_fullcov_v1/report.md`
+
 This does **not** prove a physical mechanism (we are not modeling the full photometry pipeline), but
 it does say the required calibrator↔HF offset behaves like a **coherent effect**, not a tiny-N
 artifact.
