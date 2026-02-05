@@ -422,3 +422,33 @@ predictive_score:
     - label: baseline
       model: {}
 ```
+
+### Stack probe support
+
+For `probe.name: stack`, predictive scoring supports two additional conveniences:
+
+- `predictive_score.stack_scope_part`: when set, **all rows outside that stack part are always in TRAIN**,
+  and splits are applied only within the scoped part. This is useful for “hold out calibrators while
+  keeping SN+BAO+CC fixed” style tests.
+- `predictive_score.models[*].stack_overrides`: per-part model overrides (keyed by stack part name),
+  analogous to `sweep[*].stack_overrides` in `baseline_sweep`.
+
+Example (hold out calibrators inside the ladder part; keep other parts in TRAIN):
+
+```yaml
+predictive_score:
+  mode: random
+  n_rep: 200
+  train_frac: 0.7
+  stack_scope_part: pantheon_plus_shoes_ladder
+  always_include_hubble_flow: true
+  always_include_calibrators: false
+  use_diagonal_errors: true
+  models:
+    - label: baseline
+      model: {}
+    - label: +cal_offset
+      stack_overrides:
+        pantheon_plus_shoes_ladder:
+          mechanisms: {calibrator_offset: true}
+```

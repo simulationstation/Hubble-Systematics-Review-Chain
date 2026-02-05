@@ -126,6 +126,21 @@ See:
 - `outputs/pantheon_plus_shoes_ladder_predictive_score_cal_holdout_fullcov_v1/report.md`
 - `outputs/pantheon_plus_shoes_ladder_predictive_score_cal_survey_holdout_fullcov_v1/report.md`
 
+### Joint-stack version (anchor-consistency context)
+
+We repeated the same “hold out calibrators, keep hubble-flow fixed” idea inside the **joint**
+anchor-consistency stack (SN-only + BAO + chronometers + ladder). Here we also keep the non-ladder
+probes fixed in TRAIN (splits apply only within the ladder part).
+
+Result: the calibrator-only mechanisms still help held-out calibrators:
+
+- Random calibrator holdout (diag errors): Δlogp ≈ **+5.7** for `calibrator_offset_mag`
+- Random calibrator holdout (full cov): Δlogp ≈ **+6.2** for `calibrator_offset_mag`
+
+See:
+- `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_v1/report.md`
+- `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_fullcov_v1/report.md`
+
 This does **not** prove a physical mechanism (we are not modeling the full photometry pipeline), but
 it does say the required calibrator↔HF offset behaves like a **coherent effect**, not a tiny-N
 artifact.

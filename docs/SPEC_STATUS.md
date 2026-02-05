@@ -47,6 +47,9 @@ This file maps the “systematics-first” spec you described (CatWISE-style sta
   (plus full-cov robustness variants
   `configs/pantheon_plus_shoes_ladder_predictive_score_cal_holdout_fullcov_v1.yaml` and
   `configs/pantheon_plus_shoes_ladder_predictive_score_cal_survey_holdout_fullcov_v1.yaml`)
+- **Predictive scoring (stack; hold out calibrators inside ladder part while keeping other probes in TRAIN):**
+  `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_v1.yaml` and the full-cov variant
+  `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_fullcov_v1.yaml`
 - **Model-evidence ladder sweep (L2→L4):** `configs/pantheon_plus_shoes_ladder_level_sweep_v2.yaml`
 - **Time invariance null (fixed calibrators):** `configs/pantheon_plus_shoes_ladder_time_invariance_null_fixedcal_v3.yaml`
 - **Quality-cut scans (FITPROB / redchi2 / etc.):** `configs/pantheon_plus_shoes_ladder_fitprob_cut_scan.yaml`, `configs/pantheon_plus_shoes_ladder_redchi2_cut_scan.yaml`, …

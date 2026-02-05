@@ -1,0 +1,23 @@
+{
+  "branch": "main",
+  "describe": "1790113-dirty",
+  "dirty": true,
+  "head": "17901135fd6148981a379506c96f56ea2d16fc1c",
+  "ok": true,
+  "remotes": [
+    "origin\tgit@github.com:simulationstation/Hubble-Systematics-Review-Chain.git (fetch)",
+    "origin\tgit@github.com:simulationstation/Hubble-Systematics-Review-Chain.git (push)"
+  ],
+  "status_porcelain": [
+    "M docs/CONFIG.md",
+    " M src/hubble_systematics/audit/predictive_score.py",
+    " M src/hubble_systematics/audit/tasks.py",
+    "?? configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_fullcov_v1.yaml",
+    "?? configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_v1.yaml",
+    "?? outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_fullcov_v1/",
+    "?? outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_v1/",
+    "?? src/hubble_systematics/audit/stack_predictive_dataset.py",
+    "?? tests/test_stack_predictive_score.py"
+  ],
+  "toplevel": "/home/primary/Hubble-Systematics-Review-Chain"
+}

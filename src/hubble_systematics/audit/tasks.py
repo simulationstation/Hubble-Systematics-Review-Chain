@@ -13,6 +13,7 @@ from hubble_systematics.audit.group_split_null import run_group_split_null_mc
 from hubble_systematics.audit.injection import run_injection_suite
 from hubble_systematics.audit.hemisphere_scan import run_hemisphere_scan
 from hubble_systematics.audit.predictive_score import run_predictive_score
+from hubble_systematics.audit.stack_predictive_dataset import StackPredictiveDataset, StackPredictivePart
 from hubble_systematics.audit.split_null import run_split_null_mc
 from hubble_systematics.audit.sbc import run_sbc
 from hubble_systematics.audit.split_fit import run_split_fit
@@ -460,12 +461,45 @@ def run_predictive_score_task(ctx) -> dict[str, Any]:
     anchor = _build_anchor(cfg)
     probe_cfg = cfg.get("probe", {}) or {}
     probe_name = probe_cfg.get("name")
-    if probe_name == "stack":
-        return {"skipped": True, "reason": "predictive_score is not implemented for stack probes"}
+    dataset = None
+    fixed_train_mask = None
 
-    dataset = _load_probe(cfg)
-    if not hasattr(dataset, "subset_mask"):
-        return {"skipped": True, "reason": f"predictive_score requires a subset_mask-capable dataset (probe={probe_name})"}
+    if probe_name == "stack":
+        items = probe_cfg.get("stack", []) or []
+        if not items:
+            raise ValueError("stack probe requires non-empty probe.stack")
+
+        base_model = cfg.get("model", {}) or {}
+        base_level = str(base_model.get("ladder_level", "L1"))
+        pred_cfg = cfg.get("predictive_score", {}) or {}
+        scope_part = pred_cfg.get("stack_scope_part")
+
+        parts: list[StackPredictivePart] = []
+        for item in items:
+            item = dict(item)
+            name = item.get("name")
+            if name is None:
+                raise ValueError("Each stack item must include a name")
+            ds = _load_probe({"probe": item})
+            parts.append(StackPredictivePart(name=str(name), dataset=ds, base_model=item.get("model", {}) or {}))
+
+        dataset = StackPredictiveDataset.from_parts(
+            parts=parts,
+            anchor=anchor,
+            base_level=base_level,
+            base_model_cfg=base_model,
+            scope_part=str(scope_part) if scope_part is not None else None,
+        )
+        if scope_part is not None:
+            scope_mask = dataset.part_mask_full(str(scope_part))
+            if int(np.sum(scope_mask)) < 2:
+                raise ValueError("predictive_score.stack_scope_part must match a part with at least 2 rows")
+            fixed_train_mask = ~scope_mask
+
+    else:
+        dataset = _load_probe(cfg)
+        if not hasattr(dataset, "subset_mask"):
+            return {"skipped": True, "reason": f"predictive_score requires a subset_mask-capable dataset (probe={probe_name})"}
 
     base_model = cfg.get("model", {}) or {}
     base_level = str(base_model.get("ladder_level", "L1"))
@@ -480,6 +514,7 @@ def run_predictive_score_task(ctx) -> dict[str, Any]:
         base_model_cfg=base_model,
         pred_cfg=pred_cfg,
         rng=rng,
+        fixed_train_mask=fixed_train_mask,
     )
     out = res.to_jsonable()
     write_json(ctx.run_dir / "predictive_score.json", out)

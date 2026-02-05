@@ -42,6 +42,7 @@ def run_predictive_score(
     base_model_cfg: dict[str, Any],
     pred_cfg: dict[str, Any],
     rng: np.random.Generator,
+    fixed_train_mask: np.ndarray | None = None,
 ) -> PredictiveScoreResult:
     mode = str(pred_cfg.get("mode", "random")).lower()
     use_diag = bool(pred_cfg.get("use_diagonal_errors", True))
@@ -65,6 +66,7 @@ def run_predictive_score(
             rng=rng,
             always_include_calibrators=always_include_cal,
             always_include_hubble_flow=always_include_hf,
+            fixed_train_mask=fixed_train_mask,
         )
     elif mode == "group_holdout":
         n_rep = 0
@@ -77,6 +79,7 @@ def run_predictive_score(
             min_group_n=min_group_n,
             always_include_calibrators=always_include_cal,
             always_include_hubble_flow=always_include_hf,
+            fixed_train_mask=fixed_train_mask,
         )
         n_rep = len(splits)
     else:
@@ -93,6 +96,13 @@ def run_predictive_score(
             base_label = label
 
         model_cfg = _deep_merge_dicts(base_model_cfg, item.get("model", {}) or {})
+        if "stack_overrides" in item:
+            # Stack-specific: per-part model overrides keyed by stack part name.
+            so = item.get("stack_overrides", {}) or {}
+            if not isinstance(so, dict):
+                raise ValueError("predictive_score.models[*].stack_overrides must be a mapping")
+            model_cfg = dict(model_cfg)
+            model_cfg["stack_overrides"] = _deep_merge_dicts(model_cfg.get("stack_overrides", {}) or {}, so)
         level = str(item.get("ladder_level", model_cfg.get("ladder_level", base_level)))
 
         scores = np.empty(len(splits), dtype=float)
@@ -156,11 +166,17 @@ def _random_splits(
     rng: np.random.Generator,
     always_include_calibrators: bool,
     always_include_hubble_flow: bool,
+    fixed_train_mask: np.ndarray | None,
 ) -> list[tuple[np.ndarray, np.ndarray]]:
     n = int(dataset.z.size)
     all_idx = np.arange(n)
 
     fixed_train = np.zeros(n, dtype=bool)
+    if fixed_train_mask is not None:
+        fixed_train_mask = np.asarray(fixed_train_mask, dtype=bool)
+        if fixed_train_mask.shape != (n,):
+            raise ValueError("fixed_train_mask shape mismatch")
+        fixed_train |= fixed_train_mask
     if always_include_calibrators and hasattr(dataset, "is_calibrator"):
         cal = np.asarray(getattr(dataset, "is_calibrator"), dtype=bool)
         if cal.shape == (n,):
@@ -171,6 +187,8 @@ def _random_splits(
             fixed_train |= hf
 
     free_idx = all_idx[~fixed_train]
+    if free_idx.size < 2:
+        raise ValueError("Not enough free rows to split after applying fixed_train constraints")
     n_train_free = int(round(train_frac * free_idx.size))
     n_train_free = int(np.clip(n_train_free, 1, max(free_idx.size - 1, 1)))
 
@@ -194,12 +212,18 @@ def _group_holdout_splits(
     min_group_n: int,
     always_include_calibrators: bool,
     always_include_hubble_flow: bool,
+    fixed_train_mask: np.ndarray | None,
 ) -> list[tuple[np.ndarray, np.ndarray]]:
     v = dataset.get_column(group_var)
     v = np.asarray(v)
     n = int(v.size)
 
     fixed_train = np.zeros(n, dtype=bool)
+    if fixed_train_mask is not None:
+        fixed_train_mask = np.asarray(fixed_train_mask, dtype=bool)
+        if fixed_train_mask.shape != (n,):
+            raise ValueError("fixed_train_mask shape mismatch")
+        fixed_train |= fixed_train_mask
     if always_include_calibrators and hasattr(dataset, "is_calibrator"):
         cal = np.asarray(getattr(dataset, "is_calibrator"), dtype=bool)
         if cal.shape == (n,):
