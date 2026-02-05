@@ -8,6 +8,7 @@ import numpy as np
 from hubble_systematics.anchors import AnchorLCDM
 from hubble_systematics.gaussian_linear_model import GaussianLinearModelSpec, fit_gaussian_linear_model
 from hubble_systematics.shared_scale import apply_shared_scale_prior
+from hubble_systematics.audit.util import cholesky_with_jitter
 
 
 @dataclass(frozen=True)
@@ -70,12 +71,14 @@ def run_sbc(
     zscores = np.empty((n_rep, p), dtype=float)
 
     y_base = y0 + X @ beta_true
+    if use_diag:
+        eps = rng.normal(0.0, sigma, size=(n_rep, sigma.size))
+    else:
+        L = cholesky_with_jitter(cov)
+        z = rng.normal(0.0, 1.0, size=(n_rep, y_base.size))
+        eps = z @ L.T
     for r in range(n_rep):
-        if use_diag:
-            eps = rng.normal(0.0, sigma, size=sigma.size)
-        else:
-            eps = rng.multivariate_normal(mean=np.zeros_like(y_base), cov=cov)
-        y_sim = y_base + eps
+        y_sim = y_base + eps[r]
         fit = fit_gaussian_linear_model(GaussianLinearModelSpec(y=y_sim, y0=y0, cov=cov, X=X, prior=prior))
         sd = np.sqrt(np.diag(fit.cov))
         z = (beta_true - fit.mean) / sd

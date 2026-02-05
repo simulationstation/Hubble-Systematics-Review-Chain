@@ -252,7 +252,8 @@ Under these bounds:
 
 See:
 - Gate sweep: `outputs/stack_sn_bao_cc_plus_ladder_surveytime_kcor_gates_extgrid_more_v1/report.md`
-- Holdout: `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_surveytime_kcor_extgrid_more_v1/report.md`
+- Holdout (diag+fullcov): `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_surveytime_kcor_extgrid_more_v1/report.md`,
+  `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_surveytime_kcor_extgrid_more_fullcov_v1/report.md`
 - Prior derivation: `scripts/derive_pantheon_shoes_kcor_variant_priors.py` (writes `data/processed/external_calibration/pantheon_plus_shoes_sigma_overrides_from_kcor_variants_v1.json`)
 
 Injection mapping (does this mechanism have enough leverage?):
@@ -266,6 +267,8 @@ Injection mapping (does this mechanism have enough leverage?):
 See:
 - `outputs/pantheon_plus_shoes_ladder_injection_kcor_survey_pkmjd_bins_misspec_v1/report.md`
 - `outputs/pantheon_plus_shoes_ladder_injection_kcor_survey_pkmjd_bins_modeled_v1/report.md`
+- `outputs/pantheon_plus_shoes_ladder_injection_kcor_survey_pkmjd_bins_misspec_fullcov_v1/report.md`
+- `outputs/pantheon_plus_shoes_ladder_injection_kcor_survey_pkmjd_bins_modeled_fullcov_v1/report.md`
 
 ### “How much could this explain?” forward simulator (prior MC)
 
@@ -289,6 +292,7 @@ SBC sanity check (does the constrained model behave “normally” under noise?)
 
 See:
 - `outputs/pantheon_plus_shoes_ladder_sbc_survey_pkmjd_bins_kcor_v1/report.md`
+- `outputs/pantheon_plus_shoes_ladder_sbc_survey_pkmjd_bins_kcor_fullcov_v1/report.md`
 
 ### External calibration covariance (Brout+21 “FRAGILISTIC”; survey-level)
 

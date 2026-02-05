@@ -1,0 +1,23 @@
+{
+  "branch": "main",
+  "describe": "8492cb3-dirty",
+  "dirty": true,
+  "head": "8492cb3241a67349a28a499fc3b2b81258f1b5f4",
+  "ok": true,
+  "remotes": [
+    "origin\tgit@github.com:simulationstation/Hubble-Systematics-Review-Chain.git (fetch)",
+    "origin\tgit@github.com:simulationstation/Hubble-Systematics-Review-Chain.git (push)"
+  ],
+  "status_porcelain": [
+    "M src/hubble_systematics/audit/injection.py",
+    " M src/hubble_systematics/audit/sbc.py",
+    " M src/hubble_systematics/audit/util.py",
+    "?? configs/pantheon_plus_shoes_ladder_injection_kcor_survey_pkmjd_bins_misspec_fullcov_v1.yaml",
+    "?? configs/pantheon_plus_shoes_ladder_injection_kcor_survey_pkmjd_bins_modeled_fullcov_v1.yaml",
+    "?? configs/pantheon_plus_shoes_ladder_sbc_survey_pkmjd_bins_kcor_fullcov_v1.yaml",
+    "?? configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_surveytime_kcor_extgrid_more_fullcov_v1.yaml",
+    "?? outputs/pantheon_plus_shoes_ladder_injection_kcor_survey_pkmjd_bins_misspec_fullcov_v1/",
+    "?? outputs/pantheon_plus_shoes_ladder_injection_kcor_survey_pkmjd_bins_modeled_fullcov_v1/"
+  ],
+  "toplevel": "/home/primary/Hubble-Systematics-Review-Chain"
+}

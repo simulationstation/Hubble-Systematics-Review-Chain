@@ -10,6 +10,7 @@ import astropy.units as u
 from hubble_systematics.anchors import AnchorLCDM
 from hubble_systematics.gaussian_linear_model import GaussianLinearModelSpec, fit_gaussian_linear_model
 from hubble_systematics.shared_scale import apply_shared_scale_prior
+from hubble_systematics.audit.util import cholesky_with_jitter
 
 
 @dataclass(frozen=True)
@@ -59,6 +60,10 @@ def run_injection_suite(
 
     # Precompute noise model.
     cov_sim = cov
+    if cov_sim.ndim == 2:
+        L_cov = cholesky_with_jitter(cov_sim)
+    else:
+        L_cov = None
 
     y_base = y0 + X @ beta_true
 
@@ -67,13 +72,15 @@ def run_injection_suite(
         amp = float(amp)
         delta = _injection_delta(n=y_base.size, dataset=dataset, mechanism=mechanism, amp=amp, inj_cfg=inj_cfg)
         vals = np.empty(n_mc, dtype=float)
+        if use_diag:
+            assert sigma is not None
+            eps = rng.normal(0.0, sigma, size=(n_mc, sigma.size))
+        else:
+            assert L_cov is not None
+            z = rng.normal(0.0, 1.0, size=(n_mc, y_base.size))
+            eps = z @ L_cov.T
         for t in range(n_mc):
-            if use_diag:
-                assert sigma is not None
-                eps = rng.normal(0.0, sigma, size=sigma.size)
-            else:
-                eps = rng.multivariate_normal(mean=np.zeros_like(y_base), cov=cov_sim)
-            y_sim = y_base + delta + eps
+            y_sim = y_base + delta + eps[t]
             fit = fit_gaussian_linear_model(GaussianLinearModelSpec(y=y_sim, y0=y0, cov=cov_sim, X=X, prior=prior))
             vals[t] = float(fit.mean[j])
         rows.append(
