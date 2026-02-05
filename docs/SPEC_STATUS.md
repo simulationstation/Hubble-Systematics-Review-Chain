@@ -50,6 +50,8 @@ This file maps the “systematics-first” spec you described (CatWISE-style sta
 - **Predictive scoring (stack; hold out calibrators inside ladder part while keeping other probes in TRAIN):**
   `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_v1.yaml` and the full-cov variant
   `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_fullcov_v1.yaml`
+- **Predictive scoring (stack; mechanism scan on calibrator-only proxies):**
+  `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_mechanism_scan_v1.yaml`
 - **Model-evidence ladder sweep (L2→L4):** `configs/pantheon_plus_shoes_ladder_level_sweep_v2.yaml`
 - **Time invariance null (fixed calibrators):** `configs/pantheon_plus_shoes_ladder_time_invariance_null_fixedcal_v3.yaml`
 - **Quality-cut scans (FITPROB / redchi2 / etc.):** `configs/pantheon_plus_shoes_ladder_fitprob_cut_scan.yaml`, `configs/pantheon_plus_shoes_ladder_redchi2_cut_scan.yaml`, …
@@ -64,7 +66,8 @@ This file maps the “systematics-first” spec you described (CatWISE-style sta
 - **Calibrator-step mechanism alternatives (no sirens):**
   `configs/stack_sn_bao_cc_plus_ladder_calTimeBins_only_v1.yaml`,
   `configs/stack_sn_bao_cc_plus_ladder_cal_offset_plus_calTimeBins_v1.yaml`,
-  and `configs/stack_sn_bao_cc_plus_ladder_calSurvey_only_min4_v1.yaml`
+  `configs/stack_sn_bao_cc_plus_ladder_calSurvey_only_min4_v1.yaml`,
+  and `configs/stack_sn_bao_cc_plus_ladder_pkmjderr_linear_cal_v1.yaml`
 - **External-prior gates (scan):**
   `configs/stack_sn_bao_cc_plus_ladder_cal_offset_prior_sigma_sweep_v1.yaml`
 

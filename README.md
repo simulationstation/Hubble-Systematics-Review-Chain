@@ -30,6 +30,7 @@ using this repo’s **linear-Gaussian audit models** (not a full end-to-end SH0E
   Reproduce: `configs/pantheon_plus_shoes_ladder_predictive_score_cal_holdout_v1.yaml`, `configs/pantheon_plus_shoes_ladder_predictive_score_cal_holdout_fullcov_v1.yaml`, `configs/pantheon_plus_shoes_ladder_predictive_score_cal_survey_holdout_v1.yaml`, `configs/pantheon_plus_shoes_ladder_predictive_score_cal_survey_holdout_fullcov_v1.yaml`
 - **Joint-stack calibrator holdout (real data):** in the *anchor-consistency* joint stack (SN-only+BAO+CC+ladder), holding out calibrators (keeping hubble-flow + other probes fixed in TRAIN) still prefers calibrator-only corrections:  
   Δlogp ≈ +5.7 / +6.2 (diag/full-cov) for `calibrator_offset_mag`.  
+  A simple calibrator-only proxy `pkmjd_err_linear` (linear in `PKMJDERR`) also improves held-out calibrators (Δlogp ≈ +4.6), while a `m_b_corr_err_VPEC` linear proxy does not.  
   Reports: `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_v1/report.md`, `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_fullcov_v1/report.md`  
   Reproduce: `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_v1.yaml`, `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_fullcov_v1.yaml`
 - **External-prior stress test:** forcing a tight prior on `calibrator_offset_mag` degrades evidence and shifts the fit (does *not* recover `H0≈73`).  

@@ -172,6 +172,9 @@ Notes:
     - optional `cal_survey_offsets_min_cal_per_survey: N` filters to surveys with at least `N` calibrators (helps avoid tiny-N overfit)
   - `m_b_corr_err_linear: true` → adds `m_b_corr_err_linear_mag` (linear in `m_b_corr_err_DIAG`, z-scored on load; prior: `sigma_m_b_corr_err_linear_mag`)
     - scope via `m_b_corr_err_apply_to: hf|cal|all` (default `hf`)
+  - `m_b_corr_err_raw_linear: true` → adds `m_b_corr_err_raw_linear_mag` (linear in `m_b_corr_err_RAW`; prior: `sigma_m_b_corr_err_raw_linear_mag`)
+  - `m_b_corr_err_vpec_linear: true` → adds `m_b_corr_err_vpec_linear_mag` (linear in `m_b_corr_err_VPEC`; prior: `sigma_m_b_corr_err_vpec_linear_mag`)
+  - `pkmjd_err_linear: true` → adds `pkmjd_err_linear_mag` (linear in `PKMJDERR`; prior: `sigma_pkmjd_err_linear_mag`)
 
 ## `sweep` (baseline model variants)
 

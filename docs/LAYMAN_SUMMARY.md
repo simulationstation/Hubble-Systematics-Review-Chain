@@ -141,6 +141,18 @@ See:
 - `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_v1/report.md`
 - `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_fullcov_v1/report.md`
 
+#### Mechanism scan (joint stack)
+
+We tested a few “explicit proxy” replacements inside the same joint-stack holdout:
+
+- `PKMJDERR` linear term on calibrators (`pkmjd_err_linear`) gives Δlogp ≈ **+4.6** (close to the
+  time-bin offsets Δlogp ≈ +5.0, but below `calibrator_offset_mag` Δlogp ≈ +5.7).
+- `m_b_corr_err_VPEC` linear term on calibrators (`m_b_corr_err_vpec_linear`) gives essentially **no**
+  improvement (Δlogp ≈ +0.1).
+
+See:
+- `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_mechanism_scan_v1/report.md`
+
 This does **not** prove a physical mechanism (we are not modeling the full photometry pipeline), but
 it does say the required calibrator↔HF offset behaves like a **coherent effect**, not a tiny-N
 artifact.
@@ -178,6 +190,18 @@ large per-epoch shifts (up to ~0.24 mag in one bin), but they are still penalize
 relative to a single `calibrator_offset_mag`:
 - `outputs/stack_sn_bao_cc_plus_ladder_calTimeBins_only_v1/report.md`
 - `outputs/stack_sn_bao_cc_plus_ladder_cal_offset_plus_calTimeBins_v1/report.md`
+
+Finally, we tested a very simple calibrator-only proxy: a linear term in `PKMJDERR` (the time of
+maximum uncertainty). This improves the joint fit slightly, but it does **not** replace the full
+calibrator offset:
+
+- With `pkmjd_err_linear` on calibrators: log evidence ≈ **861.79**, ladder chi2 ≈ **297.31**
+  (`outputs/stack_sn_bao_cc_plus_ladder_pkmjderr_linear_cal_v1/report.md`).
+- With `calibrator_offset_mag`: log evidence ≈ **871.22**, ladder chi2 ≈ **280.14**
+  (`outputs/stack_sn_bao_cc_plus_ladder_cal_offset_v1/report.md`).
+
+So `PKMJDERR` is a plausible *marker* for whatever drives the calibrator↔HF mismatch, but it does not
+fully account for it in this model family.
 
 ## “Are any of these probable yet?”
 

@@ -30,3 +30,16 @@ Caveats:
 - This does **not** identify the *physical* origin (instrument/calibration/selection) of the
   calibrator↔HF mismatch; it only indicates the mismatch behaves like a **coherent** effect rather
   than a tiny-N artifact within this framework.
+
+## 2026-02-05 — PKMJDERR proxy is a strong “replacement” candidate (joint stack; CV)
+
+Inside the joint anchor-consistency stack (SN-only+BAO+CC+ladder), a simple calibrator-only linear
+term in `PKMJDERR` (time-of-maximum uncertainty) gives a large held-out calibrator predictive
+improvement:
+
+- `pkmjd_err_linear` on calibrators: Δlogp ≈ +4.6 (vs baseline)
+- compared to `calibrator_offset_mag`: Δlogp ≈ +5.7
+- while `m_b_corr_err_VPEC` linear gives ~0 improvement (Δlogp ≈ +0.1)
+
+Artifacts:
+- `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_mechanism_scan_v1/report.md`
