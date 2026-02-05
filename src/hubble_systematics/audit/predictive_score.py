@@ -233,8 +233,15 @@ def _group_holdout_splits(
         if hf.shape == (n,):
             fixed_train |= hf
 
-    # Only hold out finite groups.
-    good = np.isfinite(v)
+    # Only hold out "valid" group labels.
+    if np.issubdtype(v.dtype, np.number):
+        good = np.isfinite(v)
+    else:
+        good = np.ones(n, dtype=bool)
+        if v.dtype.kind in {"U", "S"}:
+            good &= v != ""
+        else:
+            good &= np.asarray([x is not None for x in v], dtype=bool)
     groups = np.unique(v[good])
 
     splits: list[tuple[np.ndarray, np.ndarray]] = []

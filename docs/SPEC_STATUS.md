@@ -103,6 +103,7 @@ This file maps the “systematics-first” spec you described (CatWISE-style sta
   plus kcor-gated mechanism-attribution scans:
   `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_mechanism_attribution_kcor_extgrid_more_v1.yaml`,
   `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_mechanism_attribution_kcor_extgrid_more_fullcov_v1.yaml`,
+  `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cid_holdout_mechanism_attribution_kcor_extgrid_more_v1.yaml`,
   `configs/stack_sn_bao_cc_plus_ladder_surveytime_kcor_gates_mechanism_attribution_extgrid_more_v1.yaml`,
   and kcor-calibrated injection/SBC checks:
   `configs/pantheon_plus_shoes_ladder_injection_kcor_survey_pkmjd_bins_misspec_v1.yaml`,

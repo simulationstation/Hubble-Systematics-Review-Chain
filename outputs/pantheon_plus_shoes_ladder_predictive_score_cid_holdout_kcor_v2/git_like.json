@@ -1,0 +1,19 @@
+{
+  "branch": "main",
+  "describe": "f47a87d-dirty",
+  "dirty": true,
+  "head": "f47a87d237f76242ef8eb767074c23e8b79caf88",
+  "ok": true,
+  "remotes": [
+    "origin\tgit@github.com:simulationstation/Hubble-Systematics-Review-Chain.git (fetch)",
+    "origin\tgit@github.com:simulationstation/Hubble-Systematics-Review-Chain.git (push)"
+  ],
+  "status_porcelain": [
+    "M src/hubble_systematics/audit/predictive_score.py",
+    "?? configs/pantheon_plus_shoes_ladder_predictive_score_cid_holdout_kcor_v1.yaml",
+    "?? configs/pantheon_plus_shoes_ladder_predictive_score_cid_holdout_kcor_v2.yaml",
+    "?? outputs/pantheon_plus_shoes_ladder_predictive_score_cid_holdout_kcor_v1/",
+    "?? outputs/pantheon_plus_shoes_ladder_predictive_score_cid_holdout_kcor_v2/"
+  ],
+  "toplevel": "/home/primary/Hubble-Systematics-Review-Chain"
+}

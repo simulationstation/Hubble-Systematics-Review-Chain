@@ -178,7 +178,9 @@ class StackPredictiveDataset:
 
     def get_column(self, name: str) -> np.ndarray:
         name = str(name)
-        out = np.full(self.mask_full.shape[0], np.nan, dtype=float)
+        n_total = int(self.mask_full.shape[0])
+        out_float: np.ndarray | None = None
+        out_obj: np.ndarray | None = None
         for part, (nm, sl) in zip(self.parts, self.part_slices, strict=True):
             if self.scope_part is not None and nm != self.scope_part:
                 continue
@@ -186,13 +188,28 @@ class StackPredictiveDataset:
             if not hasattr(ds, "get_column"):
                 continue
             try:
-                v = np.asarray(ds.get_column(name), dtype=float).reshape(-1)
+                v = np.asarray(ds.get_column(name)).reshape(-1)
             except Exception:
                 continue
             if v.shape != (sl.stop - sl.start,):
                 continue
-            out[sl] = v
-        return out[self.mask_full]
+            if np.issubdtype(v.dtype, np.number):
+                if out_obj is not None:
+                    out_obj[sl] = v.astype(object)
+                else:
+                    if out_float is None:
+                        out_float = np.full(n_total, np.nan, dtype=float)
+                    out_float[sl] = v.astype(float)
+            else:
+                if out_obj is None:
+                    out_obj = np.full(n_total, None, dtype=object)
+                out_obj[sl] = v.astype(object)
+
+        if out_obj is not None:
+            return out_obj[self.mask_full]
+        if out_float is None:
+            out_float = np.full(n_total, np.nan, dtype=float)
+        return out_float[self.mask_full]
 
     def build_design(self, *, anchor: AnchorLCDM, ladder_level: str, cfg: dict[str, Any]):
         cfg = dict(cfg or {})
@@ -235,4 +252,3 @@ def _deep_merge_dicts(a: dict[str, Any], b: dict[str, Any]) -> dict[str, Any]:
         else:
             out[k] = v
     return out
-

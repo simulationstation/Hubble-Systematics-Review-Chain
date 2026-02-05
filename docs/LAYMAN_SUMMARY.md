@@ -392,6 +392,12 @@ See:
   `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_mechanism_attribution_kcor_extgrid_more_v1/report.md`,
   `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_mechanism_attribution_kcor_extgrid_more_fullcov_v1/report.md`
 
+We also ran a stricter **CID holdout** (hold out entire SNe by name, not individual rows). The
+calibrator offset remains preferred in the joint stack, but the gain is smaller on this split family
+(Δlogp ≈ +0.32 for `calibrator_offset_mag`):
+
+- `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cid_holdout_mechanism_attribution_kcor_extgrid_more_v1/report.md`
+
 We also ran a **survey holdout** (hold out calibrators from one survey at a time). Effects persist
 but are smaller, with calibrator time-bin offsets still best among these candidates (Δlogp ≈ +1.9,
 vs +1.7 for `calibrator_offset_mag`, vs +1.5 for `pkmjd_err_linear`):
