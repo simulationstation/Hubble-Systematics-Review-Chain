@@ -1,0 +1,17 @@
+{
+  "branch": "main",
+  "describe": "1bd5fa9",
+  "dirty": true,
+  "head": "1bd5fa926a80cd16625322890a4bf9b539c9a74f",
+  "ok": true,
+  "remotes": [
+    "origin\tgit@github.com:simulationstation/Hubble-Systematics-Review-Chain.git (fetch)",
+    "origin\tgit@github.com:simulationstation/Hubble-Systematics-Review-Chain.git (push)"
+  ],
+  "status_porcelain": [
+    "?? configs/stack_sn_bao_cc_plus_ladder_cal_offset_tight_v1.yaml",
+    "?? configs/stack_sn_bao_cc_plus_ladder_cal_offset_v1.yaml",
+    "?? outputs/stack_sn_bao_cc_plus_ladder_cal_offset_v1/"
+  ],
+  "toplevel": "/home/primary/Hubble-Systematics-Review-Chain"
+}

@@ -23,19 +23,20 @@ See: `outputs/pantheon_plus_shoes_ladder_demo_v3/report.md`.
 ## Other late-time probes (sanity context; real data)
 
 As a cross-check, we also ran a simple **stack** of late-time probes that do *not* include the SH0ES
-calibrator step: Pantheon+ (SN only) + DESI 2024 BAO + chronometers, optionally plus a GR-control
-siren H0 posterior grid. That stack prefers `H0 ≈ 68.21 ± 0.31`, i.e. close to the early-time
-anchor and far from the SH0ES ladder value.
+calibrator step: Pantheon+ (SN only) + DESI 2024 BAO + chronometers. That stack prefers
+`H0 ≈ 68.21 ± 0.31`, i.e. close to the early-time anchor and far from the SH0ES ladder value.
 
 See:
 - `outputs/stack_sn_bao_cc_stress_v2/report.md`
-- `outputs/stack_sn_bao_cc_siren_stress_v2/report.md`
 
 ## Independent siren probe (real data; with metadata cuts)
 
 We added a **selection-corrected Gate‑2 dark-siren** adapter that ingests per-event `logL(H0)` curves
 on a common grid (independent of SN/BAO/CC) and enables the same cut/time drift audits using event
 QC metrics (`ess_min`, `n_good_min`) and event time parsed from the event name.
+
+**Important:** you noted the upstream Gate‑2 product is **not complete yet**, so treat these results
+as *experimental plumbing checks*, not as a mature physics constraint.
 
 - Baseline (moment summary of the selection-corrected posterior): `H0_eff ≈ 60.84 ± 12.74` (broad).  
   Cut scan over `ess_min` shows large variation once `N` becomes small. Under a siren-specific
@@ -81,13 +82,22 @@ See: `outputs/pantheon_plus_shoes_ladder_injection_misspec_v3/report.md`.
 ## Joint “anchor-consistency” inference (real data)
 
 If we **force** agreement with the early-time anchor using the *other* late-time probes
-SN-only+BAO+chronometers(+siren GR control), then the SH0ES-style ladder subset can only be made
+SN-only+BAO+chronometers, then the SH0ES-style ladder subset can only be made
 compatible by introducing a large calibrator↔Hubble-flow offset:
 
 - In a joint stack, the inferred `calibrator_offset_mag ≈ +0.162 ± 0.032` mag.
 - That is roughly **~85% ± 17%** of the full **~0.19 mag** ladder gap (simple ratio; not a calibrated physical prior).
 
-See: `outputs/stack_sn_bao_cc_siren_plus_ladder_cal_offset_v2/report.md`.
+See:
+- `outputs/stack_sn_bao_cc_plus_ladder_cal_offset_v1/report.md`
+- External-prior stress test: `outputs/stack_sn_bao_cc_plus_ladder_cal_offset_tight_v1/report.md`
+
+In the tight-prior stress test (`sigma_calibrator_offset_mag=0.02`), the fit is forced toward a
+much smaller offset (`calibrator_offset_mag ≈ +0.046 ± 0.017`), the combined `H0_eff` shifts slightly
+upward (`≈ 68.57`), and the model evidence drops notably. This is a concrete “external prior gate”:
+if external calibration work can truly bound the calibrator↔HF offset at the ~0.02 mag level, this
+joint stack would no longer be able to reconcile the ladder subset without paying a strong
+likelihood/evidence penalty.
 
 ## External-probe bracketing (TRGB / strong lenses / megamasers)
 
@@ -116,6 +126,12 @@ See:
 - `outputs/stack_sn_bao_cc_siren_plus_ladder_cal_offset_plus_calTimeLinear_v1/report.md`
 - `outputs/stack_sn_bao_cc_siren_plus_ladder_calSurvey_only_v1/report.md`
 - `outputs/stack_sn_bao_cc_siren_plus_ladder_cal_offset_plus_calSurvey_v1/report.md`
+
+We also tested calibrator-only **epoch bin offsets** as a replacement mechanism. They can create
+large per-epoch shifts (up to ~0.24 mag in one bin), but they are still penalized by evidence
+relative to a single `calibrator_offset_mag`:
+- `outputs/stack_sn_bao_cc_plus_ladder_calTimeBins_only_v1/report.md`
+- `outputs/stack_sn_bao_cc_plus_ladder_cal_offset_plus_calTimeBins_v1/report.md`
 
 ## “Are any of these probable yet?”
 

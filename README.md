@@ -16,13 +16,19 @@ using this repo’s **linear-Gaussian audit models** (not a full end-to-end SH0E
 - **Ladder reproduction:** `H0_eff = 73.552 ± 1.078` vs anchor `67.4` (equivalent `|Δμ| ≈ 0.19 mag`).  
   Report: `outputs/pantheon_plus_shoes_ladder_predictive_score_v2/report.md`  
   Reproduce: `configs/pantheon_plus_shoes_ladder_predictive_score_v2.yaml`
-- **Late-time non-ladder stack:** Pantheon+ (SN-only) + DESI BAO + CC + a GR-control siren grid gives `H0_eff = 68.218 ± 0.313` (close to anchor).  
-  When the ladder is included, anchor-consistency is achieved mainly via `calibrator_offset_mag = +0.1617 ± 0.0318` mag (≈ `85% ± 17%` of the full `~0.19 mag` gap).  
-  Report: `outputs/stack_sn_bao_cc_siren_plus_ladder_cal_offset_v2/report.md`  
-  Reproduce: `configs/stack_sn_bao_cc_siren_plus_ladder_cal_offset_v2.yaml`
+- **Late-time non-ladder stack:** Pantheon+ (SN-only) + DESI BAO + CC gives `H0_eff = 68.208 ± 0.314` (close to anchor).  
+  Report: `outputs/stack_sn_bao_cc_stress_v2/report.md`  
+  Reproduce: `configs/stack_sn_bao_cc_stress.yaml`
+- **Anchor-consistency (no sirens):** adding the SH0ES ladder subset forces a large calibrator↔HF offset:  
+  `calibrator_offset_mag = +0.1616 ± 0.0318` mag.  
+  Report: `outputs/stack_sn_bao_cc_plus_ladder_cal_offset_v1/report.md`  
+  Reproduce: `configs/stack_sn_bao_cc_plus_ladder_cal_offset_v1.yaml`
+- **External-prior stress test:** forcing a tight prior on `calibrator_offset_mag` degrades evidence and shifts the fit (does *not* recover `H0≈73`).  
+  Report: `outputs/stack_sn_bao_cc_plus_ladder_cal_offset_tight_v1/report.md`  
+  Reproduce: `configs/stack_sn_bao_cc_plus_ladder_cal_offset_tight_v1.yaml`
 - **Anti-overfit gates:** cross-validated predictive scoring and exact Gaussian log-evidence both *penalize* adding flexible closure terms (HF redshift splines / sky low-ℓ modes) on the ladder subset.  
   Reports: `outputs/pantheon_plus_shoes_ladder_predictive_score_v2/report.md`, `outputs/pantheon_plus_shoes_ladder_level_sweep_v2/report.md`
-- **Independent probe adapter (sirens, Gate-2):** selection-corrected per-event `logL(H0)` grid + metadata cut/time drift audit.  
+- **Independent probe adapter (sirens, Gate-2):** selection-corrected per-event `logL(H0)` grid + metadata cut/time drift audit (experimental; upstream Gate-2 product not complete yet).  
   Report: `outputs/siren_gate2_grid_audit_v2/report.md`  
   Reproduce: `configs/siren_gate2_grid_audit_v2.yaml`
 

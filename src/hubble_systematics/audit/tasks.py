@@ -208,8 +208,10 @@ def run_baseline_sweep_task(ctx) -> dict[str, Any]:
 
         param_summary = {
             "calibrator_offset_mag": param("calibrator_offset_mag"),
+            "cal_survey_offsets": max_abs("cal_survey_offset_"),
             "time_bin_offsets": max_abs("pkmjd_bin_offset_"),
             "survey_time_offsets": max_abs("survey_pkmjd_bin_offset_"),
+            "hf_survey_offsets": max_abs("hf_survey_offset_"),
             "hf_z_spline": (max_abs("hf_z_spline_") or max_abs("z_spline_")),
             "sky_modes": max_abs("sky_"),
         }

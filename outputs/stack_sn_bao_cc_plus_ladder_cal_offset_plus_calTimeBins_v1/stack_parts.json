@@ -1,0 +1,24 @@
+{
+  "parts": [
+    {
+      "chi2": 1179.9257665803877,
+      "label": "pantheon_plus",
+      "n": 1322
+    },
+    {
+      "chi2": 270.79025717115826,
+      "label": "pantheon_plus_shoes_ladder",
+      "n": 354
+    },
+    {
+      "chi2": 14.6977873905617,
+      "label": "bao",
+      "n": 12
+    },
+    {
+      "chi2": 12.609863187659869,
+      "label": "chronometers",
+      "n": 19
+    }
+  ]
+}

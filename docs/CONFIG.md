@@ -169,6 +169,7 @@ Notes:
 - Additional optional mechanisms for `pantheon_plus_shoes_ladder` live under `model.mechanisms`, e.g.:
   - `calibrator_offset: true` → adds `calibrator_offset_mag` (calibrator-only shift)
   - `cal_survey_offsets: true` → adds per-survey calibrator-only shifts `cal_survey_offset_<idsurvey>` (prior: `sigma_cal_survey_offset_mag`)
+    - optional `cal_survey_offsets_min_cal_per_survey: N` filters to surveys with at least `N` calibrators (helps avoid tiny-N overfit)
   - `m_b_corr_err_linear: true` → adds `m_b_corr_err_linear_mag` (linear in `m_b_corr_err_DIAG`, z-scored on load; prior: `sigma_m_b_corr_err_linear_mag`)
     - scope via `m_b_corr_err_apply_to: hf|cal|all` (default `hf`)
 
@@ -235,7 +236,7 @@ Notes:
 - For most probes, `correlated_cut_null` uses a linear-Gaussian simulation (fit the max-cut model,
   inject noise, and re-fit across nested cuts).
 - For `probe.name: siren_gate2_grid`, you can choose a siren-specific null:
-  - `mode: event_gaussian` simulates event-level ln(H0) measurements using widths inferred from
+- `mode: event_gaussian` simulates event-level ln(H0) measurements using widths inferred from
     each event’s `logL(H0)` curve, then recomputes the selection-corrected posterior per cut.
 
 ```yaml
@@ -283,6 +284,10 @@ injection:
     amplitudes: [-0.2, -0.1, 0.0, 0.1, 0.2]
     param_of_interest: delta_lnH0
 ```
+
+For `survey_pkmjd_bins`, you can require a minimum count per survey depending on scope:
+- `apply_to: hf` → `min_hf_per_survey`
+- `apply_to: cal` → `min_cal_per_survey`
 
 ## `sbc` (coverage under repeated-noise truth)
 

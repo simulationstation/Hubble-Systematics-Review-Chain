@@ -48,6 +48,7 @@ class PantheonPlusShoesLadderDataset:
     is_hubble_flow: np.ndarray
     idsurvey_levels: np.ndarray
     idsurvey_hf_counts: dict[int, int]
+    idsurvey_cal_counts: dict[int, int]
     z_hf_support_min: float | None
     z_hf_support_max: float | None
     mwebv_mu: float
@@ -170,6 +171,7 @@ class PantheonPlusShoesLadderDataset:
             is_hubble_flow=self.is_hubble_flow[idx],
             idsurvey_levels=self.idsurvey_levels,
             idsurvey_hf_counts=self.idsurvey_hf_counts,
+            idsurvey_cal_counts=self.idsurvey_cal_counts,
             z_hf_support_min=self.z_hf_support_min,
             z_hf_support_max=self.z_hf_support_max,
             mwebv_mu=self.mwebv_mu,
@@ -227,7 +229,15 @@ class PantheonPlusShoesLadderDataset:
         def add_cal_survey_offsets() -> None:
             nonlocal X
             ref = prior_cfg.get("survey_reference")
-            dm = one_hot_levels(self.idsurvey, levels=self.idsurvey_levels, prefix="cal_survey_offset_", reference=ref, drop_reference=True)
+            min_cal = int(mech_cfg.get("cal_survey_offsets_min_cal_per_survey", 0))
+            levels = [int(s) for s in self.idsurvey_levels.tolist()]
+            if min_cal > 0:
+                levels = [s for s in levels if int(self.idsurvey_cal_counts.get(int(s), 0)) >= min_cal]
+            if not levels:
+                return
+            if ref is not None and int(ref) not in levels:
+                ref = levels[0]
+            dm = one_hot_levels(self.idsurvey, levels=levels, prefix="cal_survey_offset_", reference=ref, drop_reference=True)
             X = X.append(DesignMatrix(X=dm.X * cal[:, None], names=dm.names))
 
         def add_mwebv_linear() -> None:
@@ -380,13 +390,24 @@ class PantheonPlusShoesLadderDataset:
             elif apply_to != "all":
                 raise ValueError(f"Unsupported survey_pkmjd_bins.apply_to: {apply_to}")
 
-            min_hf_per_survey = int(bins_cfg.get("min_hf_per_survey", 20))
+            if apply_to == "hf":
+                min_per_survey = int(bins_cfg.get("min_hf_per_survey", 20))
+                counts = self.idsurvey_hf_counts
+            elif apply_to == "cal":
+                min_per_survey = int(bins_cfg.get("min_cal_per_survey", bins_cfg.get("min_hf_per_survey", 5)))
+                counts = self.idsurvey_cal_counts
+            else:
+                # apply_to == "all": default to a conservative threshold on total per-survey rows.
+                min_per_survey = int(bins_cfg.get("min_per_survey", bins_cfg.get("min_hf_per_survey", 20)))
+                ids_int = self.idsurvey.astype(int)
+                counts = {int(s): int(np.sum(ids_int == int(s))) for s in self.idsurvey_levels.tolist()}
+
             surveys = [int(s) for s in self.idsurvey_levels.tolist()]
             cols: list[np.ndarray] = []
             names: list[str] = []
             for s in surveys:
                 s = int(s)
-                if int(self.idsurvey_hf_counts.get(s, 0)) < min_hf_per_survey:
+                if int(counts.get(s, 0)) < min_per_survey:
                     continue
                 in_survey = (self.idsurvey.astype(int) == s) & good
                 for k in range(1, n_bins):
@@ -595,9 +616,11 @@ def load_pantheon_plus_shoes_ladder_dataset(probe_cfg: dict[str, Any]) -> Panthe
             ids = np.asarray(npz["idsurvey"], dtype=int)
             id_levels = np.unique(ids)
             is_hf = np.asarray(npz["is_hubble_flow"], dtype=bool)
+            is_cal = np.asarray(npz["is_calibrator"], dtype=bool)
             pkmjd = np.asarray(npz["pkmjd"], dtype=float)
             good_t = np.isfinite(pkmjd) & (pkmjd > 0.0)
             id_hf_counts = {int(s): int(np.sum((ids == int(s)) & is_hf & good_t)) for s in id_levels.tolist()}
+            id_cal_counts = {int(s): int(np.sum((ids == int(s)) & is_cal)) for s in id_levels.tolist()}
 
             z = np.asarray(npz["z"], dtype=float)
             z_hf = z[is_hf]
@@ -652,6 +675,7 @@ def load_pantheon_plus_shoes_ladder_dataset(probe_cfg: dict[str, Any]) -> Panthe
                 is_hubble_flow=npz["is_hubble_flow"].astype(bool),
                 idsurvey_levels=id_levels.astype(int),
                 idsurvey_hf_counts=id_hf_counts,
+                idsurvey_cal_counts=id_cal_counts,
                 z_hf_support_min=z_hf_support_min,
                 z_hf_support_max=z_hf_support_max,
                 mwebv_mu=mwebv_mu,
@@ -722,6 +746,7 @@ def load_pantheon_plus_shoes_ladder_dataset(probe_cfg: dict[str, Any]) -> Panthe
     id_levels = np.unique(idsurvey)
     good_t = np.isfinite(pkmjd) & (pkmjd > 0.0)
     id_hf_counts = {int(s): int(np.sum((idsurvey == int(s)) & is_hf_sel & good_t)) for s in id_levels.tolist()}
+    id_cal_counts = {int(s): int(np.sum((idsurvey == int(s)) & is_cal_sel)) for s in id_levels.tolist()}
 
     z_hf = z[idx][is_hf_sel]
     z_hf_support_min = float(np.min(z_hf)) if z_hf.size else None
@@ -814,6 +839,7 @@ def load_pantheon_plus_shoes_ladder_dataset(probe_cfg: dict[str, Any]) -> Panthe
         is_hubble_flow=is_hf_sel.astype(bool),
         idsurvey_levels=id_levels.astype(int),
         idsurvey_hf_counts=id_hf_counts,
+        idsurvey_cal_counts=id_cal_counts,
         z_hf_support_min=z_hf_support_min,
         z_hf_support_max=z_hf_support_max,
         mwebv_mu=mwebv_mu,

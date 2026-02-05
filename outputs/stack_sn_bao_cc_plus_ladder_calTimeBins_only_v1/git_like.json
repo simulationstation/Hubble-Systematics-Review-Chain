@@ -1,0 +1,32 @@
+{
+  "branch": "main",
+  "describe": "1bd5fa9-dirty",
+  "dirty": true,
+  "head": "1bd5fa926a80cd16625322890a4bf9b539c9a74f",
+  "ok": true,
+  "remotes": [
+    "origin\tgit@github.com:simulationstation/Hubble-Systematics-Review-Chain.git (fetch)",
+    "origin\tgit@github.com:simulationstation/Hubble-Systematics-Review-Chain.git (push)"
+  ],
+  "status_porcelain": [
+    "M README.md",
+    " M docs/CONFIG.md",
+    " M docs/LAYMAN_SUMMARY.md",
+    " M docs/SPEC_STATUS.md",
+    " M src/hubble_systematics/audit/reporting.py",
+    " M src/hubble_systematics/audit/tasks.py",
+    " M src/hubble_systematics/probes/pantheon_plus_shoes_ladder.py",
+    "?? configs/stack_sn_bao_cc_plus_ladder_calSurveyTimeBins_only_min4_v1.yaml",
+    "?? configs/stack_sn_bao_cc_plus_ladder_calSurvey_only_min4_v1.yaml",
+    "?? configs/stack_sn_bao_cc_plus_ladder_calTimeBins_only_v1.yaml",
+    "?? configs/stack_sn_bao_cc_plus_ladder_calTimeLinear_only_v1.yaml",
+    "?? configs/stack_sn_bao_cc_plus_ladder_cal_offset_tight_v1.yaml",
+    "?? configs/stack_sn_bao_cc_plus_ladder_cal_offset_v1.yaml",
+    "?? outputs/stack_sn_bao_cc_plus_ladder_calSurvey_only_min4_v1/",
+    "?? outputs/stack_sn_bao_cc_plus_ladder_calTimeBins_only_v1/",
+    "?? outputs/stack_sn_bao_cc_plus_ladder_calTimeLinear_only_v1/",
+    "?? outputs/stack_sn_bao_cc_plus_ladder_cal_offset_tight_v1/",
+    "?? outputs/stack_sn_bao_cc_plus_ladder_cal_offset_v1/"
+  ],
+  "toplevel": "/home/primary/Hubble-Systematics-Review-Chain"
+}

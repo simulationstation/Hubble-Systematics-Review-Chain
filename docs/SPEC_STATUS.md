@@ -33,6 +33,7 @@ This file maps the “systematics-first” spec you described (CatWISE-style sta
 - `h0_grid` (a 1D posterior grid / likelihood for H0, linear or ln-space): `src/hubble_systematics/probes/h0_grid.py`
 - `gaussian_measurement` (single-number Gaussian constraint on `H0` or `rd_Mpc`): `src/hubble_systematics/probes/gaussian_measurement.py`
 - `siren_gate2_grid` (Gate-2 dark-siren grid + event metadata; selection-corrected): `src/hubble_systematics/probes/siren_gate2_grid.py`
+  - Note: upstream Gate-2 products may be incomplete; treat as experimental plumbing until validated.
 - `stack` (combine multiple parts with shared parameters by name): handled in `src/hubble_systematics/audit/tasks.py`
 
 ## “Audit packet” configs (how to run each spec component)
@@ -46,6 +47,14 @@ This file maps the “systematics-first” spec you described (CatWISE-style sta
 - **External-prior sensitivity sweep (tight vs loose priors):** `configs/pantheon_plus_shoes_ladder_external_prior_sweep.yaml`
 - **Joint “anchor consistency” stress test (SN-only+BAO+CC+siren + ladder with calibrator offset):**
   `configs/stack_sn_bao_cc_siren_plus_ladder_cal_offset_v2.yaml`
+- **Joint “anchor consistency” stress test (no sirens):**
+  `configs/stack_sn_bao_cc_plus_ladder_cal_offset_v1.yaml`
+  and the external-prior stress variant
+  `configs/stack_sn_bao_cc_plus_ladder_cal_offset_tight_v1.yaml`
+- **Calibrator-step mechanism alternatives (no sirens):**
+  `configs/stack_sn_bao_cc_plus_ladder_calTimeBins_only_v1.yaml`,
+  `configs/stack_sn_bao_cc_plus_ladder_cal_offset_plus_calTimeBins_v1.yaml`,
+  and `configs/stack_sn_bao_cc_plus_ladder_calSurvey_only_min4_v1.yaml`
 
 ## What’s still incomplete vs the full ambition
 

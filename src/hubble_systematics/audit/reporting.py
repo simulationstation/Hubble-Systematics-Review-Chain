@@ -63,8 +63,10 @@ def write_report(run_dir: Path) -> None:
                     pieces.append(f"- {label}: max |mean|={a:.4f} (n={len(idx)})\n")
 
                 show("calibrator_offset_mag")
+                show_prefix("cal_survey_offset_", "Calibrator survey offsets")
                 show_prefix("pkmjd_bin_offset_", "Time-bin offsets")
                 show_prefix("survey_pkmjd_bin_offset_", "Survey×time offsets")
+                show_prefix("hf_survey_offset_", "HF survey offsets")
                 show_prefix("hf_z_spline_", "HF z-spline coeffs")
                 show_prefix("z_spline_", "HF z-spline coeffs (legacy)")
                 show_prefix("sky_", "Sky low-ℓ modes")
