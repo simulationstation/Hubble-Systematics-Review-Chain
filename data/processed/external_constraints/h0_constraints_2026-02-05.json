@@ -71,7 +71,7 @@
       "reference": {
         "arxiv": "2101.02221",
         "doi": "10.3847/1538-4357/abe86a",
-        "title": "The Carnegie-Chicago Hubble Program. VIII. ... SBF and H0",
+        "title": "The Hubble Constant from Infrared Surface Brightness Fluctuation Distances",
         "note": "SBF determination with separate stat/sys errors; combined in quadrature for this stress-test."
       }
     },
@@ -86,7 +86,7 @@
       "reference": {
         "arxiv": "1910.06306",
         "doi": "10.1093/mnras/staa828",
-        "title": "STRIDES: H0 from the STRIDES lens DES J0408-5354",
+        "title": "STRIDES: a 3.9 per cent measurement of the Hubble constant from the strong lens system DES J0408−5354",
         "note": "Asymmetric errors approximated symmetrically for this stress-test."
       }
     }

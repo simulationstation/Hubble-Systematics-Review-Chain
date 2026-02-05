@@ -15,7 +15,7 @@
     "arxiv": "2101.02221",
     "doi": "10.3847/1538-4357/abe86a",
     "note": "SBF determination with separate stat/sys errors; combined in quadrature for this stress-test.",
-    "title": "The Carnegie-Chicago Hubble Program. VIII. ... SBF and H0"
+    "title": "The Hubble Constant from Infrared Surface Brightness Fluctuation Distances"
   },
   "sigma": 2.5,
   "source_constraints_file": "/home/primary/Hubble-Systematics-Review-Chain/data/processed/external_constraints/h0_constraints_2026-02-05.json",

@@ -15,7 +15,7 @@
     "arxiv": "1910.06306",
     "doi": "10.1093/mnras/staa828",
     "note": "Asymmetric errors approximated symmetrically for this stress-test.",
-    "title": "STRIDES: H0 from the STRIDES lens DES J0408-5354"
+    "title": "STRIDES: a 3.9 per cent measurement of the Hubble constant from the strong lens system DES J0408\u22125354"
   },
   "sigma": 2.85,
   "source_constraints_file": "/home/primary/Hubble-Systematics-Review-Chain/data/processed/external_constraints/h0_constraints_2026-02-05.json",
