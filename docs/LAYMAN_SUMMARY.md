@@ -73,7 +73,7 @@ Examples (all in magnitudes, in our parameterization):
 
 - Calibrator-vs-Hubble‑flow offset needs **~0.19 mag** (this is essentially the full H0 gap).
 - A quality/selection proxy linear in `m_b_corr_err_DIAG` needs **~0.45 mag per 1σ(error)** (HF only).
-- A calibrator-only proxy linear in `PKMJDERR` needs **~0.31 mag per 1σ(PKMJDERR)**.
+- A calibrator-only proxy linear in `PKMJDERR` needs **~0.31 mag per 1σ(PKMJDERR)** (`PKMJD` is the fitted time of maximum light in Modified Julian Date; `PKMJDERR` is its uncertainty).
 - A calibrator-only proxy linear in `m_b_corr_err_VPEC` needs **~0.15 mag per 1σ(VPEC error)**.
 - A proxy linear in `m_b_corr_err_RAW` would need **~5.0 mag per 1σ(RAW error)** (i.e. effectively impossible).
 - A pure sky dipole needs **~0.40 mag**.
@@ -354,6 +354,30 @@ When we rerun the joint anchor-consistency stack with these tight **survey** cal
 See:
 - Gate sweep: `outputs/stack_sn_bao_cc_plus_ladder_fragilistic_gates_v1/report.md`
 - Holdout: `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_fragilistic_v1/report.md`
+
+### External calibration covariance (Brout+21 “FRAGILISTIC”; filter-level, correlated)
+
+The “survey-level” FRAGILISTIC adapter above is a pragmatic compression: it turns per-(survey,band)
+zeropoint covariances into one σ per survey.
+
+We now also support a **filter-level** adapter that uses `FRAGILISTIC_COVARIANCE.npz` *directly* as
+a correlated prior over the shipped zeropoint labels (102 parameters). In this compressed-table
+audit model, each SN inherits a uniform average of the filter offsets corresponding to its survey.
+This keeps the **cross-filter correlations** from the calibration product (no per-survey σ
+compression).
+
+In a joint-stack sweep:
+
+- filter-level FRAGILISTIC alone does **not** move the anchor-consistency solution toward SH0ES
+  (tension-reduction frac ≈ 0),
+- the preferred calibrator↔HF step remains ~0.16 mag when that term is allowed,
+- and applying the SH0ES linear-system σ≈0.028 mag prior on `calibrator_offset_mag` yields a
+  tension-reduction fraction ≈0.15 (consistent with the earlier compressed-FRAGILISTIC result).
+
+See:
+- Sweep: `outputs/stack_sn_bao_cc_plus_ladder_fragilistic_filter_shoes_gates_v1/report.md`
+- Config: `configs/stack_sn_bao_cc_plus_ladder_fragilistic_filter_shoes_gates_v1.yaml`
+- Implementation: `src/hubble_systematics/external_calibration/fragilistic.py`
 
 ### SH0ES calibrator-chain prior scale (linear-system products)
 

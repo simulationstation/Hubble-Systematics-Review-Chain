@@ -1,0 +1,23 @@
+{
+  "branch": "main",
+  "describe": "447409b-dirty",
+  "dirty": true,
+  "head": "447409b5a2e5d1f74663677428fe946630e1516a",
+  "ok": true,
+  "remotes": [
+    "origin\tgit@github.com:simulationstation/Hubble-Systematics-Review-Chain.git (fetch)",
+    "origin\tgit@github.com:simulationstation/Hubble-Systematics-Review-Chain.git (push)"
+  ],
+  "status_porcelain": [
+    "M src/hubble_systematics/probes/pantheon_plus.py",
+    " M src/hubble_systematics/probes/pantheon_plus_shoes_ladder.py",
+    "?? configs/pantheon_plus_shoes_ladder_sbc_realcal_surveytime_shoeslin_covproj_fragfilter_v1.yaml",
+    "?? configs/stack_sn_bao_cc_plus_ladder_fragilistic_filter_shoes_gates_v1.yaml",
+    "?? configs/stack_sn_bao_cc_plus_ladder_predictive_score_cid_holdout_realcal_surveytime_shoeslin_covproj_fragfilter_extgrid_more_v1.yaml",
+    "?? outputs/stack_sn_bao_cc_plus_ladder_fragilistic_filter_shoes_gates_v1/",
+    "?? outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cid_holdout_realcal_surveytime_shoeslin_covproj_extgrid_more_v1/hero_calibrators_provenance.md",
+    "?? scripts/report_hero_calibrators.py",
+    "?? src/hubble_systematics/external_calibration/"
+  ],
+  "toplevel": "/home/primary/Hubble-Systematics-Review-Chain"
+}

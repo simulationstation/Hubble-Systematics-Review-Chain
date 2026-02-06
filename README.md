@@ -50,6 +50,10 @@ using this repo’s **linear-Gaussian audit models** (not a full end-to-end SH0E
   Reports: `outputs/stack_sn_bao_cc_plus_ladder_fragilistic_gates_v1/report.md`, `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_fragilistic_v1/report.md`  
   Reproduce: `configs/stack_sn_bao_cc_plus_ladder_fragilistic_gates_v1.yaml`, `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_fragilistic_v1.yaml`  
   Derivation: `scripts/derive_pantheon_shoes_fragilistic_priors.py`
+- **FRAGILISTIC (filter-level; real data; new):** we now use `FRAGILISTIC_COVARIANCE.npz` **directly** as a correlated prior over *filter-level* zeropoint parameters (no per-survey σ compression). In the joint stack, filter-level calibration alone does **not** move the anchor-consistency solution toward SH0ES (tension-reduction frac ≈ 0), and the preferred calibrator offset remains ~0.16 mag when allowed. Under the SH0ES linear-system prior (σ≈0.028 mag on `calibrator_offset_mag`), the supported tension-reduction fraction remains ≈0.15—consistent with the earlier compressed-FRAGILISTIC result.  
+  Report: `outputs/stack_sn_bao_cc_plus_ladder_fragilistic_filter_shoes_gates_v1/report.md`  
+  Reproduce: `configs/stack_sn_bao_cc_plus_ladder_fragilistic_filter_shoes_gates_v1.yaml`  
+  Code: `src/hubble_systematics/external_calibration/fragilistic.py`
 - **Calibration-only covariance gate (Pantheon+SH0ES `CALIB.cov`; real data):** using the Pantheon+SH0ES *calibration-only* covariance grouping (`sytematic_groupings/Pantheon+SH0ES_122221_CALIB.cov`) to derive prior widths gives σ(`calibrator_offset_mag`)≈0.019 mag. Under these bounds, the joint anchor-consistency fit can only support a much smaller step: `calibrator_offset_mag ≈ 0.045 ± 0.016` (tension-reduction frac ≈ 0.09 vs ≈ 0.37 when free). Calibrator-holdout predictive scoring still prefers the mechanism, but with a smaller gain (Δlogp ≈ +4.1 vs +5.7 when free).  
   Reports: `outputs/stack_sn_bao_cc_plus_ladder_calibcov_gates_v1/report.md`, `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_calibcov_v1/report.md`  
   Reproduce: `configs/stack_sn_bao_cc_plus_ladder_calibcov_gates_v1.yaml`, `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_calibcov_v1.yaml`  
@@ -148,6 +152,11 @@ using this repo’s **linear-Gaussian audit models** (not a full end-to-end SH0E
   Report: `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cid_holdout_realcal_surveytime_shoeslin_covproj_extgrid_more_v1/report.md`  
   Driver ranking: `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cid_holdout_realcal_surveytime_shoeslin_covproj_extgrid_more_v1/driver_ranking.md`  
   Reproduce: `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cid_holdout_realcal_surveytime_shoeslin_covproj_extgrid_more_v1.yaml`
+- **CID holdout under “realcal” + FRAGILISTIC filter priors (real data; new):** rerunning the same calibrator-CID holdout battery with **filter-level** FRAGILISTIC priors leaves results essentially unchanged: Δlogp ≈ +0.31 (`cal_offset_bounded`) and ≈ +0.40 (`+bounded_fields_plus_metadata_bounded`) vs baseline, with the same “hero” calibrators driving gains (e.g. `2007af` appears in 4 surveys).  
+  Report: `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cid_holdout_realcal_surveytime_shoeslin_covproj_fragfilter_extgrid_more_v1/report.md`  
+  Driver ranking: `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cid_holdout_realcal_surveytime_shoeslin_covproj_fragfilter_extgrid_more_v1/driver_ranking.md`  
+  Hero provenance: `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cid_holdout_realcal_surveytime_shoeslin_covproj_fragfilter_extgrid_more_v1/hero_calibrators_provenance.md`  
+  Reproduce: `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cid_holdout_realcal_surveytime_shoeslin_covproj_fragfilter_extgrid_more_v1.yaml`
 - **Independent probe adapter (sirens, Gate-2):** selection-corrected per-event `logL(H0)` grid + metadata cut/time drift audit (experimental; upstream Gate-2 product not complete yet).  
   Report: `outputs/siren_gate2_grid_audit_v2/report.md`  
   Reproduce: `configs/siren_gate2_grid_audit_v2.yaml`

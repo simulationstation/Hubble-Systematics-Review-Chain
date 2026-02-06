@@ -10,6 +10,9 @@ This file maps the “systematics-first” spec you described (CatWISE-style sta
 ## Implemented building blocks (code)
 
 - **Config-driven runner + reporting:** `src/hubble_systematics/audit/runner.py`, `src/hubble_systematics/audit/reporting.py`
+- **Predictive-score driver attribution (who drives Δlogp?):**
+  - `scripts/rank_predictive_score_drivers.py`
+  - `scripts/report_hero_calibrators.py` (metadata/photometry provenance for “hero” CIDs)
 - **Mechanism ladder (L0–L4):** implemented per-probe (e.g. `src/hubble_systematics/probes/pantheon_plus_shoes_ladder.py`)
 - **Stability scans (cut sweeps):** `src/hubble_systematics/audit/tasks.py#run_cut_scan`
 - **Correlated-cut drift null MC:** `src/hubble_systematics/audit/correlated_cut_null.py`
@@ -25,6 +28,8 @@ This file maps the “systematics-first” spec you described (CatWISE-style sta
 - **Permutation-null tests (metadata proxy “realness”):** `scripts/proxy_permutation_null.py` (permute within-survey / global; supports multiprocessing)
 - **Exact Gaussian log evidence:** `src/hubble_systematics/gaussian_linear_model.py#log_marginal_likelihood`
 - **Joint / stacked inference:** `src/hubble_systematics/joint.py` (+ stack handling in `src/hubble_systematics/audit/tasks.py`)
+- **External calibration adapters:**
+  - FRAGILISTIC (Brout+21) filter-level correlated prior: `src/hubble_systematics/external_calibration/fragilistic.py`
 
 ## Implemented probes (real-data adapters)
 
@@ -143,6 +148,8 @@ This file maps the “systematics-first” spec you described (CatWISE-style sta
   `scripts/derive_shoes_linear_system_fivelogh0_prior.py`,
   `configs/stack_sn_bao_cc_plus_ladder_fragilistic_shoes_gates_v1.yaml`,
   `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_fragilistic_shoes_v1.yaml`
+- **FRAGILISTIC filter-level correlated prior (no per-survey σ compression):**
+  `configs/stack_sn_bao_cc_plus_ladder_fragilistic_filter_shoes_gates_v1.yaml`
 - **Injection suite (adds new metadata proxies):**
   `configs/pantheon_plus_shoes_ladder_injection_misspec_v4.yaml`
 - **Injection suite (survey×time-bin proxy):**
@@ -168,6 +175,8 @@ This file maps the “systematics-first” spec you described (CatWISE-style sta
   `configs/pantheon_plus_shoes_ladder_injection_realcal_surveytime_shoeslin_covproj_misspec_v1.yaml`,
   `configs/pantheon_plus_shoes_ladder_injection_realcal_surveytime_shoeslin_covproj_modeled_v1.yaml`,
   `configs/pantheon_plus_shoes_ladder_sbc_realcal_surveytime_shoeslin_covproj_v1.yaml`
+- **SBC under “realcal” constraints + FRAGILISTIC filter priors:**
+  `configs/pantheon_plus_shoes_ladder_sbc_realcal_surveytime_shoeslin_covproj_fragfilter_v1.yaml`
 - **Injection/SBC under CALIB-only priors (survey/time injections):**
   `configs/pantheon_plus_shoes_ladder_injection_calibcov_misspec_v1.yaml`,
   `configs/pantheon_plus_shoes_ladder_injection_calibcov_modeled_v1.yaml`,
@@ -190,6 +199,8 @@ This file maps the “systematics-first” spec you described (CatWISE-style sta
   `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_calibcov_extgrid_all_v1.yaml`
 - **CID-holdout battery (calibrators held out by CID; ext grids; realcal survey×epoch pack):**
   `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cid_holdout_realcal_surveytime_shoeslin_covproj_extgrid_more_v1.yaml`
+- **CID-holdout battery with FRAGILISTIC filter priors (same realcal pack + ext grids):**
+  `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cid_holdout_realcal_surveytime_shoeslin_covproj_fragfilter_extgrid_more_v1.yaml`
 
 ## What’s still incomplete vs the full ambition
 

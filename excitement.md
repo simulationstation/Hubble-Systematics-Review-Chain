@@ -184,6 +184,24 @@ step, a forward prior-MC simulator suggests it could explain:
 Artifact:
 - `outputs/pantheon_plus_shoes_ladder_prior_mc_host_mass_step_covproj_v1/report.md`
 
+## 2026-02-06 — FRAGILISTIC filter-level priors (real data; no per-survey σ compression)
+
+Implemented a filter-level adapter for the Pantheon+ DataRelease calibration product
+`FRAGILISTIC_COVARIANCE.npz`: instead of compressing to per-survey σ priors, fit a correlated
+zeropoint vector over the shipped (survey,band) labels (102 parameters) with the full covariance.
+
+Indication (real data):
+- Filter-level calibration alone does **not** explain the joint-stack anchor-consistency offset
+  (tension-reduction frac ≈ 0).
+- CID holdout gains and “hero” calibrators remain essentially unchanged (e.g. `2007af` dominates and
+  appears under multiple surveys/photometry reductions).
+
+Artifacts:
+- Sweep: `outputs/stack_sn_bao_cc_plus_ladder_fragilistic_filter_shoes_gates_v1/report.md`
+- CID holdout: `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cid_holdout_realcal_surveytime_shoeslin_covproj_fragfilter_extgrid_more_v1/report.md`
+  with driver ranking: `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cid_holdout_realcal_surveytime_shoeslin_covproj_fragfilter_extgrid_more_v1/driver_ranking.md`
+  and provenance: `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cid_holdout_realcal_surveytime_shoeslin_covproj_fragfilter_extgrid_more_v1/hero_calibrators_provenance.md`
+
 ## 2026-02-05 — CALIB-only covariance gate sharply bounds the calibrator step (real data)
 
 Pantheon+SH0ES also ships systematic-group covariance blocks. Using the **CALIB-only** grouping

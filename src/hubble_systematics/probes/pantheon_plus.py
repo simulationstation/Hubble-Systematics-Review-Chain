@@ -11,6 +11,12 @@ import astropy.units as u
 from hubble_systematics.anchors import AnchorLCDM
 from hubble_systematics.design import DesignMatrix, bspline_basis, one_hot_levels, ones, second_difference_precision, sky_real_harmonics
 from hubble_systematics.gaussian_linear_model import GaussianPrior
+from hubble_systematics.external_calibration.fragilistic import (
+    build_fragilistic_filter_design,
+    cached_fragilistic_precision,
+    load_fragilistic_npz,
+    parse_fragilistic_prior_cfg,
+)
 from hubble_systematics.prior_overrides import load_sigma_overrides, sigma_from_mapping
 from hubble_systematics.shared_scale import shared_scale_params
 
@@ -89,6 +95,9 @@ class PantheonPlusDataset:
         prior_cfg = (cfg or {}).get("priors", {}) or {}
         lvl = str(ladder_level).upper()
 
+        frag_cfg = parse_fragilistic_prior_cfg(prior_cfg)
+        frag_block: tuple[list[int], np.ndarray] | None = None
+
         X = DesignMatrix(X=np.zeros((y.size, 0)), names=[])
 
         # Shared scale stress-test params (e.g., delta_lnH0).
@@ -98,15 +107,52 @@ class PantheonPlusDataset:
             nonlocal X
             X = X.append(DesignMatrix(X=ones(y.size), names=["global_offset_mag"]))
 
-        def add_survey_offsets() -> None:
+        def add_survey_offsets(*, levels_override: list[int] | None = None, drop_reference: bool = True) -> None:
             nonlocal X
             if self.idsurvey is None:
                 raise ValueError("idsurvey required for L2+")
             if self.idsurvey_levels is None:
                 raise ValueError("idsurvey_levels required for L2+")
+            levels = self.idsurvey_levels.tolist() if levels_override is None else [int(x) for x in levels_override]
             ref = prior_cfg.get("survey_reference")
-            dm = one_hot_levels(self.idsurvey, levels=self.idsurvey_levels, prefix="survey_offset_", reference=ref, drop_reference=True)
+            dm = one_hot_levels(self.idsurvey, levels=levels, prefix="survey_offset_", reference=ref, drop_reference=bool(drop_reference))
             X = X.append(dm)
+
+        def add_fragilistic_filter_offsets() -> None:
+            nonlocal X, frag_block
+            if self.idsurvey is None:
+                raise ValueError("idsurvey required for fragilistic offsets")
+            if not frag_cfg.get("enable", False):
+                return
+            npz_path = Path(str(frag_cfg["npz_path"])).expanduser()
+            if not npz_path.is_absolute():
+                npz_path = (Path(__file__).resolve().parents[3] / npz_path).resolve()
+            frag = load_fragilistic_npz(npz_path)
+
+            design = build_fragilistic_filter_design(
+                idsurvey=self.idsurvey,
+                labels=frag.labels,
+                apply_weight=np.ones_like(self.z, dtype=float),
+                include_only_used_labels=False,
+            )
+            if design.X.shape[1] == 0:
+                return
+
+            start = int(X.X.shape[1])
+            X = X.append(DesignMatrix(X=design.X, names=design.names))
+
+            P_frag = cached_fragilistic_precision(
+                abs_npz_path=str(npz_path),
+                scale=float(frag_cfg.get("scale", 1.0)),
+                jitter=float(frag_cfg.get("jitter", 0.0)),
+            )
+            frag_idx = list(range(start, start + int(design.X.shape[1])))
+            frag_block = (frag_idx, P_frag)
+
+            # Fallback: if an IDSURVEY has no mapping to FRAGILISTIC keys, include a per-survey offset
+            # term for it so it isn't implicitly pinned to 0.
+            if design.unmapped_idsurvey.size:
+                add_survey_offsets(levels_override=design.unmapped_idsurvey.tolist(), drop_reference=False)
 
         def add_z_spline() -> None:
             nonlocal X
@@ -153,14 +199,23 @@ class PantheonPlusDataset:
             add_global_offset()
         elif lvl == "L2":
             add_global_offset()
-            add_survey_offsets()
+            if frag_cfg.get("enable", False):
+                add_fragilistic_filter_offsets()
+            else:
+                add_survey_offsets()
         elif lvl == "L3":
             add_global_offset()
-            add_survey_offsets()
+            if frag_cfg.get("enable", False):
+                add_fragilistic_filter_offsets()
+            else:
+                add_survey_offsets()
             add_z_spline()
         elif lvl == "L4":
             add_global_offset()
-            add_survey_offsets()
+            if frag_cfg.get("enable", False):
+                add_fragilistic_filter_offsets()
+            else:
+                add_survey_offsets()
             add_z_spline()
             add_sky_modes()
         else:
@@ -196,6 +251,9 @@ class PantheonPlusDataset:
                 if sigma is None:
                     sigma = float(prior_cfg.get("sigma_survey_offset_mag", 0.2))
                 sigmas.append(float(sigma))
+            elif n.startswith("frag_zp_"):
+                # Correlated prior inserted below via FRAGILISTIC precision block.
+                sigmas.append(float("inf"))
             elif n.startswith("sn_z_spline_"):
                 sigmas.append(float(prior_cfg.get("sigma_z_spline_mag", 0.2)))
             elif n.startswith("sky_"):
@@ -214,6 +272,14 @@ class PantheonPlusDataset:
             for a, ia in enumerate(z_idx):
                 for b, ib in enumerate(z_idx):
                     P[ia, ib] += P_z[a, b]
+            prior = GaussianPrior.from_precision(names, P, mean=0.0)
+
+        if frag_block is not None:
+            idx, P_frag = frag_block
+            P = prior.precision_matrix()
+            if P_frag.shape != (len(idx), len(idx)):
+                raise ValueError("FRAGILISTIC prior block shape mismatch")
+            P[np.ix_(idx, idx)] = P_frag
             prior = GaussianPrior.from_precision(names, P, mean=0.0)
 
         return y, y0, cov, X.X, prior
