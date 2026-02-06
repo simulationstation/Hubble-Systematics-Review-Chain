@@ -165,6 +165,25 @@ Artifacts:
 - `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_survey_holdout_covproj_term_ablations_v1/permutation_null__fields_host_mass_step_host_logmass_within_survey_n5000.json`
 - `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_survey_holdout_covproj_term_ablations_v1/permutation_null__fields_pkmjd_err_pkmjd_err_within_survey_n5000.json`
 
+## 2026-02-06 — Host-mass term is strongest when calibrator-only (real data; covproj bounds)
+
+If we let the host-mass step apply to **all** ladder SNe instead of **calibrators only**, the
+held-out calibrator predictive gain drops sharply; an HF-only host-mass step gives ~no gain.
+
+Artifacts:
+- Survey holdout: `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_survey_holdout_covproj_hostmass_scope_v1/report.md`
+- Random holdout: `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_covproj_hostmass_scope_v1/report.md`
+
+## 2026-02-06 — Host-mass “fraction of tension” bound (prior-MC; covproj bounds)
+
+Using the cov-projected external bounds as a prior width for an *unmodeled* calibrator-only host-mass
+step, a forward prior-MC simulator suggests it could explain:
+
+- p50/p95/p99 ≈ 0.124 / 0.360 / 0.473 of ln(73/67.4).
+
+Artifact:
+- `outputs/pantheon_plus_shoes_ladder_prior_mc_host_mass_step_covproj_v1/report.md`
+
 ## 2026-02-05 — CALIB-only covariance gate sharply bounds the calibrator step (real data)
 
 Pantheon+SH0ES also ships systematic-group covariance blocks. Using the **CALIB-only** grouping

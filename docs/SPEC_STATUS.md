@@ -54,6 +54,9 @@ This file maps the “systematics-first” spec you described (CatWISE-style sta
   `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_fullcov_v1.yaml`
 - **Predictive scoring (stack; covproj term ablations + survey holdout):**
   `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_survey_holdout_covproj_term_ablations_v1.yaml`
+- **Predictive scoring (stack; host-mass scope test under covproj bounds):**
+  `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_survey_holdout_covproj_hostmass_scope_v1.yaml` and
+  `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_covproj_hostmass_scope_v1.yaml`
 - **Predictive scoring (stack; mechanism scan on calibrator-only proxies):**
   `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_mechanism_scan_v1.yaml`
 - **Mechanism attribution scans (stack; compare cal_offset vs time-bin proxies):**
@@ -157,6 +160,8 @@ This file maps the “systematics-first” spec you described (CatWISE-style sta
   `configs/pantheon_plus_shoes_ladder_prior_mc_kcor_timebins_v1.yaml`
 - **Prior-MC bias bound (combined kcor cal/hf + SH0ES-linear-system):**
   `configs/pantheon_plus_shoes_ladder_prior_mc_constrained_kcor_calhf_shoeslin_v1.yaml`
+- **Prior-MC bias bound (host mass only; covproj bounds):**
+  `configs/pantheon_plus_shoes_ladder_prior_mc_host_mass_step_covproj_v1.yaml`
 - **Injection/SBC under CALIB-only priors (survey/time injections):**
   `configs/pantheon_plus_shoes_ladder_injection_calibcov_misspec_v1.yaml`,
   `configs/pantheon_plus_shoes_ladder_injection_calibcov_modeled_v1.yaml`,

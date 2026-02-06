@@ -107,9 +107,24 @@ using this repo’s **linear-Gaussian audit models** (not a full end-to-end SH0E
   Report: `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_survey_holdout_covproj_term_ablations_v1/report.md`  
   Artifacts: `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_survey_holdout_covproj_term_ablations_v1/permutation_null__fields_host_mass_step_host_logmass_within_survey_n5000.json`, `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_survey_holdout_covproj_term_ablations_v1/permutation_null__fields_pkmjd_err_pkmjd_err_within_survey_n5000.json`
   Reproduce: `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_survey_holdout_covproj_term_ablations_v1.yaml`
+- **Host-mass effect is calibrator-specific (real data; covproj bounds):** if the host-mass step is allowed to apply to *all* ladder SNe instead of calibrators only, its held-out-calibrator benefit drops sharply, and an HF-only mass step gives ~no gain. On calibrator survey holdout:
+  - calibrator-only: Δlogp ≈ +1.23 (vs bounded fields)
+  - all-SNe: Δlogp ≈ +0.38
+  - HF-only: Δlogp ≈ +0.00
+  Report: `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_survey_holdout_covproj_hostmass_scope_v1/report.md`  
+  Reproduce: `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_survey_holdout_covproj_hostmass_scope_v1.yaml`
+- **Same conclusion under random calibrator holdout (real data; covproj bounds):** random splits (200 reps) show a much larger gap:
+  - calibrator-only: Δlogp ≈ +3.50 (vs bounded fields)
+  - all-SNe: Δlogp ≈ +1.07
+  - HF-only: Δlogp ≈ +0.00
+  Report: `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_covproj_hostmass_scope_v1/report.md`  
+  Reproduce: `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_covproj_hostmass_scope_v1.yaml`
 - **Calibration gates for these proxy terms (prior-MC + SBC + injections; real data + simulator):** under the combined kcor+SH0ES-linear+covproj bounds, a forward “prior-MC” draw of unmodeled distortions can explain p50/p95/p99 ≈ **20% / 60% / 79%** of a reference ln(73/67.4) tension scale (but P(>100%) remains ≈0). Repeated-noise SBC shows **no undercoverage** (it is conservative/over-covered), and injections confirm the dominant single-term H0-shift risks are `pkmjd_err_linear_mag` and `host_mass_step_mag` (each ≈15% of the reference scale at 1σ).  
   Reports: `outputs/pantheon_plus_shoes_ladder_prior_mc_constrained_kcor_calhf_shoeslin_covproj_JLA_SALT2_cal_v1/report.md`, `outputs/pantheon_plus_shoes_ladder_sbc_constrained_covproj_JLA_SALT2_cal_v1/report.md`, `outputs/pantheon_plus_shoes_ladder_injection_covproj_metadata_misspec_v1/report.md`, `outputs/pantheon_plus_shoes_ladder_injection_covproj_metadata_modeled_v1/report.md`  
   Reproduce: `configs/pantheon_plus_shoes_ladder_prior_mc_constrained_kcor_calhf_shoeslin_covproj_JLA_SALT2_cal_v1.yaml`, `configs/pantheon_plus_shoes_ladder_sbc_constrained_covproj_JLA_SALT2_cal_v1.yaml`, `configs/pantheon_plus_shoes_ladder_injection_covproj_metadata_misspec_v1.yaml`, `configs/pantheon_plus_shoes_ladder_injection_covproj_metadata_modeled_v1.yaml`
+- **Host-mass alone “how much can it explain?” bound (prior-MC; covproj bounds):** drawing an unmodeled calibrator-only host-mass step with σ from the cov-projected external bounds yields frac(tension) p50/p95/p99 ≈ **0.124 / 0.360 / 0.473** of ln(73/67.4).  
+  Report: `outputs/pantheon_plus_shoes_ladder_prior_mc_host_mass_step_covproj_v1/report.md`  
+  Reproduce: `configs/pantheon_plus_shoes_ladder_prior_mc_host_mass_step_covproj_v1.yaml`
 - **SH0ES calibrator-chain prior scale (linear-system; real data product):** the SH0ES DataRelease includes a compact linear system (`SH0ES_Data/all[LCY]_...fits`, `lstsq_results.txt`) with σ(`fivelogH0`)≈0.028 mag. Treating that as a *calibrator-chain-inspired* prior width for an additional `calibrator_offset_mag`, the joint stack under FRAGILISTIC survey priors supports only `calibrator_offset_mag ≈ 0.074 ± 0.021` (tension-reduction frac ≈ 0.16).  
   Reports: `outputs/stack_sn_bao_cc_plus_ladder_fragilistic_shoes_gates_v1/report.md`, `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_fragilistic_shoes_v1/report.md`  
   Reproduce: `configs/stack_sn_bao_cc_plus_ladder_fragilistic_shoes_gates_v1.yaml`, `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_fragilistic_shoes_v1.yaml`  
