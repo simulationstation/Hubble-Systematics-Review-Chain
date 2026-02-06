@@ -13,6 +13,7 @@ This file maps the “systematics-first” spec you described (CatWISE-style sta
 - **Predictive-score driver attribution (who drives Δlogp?):**
   - `scripts/rank_predictive_score_drivers.py`
   - `scripts/report_hero_calibrators.py` (metadata/photometry provenance for “hero” CIDs)
+  - `scripts/report_cid_discordance.py` (quantifies duplicate-CID reductions; supports CID-holdout audit interpretation)
 - **Mechanism ladder (L0–L4):** implemented per-probe (e.g. `src/hubble_systematics/probes/pantheon_plus_shoes_ladder.py`)
 - **Stability scans (cut sweeps):** `src/hubble_systematics/audit/tasks.py#run_cut_scan`
 - **Correlated-cut drift null MC:** `src/hubble_systematics/audit/correlated_cut_null.py`
@@ -201,6 +202,9 @@ This file maps the “systematics-first” spec you described (CatWISE-style sta
   `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cid_holdout_realcal_surveytime_shoeslin_covproj_extgrid_more_v1.yaml`
 - **CID-holdout battery with FRAGILISTIC filter priors (same realcal pack + ext grids):**
   `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cid_holdout_realcal_surveytime_shoeslin_covproj_fragfilter_extgrid_more_v1.yaml`
+- **CID-holdout battery with calibrator-CID duplicate handling (dedup / drop-discordant):**
+  `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cid_holdout_realcal_surveytime_shoeslin_covproj_fragfilter_extgrid_more_cid_dedup_cal_bestfitprob_v1.yaml`,
+  `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cid_holdout_realcal_surveytime_shoeslin_covproj_fragfilter_extgrid_more_cid_dropdiscord_cal_bestfitprob_v1.yaml`
 
 ## What’s still incomplete vs the full ambition
 

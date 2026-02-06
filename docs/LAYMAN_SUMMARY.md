@@ -542,6 +542,13 @@ We have a **probable “shape”** but not a probable **physical cause** yet.
 - The existence of a coherent **calibrator↔HF offset** is supported in this simplified framework:
   it is required by the joint anchor-consistency stack and it improves held‑out calibrator
   predictive scoring.
+- A key caveat: some of the largest “hero SN” gains in **CID-holdout** scoring were partly driven by
+  the fact that some calibrators appear under **multiple survey reductions** (duplicate rows with
+  the same `CID`). Under diagonalized predictive scoring this can overweight those SNe. When we
+  deduplicate to *one row per calibrator CID* (choose max `FITPROB`), the CID-holdout gain drops
+  from Δlogp≈+0.40 to Δlogp≈+0.22 (still positive).  
+  See: `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cid_holdout_realcal_surveytime_shoeslin_covproj_fragfilter_extgrid_more_v1/report.md` and
+  `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cid_holdout_realcal_surveytime_shoeslin_covproj_fragfilter_extgrid_more_cid_dedup_cal_bestfitprob_v1/report.md`.
 - However, we still do **not** have a specific, independently validated metadata mechanism
   (time/sky/quality/host) that can explain most of the ~0.19 mag ladder shift at an amplitude that
   is clearly physically plausible.

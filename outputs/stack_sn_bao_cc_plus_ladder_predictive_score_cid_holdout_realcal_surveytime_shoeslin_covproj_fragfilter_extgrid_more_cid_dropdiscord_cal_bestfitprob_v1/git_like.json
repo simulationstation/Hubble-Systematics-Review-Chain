@@ -1,0 +1,22 @@
+{
+  "branch": "main",
+  "describe": "4421c5e-dirty",
+  "dirty": true,
+  "head": "4421c5eb0fa80c5f9375f777afdcc9a31923cb40",
+  "ok": true,
+  "remotes": [
+    "origin\tgit@github.com:simulationstation/Hubble-Systematics-Review-Chain.git (fetch)",
+    "origin\tgit@github.com:simulationstation/Hubble-Systematics-Review-Chain.git (push)"
+  ],
+  "status_porcelain": [
+    "M src/hubble_systematics/probes/pantheon_plus_shoes_ladder.py",
+    " M tests/test_pantheon_plus_shoes_ladder_dataset.py",
+    "?? configs/stack_sn_bao_cc_plus_ladder_predictive_score_cid_holdout_realcal_surveytime_shoeslin_covproj_fragfilter_extgrid_more_cid_dedup_cal_bestfitprob_v1.yaml",
+    "?? configs/stack_sn_bao_cc_plus_ladder_predictive_score_cid_holdout_realcal_surveytime_shoeslin_covproj_fragfilter_extgrid_more_cid_dropdiscord_cal_bestfitprob_v1.yaml",
+    "?? outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cid_holdout_realcal_surveytime_shoeslin_covproj_fragfilter_extgrid_more_cid_dedup_cal_bestfitprob_v1/",
+    "?? outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cid_holdout_realcal_surveytime_shoeslin_covproj_fragfilter_extgrid_more_cid_dropdiscord_cal_bestfitprob_v1/",
+    "?? outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cid_holdout_realcal_surveytime_shoeslin_covproj_fragfilter_extgrid_more_v1/cid_discordance.md",
+    "?? scripts/report_cid_discordance.py"
+  ],
+  "toplevel": "/home/primary/Hubble-Systematics-Review-Chain"
+}

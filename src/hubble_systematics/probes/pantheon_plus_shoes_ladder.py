@@ -902,6 +902,141 @@ class PantheonPlusShoesLadderDataset:
         return y, y0, cov, X.X, prior
 
 
+def _safe_argmax(x: np.ndarray) -> int:
+    if x.size <= 0:
+        raise ValueError("argmax on empty array")
+    x = np.asarray(x, dtype=float)
+    if np.any(np.isfinite(x)):
+        return int(np.nanargmax(np.where(np.isfinite(x), x, -np.inf)))
+    return int(np.argmax(x))
+
+
+def _safe_argmin(x: np.ndarray) -> int:
+    if x.size <= 0:
+        raise ValueError("argmin on empty array")
+    x = np.asarray(x, dtype=float)
+    if np.any(np.isfinite(x)):
+        return int(np.nanargmin(np.where(np.isfinite(x), x, np.inf)))
+    return int(np.argmin(x))
+
+
+def _choose_one_duplicate_row(
+    idxs: np.ndarray,
+    *,
+    strategy: str,
+    fitprob: np.ndarray,
+    m_b_corr_err_diag: np.ndarray,
+) -> int:
+    idxs = np.asarray(idxs, dtype=int).reshape(-1)
+    if idxs.size <= 0:
+        raise ValueError("No idxs to choose from")
+    strategy = str(strategy).strip().lower()
+
+    fp = np.asarray(fitprob[idxs], dtype=float)
+    sig = np.asarray(m_b_corr_err_diag[idxs], dtype=float)
+
+    if strategy in {"best_fitprob", "max_fitprob"}:
+        j = _safe_argmax(fp)
+    elif strategy in {"min_sigma", "min_sigma_diag", "min_m_b_corr_err_diag"}:
+        j = _safe_argmin(sig)
+    elif strategy in {"best_fitprob_then_min_sigma", "max_fitprob_then_min_sigma"}:
+        # Choose among (nearly) best-fitprob rows, tie-break by smallest sigma.
+        fp_max = float(np.nanmax(fp)) if np.any(np.isfinite(fp)) else float(fp.max())
+        near = np.where(np.isfinite(fp) & (fp >= fp_max - 1e-12))[0]
+        if near.size <= 1:
+            j = _safe_argmax(fp)
+        else:
+            j = int(near[_safe_argmin(sig[near])])
+    elif strategy in {"min_sigma_then_best_fitprob"}:
+        sig_min = float(np.nanmin(sig)) if np.any(np.isfinite(sig)) else float(sig.min())
+        near = np.where(np.isfinite(sig) & (sig <= sig_min + 1e-12))[0]
+        if near.size <= 1:
+            j = _safe_argmin(sig)
+        else:
+            j = int(near[_safe_argmax(fp[near])])
+    else:
+        raise ValueError(f"Unsupported cid dedup strategy: {strategy!r}")
+    return int(idxs[int(j)])
+
+
+def _cid_duplicate_keep_indices(
+    *,
+    cid: np.ndarray,
+    is_calibrator: np.ndarray,
+    is_hubble_flow: np.ndarray,
+    m_b_corr: np.ndarray,
+    m_b_corr_err_diag: np.ndarray,
+    fitprob: np.ndarray,
+    probe_cfg: dict[str, Any],
+) -> np.ndarray | None:
+    mode = str(probe_cfg.get("cid_duplicate_mode", "none") or "none").strip().lower()
+    if mode in {"none", "off", "false", "0"}:
+        return None
+
+    scope = str(probe_cfg.get("cid_duplicate_scope", "cal") or "cal").strip().lower()
+    if scope == "cal":
+        in_scope = np.asarray(is_calibrator, dtype=bool)
+    elif scope == "hf":
+        in_scope = np.asarray(is_hubble_flow, dtype=bool)
+    elif scope == "all":
+        in_scope = np.ones_like(is_calibrator, dtype=bool)
+    else:
+        raise ValueError(f"Unsupported cid_duplicate_scope: {scope!r}")
+
+    strategy = str(probe_cfg.get("cid_dedup_strategy", "best_fitprob") or "best_fitprob")
+    threshold_mag = float(probe_cfg.get("cid_drop_discordant_threshold_mag", 0.05))
+    ref_strategy = str(probe_cfg.get("cid_drop_discordant_reference", strategy) or strategy)
+    force_dedup = bool(probe_cfg.get("cid_drop_discordant_force_dedup", False))
+
+    cid = np.asarray(cid, dtype=str)
+    keep = np.ones(cid.shape[0], dtype=bool)
+    cids = np.unique(cid[in_scope]).tolist()
+
+    for c in cids:
+        idxs = np.where((cid == str(c)) & in_scope)[0]
+        if idxs.size <= 1:
+            continue
+
+        if mode == "dedup":
+            chosen = _choose_one_duplicate_row(
+                idxs,
+                strategy=strategy,
+                fitprob=fitprob,
+                m_b_corr_err_diag=m_b_corr_err_diag,
+            )
+            keep[idxs] = False
+            keep[int(chosen)] = True
+        elif mode in {"drop_discordant", "drop"}:
+            ref = _choose_one_duplicate_row(
+                idxs,
+                strategy=ref_strategy,
+                fitprob=fitprob,
+                m_b_corr_err_diag=m_b_corr_err_diag,
+            )
+            mb_ref = float(m_b_corr[int(ref)])
+            mb = np.asarray(m_b_corr[idxs], dtype=float)
+            good = np.isfinite(mb) & (np.abs(mb - mb_ref) <= threshold_mag)
+            if not np.any(good):
+                keep[idxs] = False
+                keep[int(ref)] = True
+            else:
+                keep[idxs[~good]] = False
+                if force_dedup:
+                    remain = idxs[good]
+                    chosen = _choose_one_duplicate_row(
+                        remain,
+                        strategy=strategy,
+                        fitprob=fitprob,
+                        m_b_corr_err_diag=m_b_corr_err_diag,
+                    )
+                    keep[remain] = False
+                    keep[int(chosen)] = True
+        else:
+            raise ValueError(f"Unsupported cid_duplicate_mode: {mode!r}")
+
+    return np.where(keep)[0]
+
+
 def load_pantheon_plus_shoes_ladder_dataset(probe_cfg: dict[str, Any]) -> PantheonPlusShoesLadderDataset:
     raw_dat = Path(probe_cfg.get("raw_dat_path", "data/raw/pantheon_plus_shoes/Pantheon+SH0ES.dat")).expanduser()
     raw_cov = Path(probe_cfg.get("raw_cov_path", "data/raw/pantheon_plus_shoes/Pantheon+SH0ES_STAT+SYS.cov")).expanduser()
@@ -957,21 +1092,87 @@ def load_pantheon_plus_shoes_ladder_dataset(probe_cfg: dict[str, Any]) -> Panthe
             # Fall through to regenerate.
             pass
         else:
-            ids = np.asarray(npz["idsurvey"], dtype=int)
-            id_levels = np.unique(ids)
-            is_hf = np.asarray(npz["is_hubble_flow"], dtype=bool)
-            is_cal = np.asarray(npz["is_calibrator"], dtype=bool)
+            cid = np.asarray(npz["cid"], dtype=str)
+            z = np.asarray(npz["z"], dtype=float)
+            m_b_corr = np.asarray(npz["m_b_corr"], dtype=float)
+            m_b_corr_err_diag = np.asarray(npz["m_b_corr_err_diag"], dtype=float)
+            m_b_corr_err_raw = np.asarray(npz["m_b_corr_err_raw"], dtype=float)
+            m_b_corr_err_vpec = np.asarray(npz["m_b_corr_err_vpec"], dtype=float)
+            cov = np.asarray(npz["cov"], dtype=float)
+            ra = np.asarray(npz["ra_deg"], dtype=float)
+            dec = np.asarray(npz["dec_deg"], dtype=float)
+            idsurvey = np.asarray(npz["idsurvey"], dtype=int)
             pkmjd = np.asarray(npz["pkmjd"], dtype=float)
+            pkmjd_err = np.asarray(npz["pkmjd_err"], dtype=float)
+            mwebv = np.asarray(npz["mwebv"], dtype=float)
+            host_logmass = np.asarray(npz["host_logmass"], dtype=float)
+            host_logmass_err = np.asarray(npz["host_logmass_err"], dtype=float)
+            fitprob = np.asarray(npz["fitprob"], dtype=float)
+            fitchi2 = np.asarray(npz["fitchi2"], dtype=float)
+            ndof = np.asarray(npz["ndof"], dtype=float)
+            c = np.asarray(npz["c"], dtype=float)
+            c_err = np.asarray(npz["c_err"], dtype=float)
+            x1 = np.asarray(npz["x1"], dtype=float)
+            x1_err = np.asarray(npz["x1_err"], dtype=float)
+            biascor_m_b = np.asarray(npz["biascor_m_b"], dtype=float)
+            biascorerr_m_b = np.asarray(npz["biascorerr_m_b"], dtype=float)
+            mu_shoes = np.asarray(npz["mu_shoes"], dtype=float)
+            mu_shoes_err_diag = np.asarray(npz["mu_shoes_err_diag"], dtype=float)
+            ceph_dist = np.asarray(npz["ceph_dist"], dtype=float)
+            is_cal = np.asarray(npz["is_calibrator"], dtype=bool)
+            is_hf = np.asarray(npz["is_hubble_flow"], dtype=bool)
+
+            keep = _cid_duplicate_keep_indices(
+                cid=cid,
+                is_calibrator=is_cal,
+                is_hubble_flow=is_hf,
+                m_b_corr=m_b_corr,
+                m_b_corr_err_diag=m_b_corr_err_diag,
+                fitprob=fitprob,
+                probe_cfg=probe_cfg,
+            )
+            if keep is not None:
+                keep = np.asarray(keep, dtype=int).reshape(-1)
+                cid = cid[keep]
+                z = z[keep]
+                m_b_corr = m_b_corr[keep]
+                m_b_corr_err_diag = m_b_corr_err_diag[keep]
+                m_b_corr_err_raw = m_b_corr_err_raw[keep]
+                m_b_corr_err_vpec = m_b_corr_err_vpec[keep]
+                cov = cov[np.ix_(keep, keep)]
+                ra = ra[keep]
+                dec = dec[keep]
+                idsurvey = idsurvey[keep]
+                pkmjd = pkmjd[keep]
+                pkmjd_err = pkmjd_err[keep]
+                mwebv = mwebv[keep]
+                host_logmass = host_logmass[keep]
+                host_logmass_err = host_logmass_err[keep]
+                fitprob = fitprob[keep]
+                fitchi2 = fitchi2[keep]
+                ndof = ndof[keep]
+                c = c[keep]
+                c_err = c_err[keep]
+                x1 = x1[keep]
+                x1_err = x1_err[keep]
+                biascor_m_b = biascor_m_b[keep]
+                biascorerr_m_b = biascorerr_m_b[keep]
+                mu_shoes = mu_shoes[keep]
+                mu_shoes_err_diag = mu_shoes_err_diag[keep]
+                ceph_dist = ceph_dist[keep]
+                is_cal = is_cal[keep]
+                is_hf = is_hf[keep]
+
+            ids = np.asarray(idsurvey, dtype=int)
+            id_levels = np.unique(ids)
             good_t = np.isfinite(pkmjd) & (pkmjd > 0.0)
             id_hf_counts = {int(s): int(np.sum((ids == int(s)) & is_hf & good_t)) for s in id_levels.tolist()}
             id_cal_counts = {int(s): int(np.sum((ids == int(s)) & is_cal)) for s in id_levels.tolist()}
 
-            z = np.asarray(npz["z"], dtype=float)
             z_hf = z[is_hf]
             z_hf_support_min = float(np.min(z_hf)) if z_hf.size else None
             z_hf_support_max = float(np.max(z_hf)) if z_hf.size else None
 
-            mwebv = np.asarray(npz["mwebv"], dtype=float)
             good_m = np.isfinite(mwebv) & (mwebv >= 0.0)
             if np.any(good_m):
                 mwebv_mu = float(np.mean(mwebv[good_m]))
@@ -979,15 +1180,13 @@ def load_pantheon_plus_shoes_ladder_dataset(probe_cfg: dict[str, Any]) -> Panthe
             else:
                 mwebv_mu, mwebv_sd = 0.0, 1.0
 
-            m_b_corr_err = np.asarray(npz["m_b_corr_err_diag"], dtype=float)
-            good_e = np.isfinite(m_b_corr_err) & (m_b_corr_err > 0.0)
+            good_e = np.isfinite(m_b_corr_err_diag) & (m_b_corr_err_diag > 0.0)
             if np.any(good_e):
-                m_b_corr_err_mu = float(np.mean(m_b_corr_err[good_e]))
-                m_b_corr_err_sd = float(np.std(m_b_corr_err[good_e]) + 1e-12)
+                m_b_corr_err_mu = float(np.mean(m_b_corr_err_diag[good_e]))
+                m_b_corr_err_sd = float(np.std(m_b_corr_err_diag[good_e]) + 1e-12)
             else:
                 m_b_corr_err_mu, m_b_corr_err_sd = 0.0, 1.0
 
-            m_b_corr_err_raw = np.asarray(npz["m_b_corr_err_raw"], dtype=float)
             good_r = np.isfinite(m_b_corr_err_raw) & (m_b_corr_err_raw > 0.0)
             if np.any(good_r):
                 m_b_corr_err_raw_mu = float(np.mean(m_b_corr_err_raw[good_r]))
@@ -995,7 +1194,6 @@ def load_pantheon_plus_shoes_ladder_dataset(probe_cfg: dict[str, Any]) -> Panthe
             else:
                 m_b_corr_err_raw_mu, m_b_corr_err_raw_sd = 0.0, 1.0
 
-            m_b_corr_err_vpec = np.asarray(npz["m_b_corr_err_vpec"], dtype=float)
             good_v = np.isfinite(m_b_corr_err_vpec) & (m_b_corr_err_vpec > 0.0)
             if np.any(good_v):
                 m_b_corr_err_vpec_mu = float(np.mean(m_b_corr_err_vpec[good_v]))
@@ -1003,7 +1201,6 @@ def load_pantheon_plus_shoes_ladder_dataset(probe_cfg: dict[str, Any]) -> Panthe
             else:
                 m_b_corr_err_vpec_mu, m_b_corr_err_vpec_sd = 0.0, 1.0
 
-            c = np.asarray(npz["c"], dtype=float)
             good_c = np.isfinite(c)
             if np.any(good_c):
                 c_mu = float(np.mean(c[good_c]))
@@ -1011,7 +1208,6 @@ def load_pantheon_plus_shoes_ladder_dataset(probe_cfg: dict[str, Any]) -> Panthe
             else:
                 c_mu, c_sd = 0.0, 1.0
 
-            x1 = np.asarray(npz["x1"], dtype=float)
             good_x1 = np.isfinite(x1)
             if np.any(good_x1):
                 x1_mu = float(np.mean(x1[good_x1]))
@@ -1019,7 +1215,6 @@ def load_pantheon_plus_shoes_ladder_dataset(probe_cfg: dict[str, Any]) -> Panthe
             else:
                 x1_mu, x1_sd = 0.0, 1.0
 
-            biascor_m_b = np.asarray(npz["biascor_m_b"], dtype=float)
             good_b = np.isfinite(biascor_m_b)
             if np.any(good_b):
                 biascor_m_b_mu = float(np.mean(biascor_m_b[good_b]))
@@ -1036,7 +1231,6 @@ def load_pantheon_plus_shoes_ladder_dataset(probe_cfg: dict[str, Any]) -> Panthe
                 pkmjd_mu, pkmjd_sd = 0.0, 1.0
                 pkmjd_edges = None
 
-            pkmjd_err = np.asarray(npz["pkmjd_err"], dtype=float)
             good_te = np.isfinite(pkmjd_err) & (pkmjd_err > 0.0)
             if np.any(good_te):
                 pkmjd_err_mu = float(np.mean(pkmjd_err[good_te]))
@@ -1045,35 +1239,35 @@ def load_pantheon_plus_shoes_ladder_dataset(probe_cfg: dict[str, Any]) -> Panthe
                 pkmjd_err_mu, pkmjd_err_sd = 0.0, 1.0
 
             return PantheonPlusShoesLadderDataset(
-                cid=np.asarray(npz["cid"], dtype=str),
-                z=npz["z"],
-                m_b_corr=npz["m_b_corr"],
-                m_b_corr_err_diag=npz["m_b_corr_err_diag"],
-                m_b_corr_err_raw=npz["m_b_corr_err_raw"],
-                m_b_corr_err_vpec=npz["m_b_corr_err_vpec"],
-                cov=npz["cov"],
-                ra_deg=npz["ra_deg"],
-                dec_deg=npz["dec_deg"],
-                idsurvey=npz["idsurvey"],
-                pkmjd=npz["pkmjd"],
-                pkmjd_err=npz["pkmjd_err"],
-                mwebv=npz["mwebv"],
-                host_logmass=npz["host_logmass"],
-                host_logmass_err=npz["host_logmass_err"],
-                fitprob=npz["fitprob"],
-                fitchi2=npz["fitchi2"],
-                ndof=npz["ndof"],
-                c=npz["c"],
-                c_err=npz["c_err"],
-                x1=npz["x1"],
-                x1_err=npz["x1_err"],
-                biascor_m_b=npz["biascor_m_b"],
-                biascorerr_m_b=npz["biascorerr_m_b"],
-                mu_shoes=npz["mu_shoes"],
-                mu_shoes_err_diag=npz["mu_shoes_err_diag"],
-                ceph_dist=npz["ceph_dist"],
-                is_calibrator=npz["is_calibrator"].astype(bool),
-                is_hubble_flow=npz["is_hubble_flow"].astype(bool),
+                cid=cid,
+                z=z,
+                m_b_corr=m_b_corr,
+                m_b_corr_err_diag=m_b_corr_err_diag,
+                m_b_corr_err_raw=m_b_corr_err_raw,
+                m_b_corr_err_vpec=m_b_corr_err_vpec,
+                cov=cov,
+                ra_deg=ra,
+                dec_deg=dec,
+                idsurvey=idsurvey,
+                pkmjd=pkmjd,
+                pkmjd_err=pkmjd_err,
+                mwebv=mwebv,
+                host_logmass=host_logmass,
+                host_logmass_err=host_logmass_err,
+                fitprob=fitprob,
+                fitchi2=fitchi2,
+                ndof=ndof,
+                c=c,
+                c_err=c_err,
+                x1=x1,
+                x1_err=x1_err,
+                biascor_m_b=biascor_m_b,
+                biascorerr_m_b=biascorerr_m_b,
+                mu_shoes=mu_shoes,
+                mu_shoes_err_diag=mu_shoes_err_diag,
+                ceph_dist=ceph_dist,
+                is_calibrator=is_cal,
+                is_hubble_flow=is_hf,
                 idsurvey_levels=id_levels.astype(int),
                 idsurvey_hf_counts=id_hf_counts,
                 idsurvey_cal_counts=id_cal_counts,
@@ -1289,9 +1483,125 @@ def load_pantheon_plus_shoes_ladder_dataset(probe_cfg: dict[str, Any]) -> Panthe
         is_hubble_flow=is_hf_sel.astype(np.uint8),
     )
 
+    z_sel = z[idx]
+    keep = _cid_duplicate_keep_indices(
+        cid=cid,
+        is_calibrator=is_cal_sel,
+        is_hubble_flow=is_hf_sel,
+        m_b_corr=m_b_corr,
+        m_b_corr_err_diag=m_b_corr_err_diag,
+        fitprob=fitprob,
+        probe_cfg=probe_cfg,
+    )
+    if keep is not None:
+        keep = np.asarray(keep, dtype=int).reshape(-1)
+        cid = cid[keep]
+        z_sel = z_sel[keep]
+        m_b_corr = m_b_corr[keep]
+        m_b_corr_err_diag = m_b_corr_err_diag[keep]
+        m_b_corr_err_raw = m_b_corr_err_raw[keep]
+        m_b_corr_err_vpec = m_b_corr_err_vpec[keep]
+        cov = cov[np.ix_(keep, keep)]
+        ra = ra[keep]
+        dec = dec[keep]
+        idsurvey = idsurvey[keep]
+        pkmjd = pkmjd[keep]
+        pkmjd_err = pkmjd_err[keep]
+        mwebv = mwebv[keep]
+        host_logmass = host_logmass[keep]
+        host_logmass_err = host_logmass_err[keep]
+        fitprob = fitprob[keep]
+        fitchi2 = fitchi2[keep]
+        ndof = ndof[keep]
+        c = c[keep]
+        c_err = c_err[keep]
+        x1 = x1[keep]
+        x1_err = x1_err[keep]
+        biascor_m_b = biascor_m_b[keep]
+        biascorerr_m_b = biascorerr_m_b[keep]
+        mu_shoes = mu_shoes[keep]
+        mu_shoes_err_diag = mu_shoes_err_diag[keep]
+        ceph_dist = ceph_dist[keep]
+        is_cal_sel = is_cal_sel[keep]
+        is_hf_sel = is_hf_sel[keep]
+
+    id_levels = np.unique(idsurvey)
+    good_t = np.isfinite(pkmjd) & (pkmjd > 0.0)
+    id_hf_counts = {int(s): int(np.sum((idsurvey == int(s)) & is_hf_sel & good_t)) for s in id_levels.tolist()}
+    id_cal_counts = {int(s): int(np.sum((idsurvey == int(s)) & is_cal_sel)) for s in id_levels.tolist()}
+
+    z_hf = z_sel[is_hf_sel]
+    z_hf_support_min = float(np.min(z_hf)) if z_hf.size else None
+    z_hf_support_max = float(np.max(z_hf)) if z_hf.size else None
+
+    good_m = np.isfinite(mwebv) & (mwebv >= 0.0)
+    if np.any(good_m):
+        mwebv_mu = float(np.mean(mwebv[good_m]))
+        mwebv_sd = float(np.std(mwebv[good_m]) + 1e-12)
+    else:
+        mwebv_mu, mwebv_sd = 0.0, 1.0
+
+    good_e = np.isfinite(m_b_corr_err_diag) & (m_b_corr_err_diag > 0.0)
+    if np.any(good_e):
+        m_b_corr_err_mu = float(np.mean(m_b_corr_err_diag[good_e]))
+        m_b_corr_err_sd = float(np.std(m_b_corr_err_diag[good_e]) + 1e-12)
+    else:
+        m_b_corr_err_mu, m_b_corr_err_sd = 0.0, 1.0
+
+    good_r = np.isfinite(m_b_corr_err_raw) & (m_b_corr_err_raw > 0.0)
+    if np.any(good_r):
+        m_b_corr_err_raw_mu = float(np.mean(m_b_corr_err_raw[good_r]))
+        m_b_corr_err_raw_sd = float(np.std(m_b_corr_err_raw[good_r]) + 1e-12)
+    else:
+        m_b_corr_err_raw_mu, m_b_corr_err_raw_sd = 0.0, 1.0
+
+    good_v = np.isfinite(m_b_corr_err_vpec) & (m_b_corr_err_vpec > 0.0)
+    if np.any(good_v):
+        m_b_corr_err_vpec_mu = float(np.mean(m_b_corr_err_vpec[good_v]))
+        m_b_corr_err_vpec_sd = float(np.std(m_b_corr_err_vpec[good_v]) + 1e-12)
+    else:
+        m_b_corr_err_vpec_mu, m_b_corr_err_vpec_sd = 0.0, 1.0
+
+    good_c = np.isfinite(c)
+    if np.any(good_c):
+        c_mu = float(np.mean(c[good_c]))
+        c_sd = float(np.std(c[good_c]) + 1e-12)
+    else:
+        c_mu, c_sd = 0.0, 1.0
+
+    good_x1 = np.isfinite(x1)
+    if np.any(good_x1):
+        x1_mu = float(np.mean(x1[good_x1]))
+        x1_sd = float(np.std(x1[good_x1]) + 1e-12)
+    else:
+        x1_mu, x1_sd = 0.0, 1.0
+
+    good_b = np.isfinite(biascor_m_b)
+    if np.any(good_b):
+        biascor_m_b_mu = float(np.mean(biascor_m_b[good_b]))
+        biascor_m_b_sd = float(np.std(biascor_m_b[good_b]) + 1e-12)
+    else:
+        biascor_m_b_mu, biascor_m_b_sd = 0.0, 1.0
+
+    if np.any(good_t):
+        pkmjd_mu = float(np.mean(pkmjd[good_t]))
+        pkmjd_sd = float(np.std(pkmjd[good_t]) + 1e-12)
+        qs = np.linspace(0.0, 1.0, 6 + 1)
+        pkmjd_edges = np.quantile(pkmjd[good_t], qs)
+    else:
+        pkmjd_mu, pkmjd_sd = 0.0, 1.0
+        pkmjd_edges = None
+
+    good_te = np.isfinite(pkmjd_err) & (pkmjd_err > 0.0)
+    if np.any(good_te):
+        pkmjd_err_mu = float(np.mean(pkmjd_err[good_te]))
+        pkmjd_err_sd = float(np.std(pkmjd_err[good_te]) + 1e-12)
+    else:
+        pkmjd_err_mu, pkmjd_err_sd = 0.0, 1.0
+
     return PantheonPlusShoesLadderDataset(
         cid=cid,
-        z=z[idx],
+        z=z_sel,
         m_b_corr=m_b_corr,
         m_b_corr_err_diag=m_b_corr_err_diag,
         m_b_corr_err_raw=m_b_corr_err_raw,

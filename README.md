@@ -156,7 +156,20 @@ using this repo’s **linear-Gaussian audit models** (not a full end-to-end SH0E
   Report: `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cid_holdout_realcal_surveytime_shoeslin_covproj_fragfilter_extgrid_more_v1/report.md`  
   Driver ranking: `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cid_holdout_realcal_surveytime_shoeslin_covproj_fragfilter_extgrid_more_v1/driver_ranking.md`  
   Hero provenance: `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cid_holdout_realcal_surveytime_shoeslin_covproj_fragfilter_extgrid_more_v1/hero_calibrators_provenance.md`  
+  CID discordance report: `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cid_holdout_realcal_surveytime_shoeslin_covproj_fragfilter_extgrid_more_v1/cid_discordance.md`  
   Reproduce: `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cid_holdout_realcal_surveytime_shoeslin_covproj_fragfilter_extgrid_more_v1.yaml`
+- **CID holdout with calibrator duplicates *deduplicated* (real data; new):** enforcing one row per calibrator CID (choose max `FITPROB`) reduces the cross‑validated gains substantially: Δlogp ≈ +0.21 (`cal_offset_bounded`) and ≈ +0.22 (`+bounded_fields_plus_metadata_bounded`) vs baseline. The top “hero” CID `2007af` drops from Δlogp≈+11.1 (n_test=4) to Δlogp≈+2.0 (n_test=1), implying the earlier leverage was partly driven by duplicate survey reductions interacting with diagonalized scoring.  
+  Report: `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cid_holdout_realcal_surveytime_shoeslin_covproj_fragfilter_extgrid_more_cid_dedup_cal_bestfitprob_v1/report.md`  
+  Driver ranking: `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cid_holdout_realcal_surveytime_shoeslin_covproj_fragfilter_extgrid_more_cid_dedup_cal_bestfitprob_v1/driver_ranking.md`  
+  Hero provenance: `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cid_holdout_realcal_surveytime_shoeslin_covproj_fragfilter_extgrid_more_cid_dedup_cal_bestfitprob_v1/hero_calibrators_provenance.md`  
+  CID discordance report: `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cid_holdout_realcal_surveytime_shoeslin_covproj_fragfilter_extgrid_more_cid_dedup_cal_bestfitprob_v1/cid_discordance.md`  
+  Reproduce: `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cid_holdout_realcal_surveytime_shoeslin_covproj_fragfilter_extgrid_more_cid_dedup_cal_bestfitprob_v1.yaml`
+- **CID holdout with *discordant* duplicate reductions dropped (real data; new):** dropping calibrator duplicates with |Δm_b_corr|>0.05 mag relative to the best‑`FITPROB` reduction gives an intermediate outcome: Δlogp ≈ +0.28 (`cal_offset_bounded`) and ≈ +0.34 (`+bounded_fields_plus_metadata_bounded`). `2007af` still appears as a major driver (n_test=3), so this drop-only rule does not fully remove duplicate leverage.  
+  Report: `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cid_holdout_realcal_surveytime_shoeslin_covproj_fragfilter_extgrid_more_cid_dropdiscord_cal_bestfitprob_v1/report.md`  
+  Driver ranking: `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cid_holdout_realcal_surveytime_shoeslin_covproj_fragfilter_extgrid_more_cid_dropdiscord_cal_bestfitprob_v1/driver_ranking.md`  
+  Hero provenance: `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cid_holdout_realcal_surveytime_shoeslin_covproj_fragfilter_extgrid_more_cid_dropdiscord_cal_bestfitprob_v1/hero_calibrators_provenance.md`  
+  CID discordance report: `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cid_holdout_realcal_surveytime_shoeslin_covproj_fragfilter_extgrid_more_cid_dropdiscord_cal_bestfitprob_v1/cid_discordance.md`  
+  Reproduce: `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cid_holdout_realcal_surveytime_shoeslin_covproj_fragfilter_extgrid_more_cid_dropdiscord_cal_bestfitprob_v1.yaml`
 - **Independent probe adapter (sirens, Gate-2):** selection-corrected per-event `logL(H0)` grid + metadata cut/time drift audit (experimental; upstream Gate-2 product not complete yet).  
   Report: `outputs/siren_gate2_grid_audit_v2/report.md`  
   Reproduce: `configs/siren_gate2_grid_audit_v2.yaml`

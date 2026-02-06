@@ -65,6 +65,71 @@ def test_load_and_design_shapes() -> None:
     assert np.allclose(X[ds.is_calibrator, j], 0.0)
 
 
+def test_cid_duplicate_mode_dedup_calibrators() -> None:
+    root = Path(__file__).resolve().parents[1]
+    base_cfg = {
+        "raw_dat_path": str(root / "data/raw/pantheon_plus_shoes/Pantheon+SH0ES.dat"),
+        "raw_cov_path": str(root / "data/raw/pantheon_plus_shoes/Pantheon+SH0ES_STAT+SYS.cov"),
+        "include_calibrators": True,
+        "include_hubble_flow": True,
+        "z_column": "zHD",
+        "z_hf_min": 0.023,
+        "z_hf_max": 0.15,
+        "tag": "pytest_cal+hf_zHD",
+        "processed_dir": str(root / "data/processed/pantheon_plus_shoes_ladder"),
+    }
+    ds_base = load_pantheon_plus_shoes_ladder_dataset(base_cfg)
+
+    cfg = dict(base_cfg)
+    cfg.update(
+        {
+            "cid_duplicate_mode": "dedup",
+            "cid_duplicate_scope": "cal",
+            "cid_dedup_strategy": "best_fitprob",
+        }
+    )
+    ds = load_pantheon_plus_shoes_ladder_dataset(cfg)
+
+    assert ds.cov.shape == (ds.z.size, ds.z.size)
+    assert int(np.sum(ds.is_hubble_flow)) == int(np.sum(ds_base.is_hubble_flow))
+
+    cal_cids = ds.cid[ds.is_calibrator]
+    assert cal_cids.size == np.unique(cal_cids).size
+
+    mask = (ds.cid == "2007af") & ds.is_calibrator
+    assert int(np.sum(mask)) == 1
+    i = int(np.where(mask)[0][0])
+    assert int(ds.idsurvey[i]) == 64
+
+
+def test_cid_duplicate_mode_drop_discordant() -> None:
+    root = Path(__file__).resolve().parents[1]
+    cfg = {
+        "raw_dat_path": str(root / "data/raw/pantheon_plus_shoes/Pantheon+SH0ES.dat"),
+        "raw_cov_path": str(root / "data/raw/pantheon_plus_shoes/Pantheon+SH0ES_STAT+SYS.cov"),
+        "include_calibrators": True,
+        "include_hubble_flow": True,
+        "z_column": "zHD",
+        "z_hf_min": 0.023,
+        "z_hf_max": 0.15,
+        "tag": "pytest_cal+hf_zHD",
+        "processed_dir": str(root / "data/processed/pantheon_plus_shoes_ladder"),
+        "cid_duplicate_mode": "drop_discordant",
+        "cid_duplicate_scope": "cal",
+        "cid_drop_discordant_threshold_mag": 0.05,
+        "cid_drop_discordant_reference": "best_fitprob",
+    }
+    ds = load_pantheon_plus_shoes_ladder_dataset(cfg)
+
+    # A strongly discordant duplicate should collapse to the best-fitprob row.
+    mask_2009ig = (ds.cid == "2009ig") & ds.is_calibrator
+    assert int(np.sum(mask_2009ig)) == 1
+
+    # A mild duplicate should survive under the threshold.
+    mask_2019np = (ds.cid == "2019np") & ds.is_calibrator
+    assert int(np.sum(mask_2019np)) == 2
+
+
 def test_injection_suite_calibrator_offset_runs() -> None:
     root = Path(__file__).resolve().parents[1]
     cfg = {
