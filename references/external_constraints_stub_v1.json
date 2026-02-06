@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "notes": [
+    "This is a *stub/example* external-constraint payload.",
+    "It demonstrates the supported input schema for scripts/build_sigma_overrides_from_external_constraints.py.",
+    "Replace these with real per-survey / per-epoch calibration products (Gaia cross-cal, overlap residuals, zeropoint logs)."
+  ],
+  "constraints": [
+    {
+      "mechanism": "cal_survey_offset_mag",
+      "idsurvey": 5,
+      "sigma_mag": 0.010,
+      "source": "Gaia cross-cal (stub)"
+    },
+    {
+      "mechanism": "hf_survey_offset_mag",
+      "idsurvey": 5,
+      "sigma_mag": 0.010,
+      "source": "Gaia cross-cal (stub)"
+    },
+    {
+      "mechanism": "survey_pkmjd_bin_offset_mag",
+      "idsurvey": 5,
+      "bin": 2,
+      "sigma_mag": 0.015,
+      "source": "zeropoint log window (stub)",
+      "notes": "Example per-survey time-bin constraint (survey×epoch)."
+    },
+    {
+      "param": "pkmjd_err_linear_mag",
+      "sigma_mag": 0.040,
+      "source": "overlap residuals (stub)"
+    }
+  ]
+}
+

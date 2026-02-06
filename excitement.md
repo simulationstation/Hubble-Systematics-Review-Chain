@@ -118,6 +118,28 @@ Applying these tight survey-calibration priors:
 Artifacts:
 - Data: `data/raw/pantheon_plus_calibration/FRAGILISTIC_COVARIANCE.npz`
 - Derivation: `scripts/derive_pantheon_shoes_fragilistic_priors.py`
+
+## 2026-02-06 — Under cov-projected proxy bounds, `host_mass_step` + `pkmjd_err` dominate CID-holdout gains
+
+Using “budget-like” external bounds for SALT2 metadata terms derived by projecting the published
+JLA_SALT2 systematic covariance onto proxy vectors (σ≈0.021–0.045 mag), the joint-stack CID-holdout
+prefers a bounded metadata-rich model with a sizable out-of-sample gain (Δlogp ≈ +0.40).
+
+In term ablations, nearly all of that improvement comes from:
+- `host_mass_step` (Δlogp ≈ +0.29), and
+- `pkmjd_err_linear` (Δlogp ≈ +0.26),
+with smaller contributions from `x1_linear` and negligible impact from `mwebv`/`c_linear`.
+
+This suggests the “most leverage” metadata terms (in this simplified linear-Gaussian audit) are
+highly specific and therefore good targets for *real* external calibration constraints (Gaia cross-cal,
+overlap residuals, zeropoint logs).
+
+Artifacts:
+- Covproj CID holdout: `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cid_holdout_constrained_decomp_kcor_calhf_shoeslin_covproj_JLA_SALT2_cal_extgrid_more_v1/report.md`
+- Term ablations: `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cid_holdout_covproj_term_ablations_v1/report.md`
+- Driver ranking: `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cid_holdout_covproj_term_ablations_v1/driver_ranking.md`
+- Injection mapping (misspec/modeled): `outputs/pantheon_plus_shoes_ladder_injection_covproj_metadata_misspec_v1/report.md`,
+  `outputs/pantheon_plus_shoes_ladder_injection_covproj_metadata_modeled_v1/report.md`
 - Sigma file: `data/processed/external_calibration/pantheon_plus_shoes_sigma_overrides_from_fragilistic_v1.json`
 - Gate sweep: `outputs/stack_sn_bao_cc_plus_ladder_fragilistic_gates_v1/report.md`
 - Holdout: `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_fragilistic_v1/report.md`

@@ -1,0 +1,105 @@
+{
+  "apply_to": "cal",
+  "created_by": "scripts/derive_proxy_priors_from_cov_projection.py",
+  "inputs": {
+    "processed_dir": "/home/primary/Hubble-Systematics-Review-Chain/data/processed/pantheon_plus_shoes_ladder",
+    "raw_cov_path": "/home/primary/Hubble-Systematics-Review-Chain/data/raw/pantheon_plus_shoes/sytematic_groupings/Pantheon+SH0ES_122221_JLA_SALT2.cov",
+    "raw_dat_path": "/home/primary/Hubble-Systematics-Review-Chain/data/raw/pantheon_plus_shoes/Pantheon+SH0ES.dat",
+    "tag": "cal+hf_covproj_JLA_SALT2_cal_zHD"
+  },
+  "notes": [
+    "This file encodes per-parameter sigma overrides for selected proxy coefficients by projecting a published covariance matrix C onto the proxy vector v.",
+    "We set sigma(beta) so that Var(v^T (beta v)) matches v^T C v, i.e. sigma(beta)=sqrt(v^T C v)/(v^T v).",
+    "This is a pragmatic way to translate a covariance budget into a bound on a specific low-dimensional mechanism term."
+  ],
+  "requested_proxies": [
+    "c_linear_mag",
+    "x1_linear_mag",
+    "biascor_m_b_linear_mag",
+    "mwebv_linear_mag",
+    "pkmjd_err_linear_mag",
+    "host_mass_step_mag"
+  ],
+  "summaries": [
+    {
+      "apply_to": "cal",
+      "n": 354,
+      "n_nonzero": 77,
+      "notes": [
+        "z-score: mu=-0.01812, sd=0.07123"
+      ],
+      "proxy": "c_linear_mag",
+      "sigma_beta_mag": 0.025970785963855967,
+      "vCv": 5.89686588336877,
+      "v_norm2": 93.50299718613005
+    },
+    {
+      "apply_to": "cal",
+      "n": 354,
+      "n_nonzero": 77,
+      "notes": [
+        "z-score: mu=0.1165, sd=0.8361"
+      ],
+      "proxy": "x1_linear_mag",
+      "sigma_beta_mag": 0.028797665892737506,
+      "vCv": 2.633366500871719,
+      "v_norm2": 56.35057663399416
+    },
+    {
+      "apply_to": "cal",
+      "n": 354,
+      "n_nonzero": 77,
+      "notes": [
+        "z-score: mu=-0.005392, sd=0.05063"
+      ],
+      "proxy": "biascor_m_b_linear_mag",
+      "sigma_beta_mag": 0.025832907981664117,
+      "vCv": 4.61242410139519,
+      "v_norm2": 83.13642006472804
+    },
+    {
+      "apply_to": "cal",
+      "n": 354,
+      "n_nonzero": 77,
+      "notes": [
+        "z-score: mu=0.0465, sd=0.03779"
+      ],
+      "proxy": "mwebv_linear_mag",
+      "sigma_beta_mag": 0.020837561079303332,
+      "vCv": 4.092410945522493,
+      "v_norm2": 97.08289823454028
+    },
+    {
+      "apply_to": "cal",
+      "n": 354,
+      "n_nonzero": 77,
+      "notes": [
+        "z-score: mu=0.2326, sd=0.2444"
+      ],
+      "proxy": "pkmjd_err_linear_mag",
+      "sigma_beta_mag": 0.04497067831994139,
+      "vCv": 2.332816475712768,
+      "v_norm2": 33.963375647716326
+    },
+    {
+      "apply_to": "cal",
+      "n": 354,
+      "n_nonzero": 50,
+      "notes": [
+        "binary step: thr=10.000"
+      ],
+      "proxy": "host_mass_step_mag",
+      "sigma_beta_mag": 0.03728820553472639,
+      "vCv": 3.4760256800000002,
+      "v_norm2": 50.0
+    }
+  ],
+  "supported_proxies": [
+    "c_linear_mag",
+    "x1_linear_mag",
+    "biascor_m_b_linear_mag",
+    "mwebv_linear_mag",
+    "pkmjd_err_linear_mag",
+    "host_mass_step_mag"
+  ]
+}

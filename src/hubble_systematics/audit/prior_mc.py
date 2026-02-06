@@ -321,6 +321,29 @@ def _component_masks(
             raise ValueError(f"Unsupported apply_to: {apply_to}")
         return {"biascor_m_b_linear_mag": xz.astype(float)}
 
+    if mechanism in {"host_mass_step_mag", "host_mass_step"}:
+        if not hasattr(dataset, "host_logmass"):
+            raise ValueError("host_mass_step_mag requires dataset.host_logmass")
+        thr = float(cfg.get("threshold") or cfg.get("host_mass_threshold") or 10.0)
+        x = np.asarray(getattr(dataset, "host_logmass"), dtype=float).reshape(-1)
+        if x.shape != (n,):
+            raise ValueError("dataset.host_logmass shape mismatch")
+        good = np.isfinite(x) & (x > 0.0)
+        step = np.zeros_like(x, dtype=float)
+        step[good] = (x[good] >= thr).astype(float)
+        apply_to = str(cfg.get("apply_to", "all")).lower()
+        if apply_to == "cal":
+            if not hasattr(dataset, "is_calibrator"):
+                raise ValueError("host_mass_step_mag apply_to=cal requires dataset.is_calibrator")
+            step *= np.asarray(getattr(dataset, "is_calibrator"), dtype=bool).astype(float).reshape(-1)
+        elif apply_to == "hf":
+            if not hasattr(dataset, "is_hubble_flow"):
+                raise ValueError("host_mass_step_mag apply_to=hf requires dataset.is_hubble_flow")
+            step *= np.asarray(getattr(dataset, "is_hubble_flow"), dtype=bool).astype(float).reshape(-1)
+        elif apply_to != "all":
+            raise ValueError(f"Unsupported apply_to: {apply_to}")
+        return {"host_mass_step_mag": step.astype(float)}
+
     if mechanism == "pkmjd_bin_offset_mag":
         if not hasattr(dataset, "pkmjd"):
             raise ValueError("pkmjd_bin_offset_mag requires dataset.pkmjd")

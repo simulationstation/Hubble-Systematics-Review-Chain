@@ -89,6 +89,14 @@ using this repo’s **linear-Gaussian audit models** (not a full end-to-end SH0E
 - **Prior-MC bound under combined gates (real data):** drawing unmodeled calibrator-step distortions from the combined kcor+SH0ES-linear-system priors yields p95(|δ`delta_lnH0`|)≈0.031, i.e. ≈39% of a reference “full tension” scale ln(73/67.4); in 20k draws, P(>100%)≈0.  
   Report: `outputs/pantheon_plus_shoes_ladder_prior_mc_constrained_kcor_calhf_shoeslin_v1/report.md`  
   Reproduce: `configs/pantheon_plus_shoes_ladder_prior_mc_constrained_kcor_calhf_shoeslin_v1.yaml`
+- **Cov-projected “external” bounds for metadata proxies (JLA_SALT2; real data):** projecting the published JLA_SALT2 systematic covariance onto proxy vectors yields realistic prior widths for metadata terms (typical σ≈0.021–0.045 mag for `pkmjd_err_linear_mag`, `host_mass_step_mag`, `c/x1/biascor`, `mwebv`). Under these bounds, a CID-group holdout inside the joint stack prefers the **bounded metadata-rich** ladder model: Δlogp ≈ +0.40 (diag), exceeding the bounded `calibrator_offset_mag` model (Δlogp ≈ +0.28). Term ablations show the gain is dominated by **`host_mass_step` (Δlogp ≈ +0.29)** and **`pkmjd_err_linear` (Δlogp ≈ +0.26)**, while `mwebv`/`c_linear` contribute little.  
+  Reports: `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cid_holdout_constrained_decomp_kcor_calhf_shoeslin_covproj_JLA_SALT2_cal_extgrid_more_v1/report.md`, `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cid_holdout_covproj_term_ablations_v1/report.md`  
+  Driver ranking: `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cid_holdout_covproj_term_ablations_v1/driver_ranking.md` (via `scripts/rank_predictive_score_drivers.py`)  
+  Reproduce: `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cid_holdout_constrained_decomp_kcor_calhf_shoeslin_covproj_JLA_SALT2_cal_extgrid_more_v1.yaml`, `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cid_holdout_covproj_term_ablations_v1.yaml`  
+  Priors: `data/processed/external_calibration/pantheon_plus_shoes_sigma_overrides_kcor_calhf_shoeslin_plus_covproj_JLA_SALT2_cal_v1.json` (built via `scripts/derive_proxy_priors_from_cov_projection.py` + `scripts/merge_sigma_overrides.py`)
+- **Calibration gates for these proxy terms (prior-MC + SBC + injections; real data + simulator):** under the combined kcor+SH0ES-linear+covproj bounds, a forward “prior-MC” draw of unmodeled distortions can explain p50/p95/p99 ≈ **20% / 60% / 79%** of a reference ln(73/67.4) tension scale (but P(>100%) remains ≈0). Repeated-noise SBC shows **no undercoverage** (it is conservative/over-covered), and injections confirm the dominant single-term H0-shift risks are `pkmjd_err_linear_mag` and `host_mass_step_mag` (each ≈15% of the reference scale at 1σ).  
+  Reports: `outputs/pantheon_plus_shoes_ladder_prior_mc_constrained_kcor_calhf_shoeslin_covproj_JLA_SALT2_cal_v1/report.md`, `outputs/pantheon_plus_shoes_ladder_sbc_constrained_covproj_JLA_SALT2_cal_v1/report.md`, `outputs/pantheon_plus_shoes_ladder_injection_covproj_metadata_misspec_v1/report.md`, `outputs/pantheon_plus_shoes_ladder_injection_covproj_metadata_modeled_v1/report.md`  
+  Reproduce: `configs/pantheon_plus_shoes_ladder_prior_mc_constrained_kcor_calhf_shoeslin_covproj_JLA_SALT2_cal_v1.yaml`, `configs/pantheon_plus_shoes_ladder_sbc_constrained_covproj_JLA_SALT2_cal_v1.yaml`, `configs/pantheon_plus_shoes_ladder_injection_covproj_metadata_misspec_v1.yaml`, `configs/pantheon_plus_shoes_ladder_injection_covproj_metadata_modeled_v1.yaml`
 - **SH0ES calibrator-chain prior scale (linear-system; real data product):** the SH0ES DataRelease includes a compact linear system (`SH0ES_Data/all[LCY]_...fits`, `lstsq_results.txt`) with σ(`fivelogH0`)≈0.028 mag. Treating that as a *calibrator-chain-inspired* prior width for an additional `calibrator_offset_mag`, the joint stack under FRAGILISTIC survey priors supports only `calibrator_offset_mag ≈ 0.074 ± 0.021` (tension-reduction frac ≈ 0.16).  
   Reports: `outputs/stack_sn_bao_cc_plus_ladder_fragilistic_shoes_gates_v1/report.md`, `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_fragilistic_shoes_v1/report.md`  
   Reproduce: `configs/stack_sn_bao_cc_plus_ladder_fragilistic_shoes_gates_v1.yaml`, `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_fragilistic_shoes_v1.yaml`  
@@ -115,7 +123,14 @@ For the full status + what’s still missing vs the full ambition, start at:
 
 ## Quickstart (uses existing venvs in this workspace)
 
-Run with the Project venv (recommended in this container):
+Run with this repo’s venv:
+
+```bash
+.venv/bin/hubble-audit --help
+.venv/bin/hubble-audit run configs/pantheon_plus_audit.yaml
+```
+
+Or run with the Project venv (also present in this workspace):
 
 ```bash
 PYTHONPATH=src ../PROJECT/.venv/bin/python -m hubble_systematics.cli --help
@@ -145,5 +160,5 @@ Outputs are written under `outputs/<run_id>/`.
 ## Tests
 
 ```bash
-../PROJECT/.venv/bin/python -m pytest
+.venv/bin/pytest
 ```

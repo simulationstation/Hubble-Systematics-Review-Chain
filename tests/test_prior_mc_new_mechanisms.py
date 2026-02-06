@@ -15,6 +15,7 @@ def _dummy_dataset() -> SimpleNamespace:
         idsurvey_levels=np.array([1, 5], dtype=int),
         is_calibrator=np.array([True, False, True, False, True, False], dtype=bool),
         is_hubble_flow=np.array([False, True, False, True, False, True], dtype=bool),
+        host_logmass=np.array([9.5, 10.5, 10.1, 9.9, 10.0, 10.7], dtype=float),
         mwebv=np.array([0.02, 0.03, 0.10, 0.01, 0.05, 0.02], dtype=float),
         mwebv_mu=0.04,
         mwebv_sd=0.03,
@@ -76,3 +77,13 @@ def test_component_masks_other_linear_proxies() -> None:
     assert "pkmjd_err_linear_mag" in pkmjderr
     assert pkmjderr["pkmjd_err_linear_mag"].shape == ds.z.shape
 
+
+def test_component_masks_host_mass_step() -> None:
+    ds = _dummy_dataset()
+    out = _component_masks(dataset=ds, mechanism="host_mass_step_mag", cfg={"apply_to": "cal", "threshold": 10.0})
+    assert "host_mass_step_mag" in out
+    v = out["host_mass_step_mag"]
+    assert v.shape == ds.z.shape
+    assert np.all(np.isin(v, [0.0, 1.0]))
+    # Apply-to-cal should zero out non-calibrator rows.
+    assert np.all(v[~ds.is_calibrator] == 0.0)

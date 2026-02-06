@@ -1,0 +1,24 @@
+{
+  "created_by": "scripts/merge_sigma_overrides.py",
+  "inputs": [
+    "/home/primary/Hubble-Systematics-Review-Chain/data/processed/external_calibration/pantheon_plus_shoes_sigma_overrides_kcor_calhf_plus_shoeslin_v1.json",
+    "/home/primary/Hubble-Systematics-Review-Chain/data/processed/external_calibration/pantheon_plus_shoes_sigma_overrides_from_covproj_JLA_SALT2_cal_v1.json"
+  ],
+  "mode": "override",
+  "n_inputs": 2,
+  "n_keys_by_input": [
+    {
+      "n_keys": 110,
+      "path": "/home/primary/Hubble-Systematics-Review-Chain/data/processed/external_calibration/pantheon_plus_shoes_sigma_overrides_kcor_calhf_plus_shoeslin_v1.json"
+    },
+    {
+      "n_keys": 6,
+      "path": "/home/primary/Hubble-Systematics-Review-Chain/data/processed/external_calibration/pantheon_plus_shoes_sigma_overrides_from_covproj_JLA_SALT2_cal_v1.json"
+    }
+  ],
+  "n_keys_out": 116,
+  "notes": [
+    "This file is a mechanical merge of one or more per-parameter sigma-override mappings.",
+    "It is intended for audit experiments that combine multiple calibration-gate sources."
+  ]
+}
