@@ -6,6 +6,8 @@ import dataclasses
 import json
 import multiprocessing as mp
 import os
+import time
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Literal
 
@@ -41,6 +43,22 @@ _G_PERMUTE_COLUMN: str | None = None
 _G_APPLY_TO: ApplyTo | None = None
 _G_PERMUTE_MODE: PermuteMode | None = None
 _G_FIXED_TRAIN_MASK: np.ndarray | None = None
+
+
+def _write_json_atomic(path: Path, obj: dict[str, Any]) -> None:
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    tmp = path.with_suffix(path.suffix + ".tmp")
+    tmp.write_text(json.dumps(obj, indent=2, sort_keys=True, allow_nan=False) + "\n")
+    tmp.replace(path)
+
+
+def _finite_or_none(x: float) -> float | None:
+    try:
+        xf = float(x)
+    except Exception:
+        return None
+    return xf if np.isfinite(xf) else None
 
 
 def _build_anchor(cfg: dict[str, Any]) -> AnchorLCDM:
@@ -264,6 +282,24 @@ def main() -> None:
     ap.add_argument("--seed", type=int, default=123, help="RNG seed.")
     ap.add_argument("--n-proc", type=int, default=1, help="Parallel worker processes (default: 1).")
     ap.add_argument("--chunksize", type=int, default=5, help="Multiprocessing map chunksize (default: 5).")
+    ap.add_argument(
+        "--progress-every",
+        type=int,
+        default=0,
+        help="Print progress every N permutations (0 disables).",
+    )
+    ap.add_argument(
+        "--progress-secs",
+        type=float,
+        default=30.0,
+        help="Also write progress at least every N seconds (0 disables).",
+    )
+    ap.add_argument(
+        "--progress-path",
+        type=Path,
+        default=None,
+        help="Optional progress JSON path (default: run_dir/permutation_progress_<model>.json).",
+    )
     ap.add_argument("--out-json", type=Path, default=None, help="Output JSON path (default: run_dir/permutation_null_<model>.json)")
     args = ap.parse_args()
 
@@ -352,19 +388,144 @@ def main() -> None:
     if n_proc < 1:
         raise ValueError("--n-proc must be >= 1")
 
+    safe = "".join(c if (c.isalnum() or c in {"-", "_", "."}) else "_" for c in test_label)[:80]
+    progress_path = args.progress_path
+    if progress_path is None:
+        progress_path = run_dir / f"permutation_progress_{safe}_{args.permute_column}_{args.mode}.json"
+    progress_path = progress_path.expanduser().resolve()
+
+    print(
+        f"Permutation null starting:\n"
+        f"- run_dir: {run_dir}\n"
+        f"- test_label: {test_label}\n"
+        f"- permute_column: {args.permute_column}\n"
+        f"- mode: {args.mode}\n"
+        f"- apply_to: {args.apply_to}\n"
+        f"- n_perm: {n_perm}\n"
+        f"- n_proc: {n_proc}\n"
+        f"- progress_path: {progress_path}\n"
+        f"- observed_mean_delta_logp: {obs_mean:+.6f}\n",
+        flush=True,
+    )
+    _write_json_atomic(
+        progress_path,
+        {
+            "status": "starting",
+            "updated_utc": datetime.now(timezone.utc).isoformat(),
+            "run_dir": str(run_dir),
+            "test_label": test_label,
+            "permute_column": str(args.permute_column),
+            "mode": str(args.mode),
+            "apply_to": str(args.apply_to),
+            "n_proc": int(n_proc),
+            "n_done": 0,
+            "n_total": int(n_perm),
+            "fraction_done": 0.0,
+            "elapsed_sec": 0.0,
+            "rate_perm_per_sec": None,
+            "eta_sec": None,
+            "observed_mean_delta_logp": float(obs_mean),
+            "perm_running_mean_delta_logp": None,
+            "perm_running_sd_delta_logp": None,
+            "n_perm_ge_obs": 0,
+            "p_hat_ge_obs": None,
+        },
+    )
+
     # Avoid oversubscription; BLAS threads should be 1 even with many processes.
     os.environ.setdefault("OMP_NUM_THREADS", "1")
     os.environ.setdefault("MKL_NUM_THREADS", "1")
     os.environ.setdefault("OPENBLAS_NUM_THREADS", "1")
     os.environ.setdefault("NUMEXPR_NUM_THREADS", "1")
 
+    draws = np.empty(n_perm, dtype=float)
+    t0 = time.time()
+    progress_every = int(args.progress_every)
+    progress_secs = float(args.progress_secs)
+    last_progress_time = 0.0
+    # Welford moments for perm mean Δlogp draws.
+    run_n = 0
+    run_mean = 0.0
+    run_M2 = 0.0
+    run_ge = 0
+
+    def maybe_emit_progress(i_done: int) -> None:
+        nonlocal last_progress_time
+        if progress_every <= 0:
+            by_count = False
+        else:
+            by_count = i_done > 0 and (i_done % progress_every == 0 or i_done == n_perm)
+        now = time.time()
+        by_time = progress_secs > 0 and (now - last_progress_time) >= progress_secs
+        if not (by_count or by_time or i_done == n_perm):
+            return
+
+        elapsed = max(time.time() - t0, 1e-9)
+        rate = i_done / elapsed
+        eta = (n_perm - i_done) / rate if rate > 0 else float("inf")
+        sd = (run_M2 / (run_n - 1)) ** 0.5 if run_n >= 2 else float("nan")
+        p_hat = (1.0 + float(run_ge)) / (float(run_n) + 1.0) if run_n >= 1 else float("nan")
+        stamp = datetime.now(timezone.utc).isoformat()
+
+        payload = {
+            "status": "running" if i_done < n_perm else "complete",
+            "updated_utc": stamp,
+            "run_dir": str(run_dir),
+            "test_label": test_label,
+            "permute_column": str(args.permute_column),
+            "mode": str(args.mode),
+            "apply_to": str(args.apply_to),
+            "n_proc": int(n_proc),
+            "n_done": int(i_done),
+            "n_total": int(n_perm),
+            "fraction_done": float(i_done / n_perm) if n_perm else None,
+            "elapsed_sec": float(elapsed),
+            "rate_perm_per_sec": _finite_or_none(rate),
+            "eta_sec": _finite_or_none(eta),
+            "observed_mean_delta_logp": float(obs_mean),
+            "perm_running_mean_delta_logp": float(run_mean) if run_n else None,
+            "perm_running_sd_delta_logp": _finite_or_none(sd),
+            "n_perm_ge_obs": int(run_ge),
+            "p_hat_ge_obs": _finite_or_none(p_hat),
+        }
+        _write_json_atomic(progress_path, payload)
+        last_progress_time = now
+
+        if progress_every > 0 or progress_secs > 0:
+            print(
+                f"progress: {i_done}/{n_perm} perms "
+                f"({100.0 * i_done / n_perm:.1f}%) "
+                f"elapsed={elapsed/60.0:.1f} min "
+                f"eta={eta/60.0:.1f} min "
+                f"p_hat≈{p_hat:.3g}",
+                flush=True,
+            )
+
     if n_proc == 1:
-        draws = np.array([_one_permutation(int(s)) for s in perm_seeds], dtype=float)
+        for i, s in enumerate(perm_seeds.tolist()):
+            val = float(_one_permutation(int(s)))
+            draws[i] = val
+            run_n += 1
+            delta = val - run_mean
+            run_mean += delta / run_n
+            run_M2 += delta * (val - run_mean)
+            if val >= obs_mean:
+                run_ge += 1
+            maybe_emit_progress(i + 1)
     else:
         ctx = mp.get_context("fork")
         chunksize = int(args.chunksize)
         with ctx.Pool(processes=n_proc) as pool:
-            draws = np.array(pool.map(_one_permutation, perm_seeds.tolist(), chunksize=chunksize), dtype=float)
+            for i, val in enumerate(pool.imap(_one_permutation, perm_seeds.tolist(), chunksize=chunksize), start=1):
+                val = float(val)
+                draws[i - 1] = val
+                run_n += 1
+                delta = val - run_mean
+                run_mean += delta / run_n
+                run_M2 += delta * (val - run_mean)
+                if val >= obs_mean:
+                    run_ge += 1
+                maybe_emit_progress(i)
 
     # One-sided p-value for “>= observed”.
     p = float((1.0 + float(np.sum(draws >= obs_mean))) / float(n_perm + 1))
@@ -392,10 +553,12 @@ def main() -> None:
 
     out_path = args.out_json
     if out_path is None:
-        safe = "".join(c if (c.isalnum() or c in {"-", "_", "."}) else "_" for c in test_label)[:80]
         out_path = run_dir / f"permutation_null_{safe}_{args.permute_column}_{args.mode}.json"
     out_path = out_path.expanduser().resolve()
     out_path.write_text(json.dumps(out, indent=2, sort_keys=True) + "\n")
+
+    # Final progress write (complete).
+    maybe_emit_progress(n_perm)
     print(f"Wrote: {out_path}")
     print(f"Observed mean Δlogp: {obs_mean:+.4f}")
     print(f"Permutation p-value (Δlogp >= obs): {p:.4g}")

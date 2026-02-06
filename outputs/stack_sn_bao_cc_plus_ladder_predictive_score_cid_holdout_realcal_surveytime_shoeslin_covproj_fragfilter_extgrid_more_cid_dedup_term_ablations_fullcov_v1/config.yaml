@@ -1,0 +1,295 @@
+run:
+  run_id: stack_sn_bao_cc_plus_ladder_predictive_score_cid_holdout_realcal_surveytime_shoeslin_covproj_fragfilter_extgrid_more_cid_dedup_term_ablations_fullcov_v1
+  out_base: outputs
+  tasks:
+    - predictive_score
+    - report
+
+anchor:
+  H0: 67.4
+  Omega_m: 0.315
+  Omega_k: 0.0
+  rd_Mpc: 147.09
+
+model:
+  shared_scale:
+    enable: true
+    params: [delta_lnH0]
+    prior_sigma: 0.5
+  priors:
+    sigma_overrides_path: data/processed/external_calibration/pantheon_plus_shoes_sigma_overrides_realcal_surveytime_shoeslin_covproj_v1.json
+
+probe:
+  name: stack
+  stack:
+    - name: pantheon_plus
+      data_path: data/processed/pantheon_plus/pantheon_plus_sky_cosmology_stat+sys_zHD.npz
+      z_min: 0.02
+      z_max: 0.62
+      model:
+        ladder_level: L2
+        priors:
+          sigma_global_offset_mag: 10.0
+          sigma_survey_offset_mag: 0.2
+          sigma_overrides_path: data/processed/external_calibration/pantheon_plus_shoes_sigma_overrides_realcal_surveytime_shoeslin_covproj_v1.json
+          fragilistic:
+            enable: true
+            npz_path: data/raw/pantheon_plus_calibration/FRAGILISTIC_COVARIANCE.npz
+            scale: 1.0
+
+    - name: pantheon_plus_shoes_ladder
+      raw_dat_path: data/raw/pantheon_plus_shoes/Pantheon+SH0ES.dat
+      raw_cov_path: data/raw/pantheon_plus_shoes/Pantheon+SH0ES_STAT+SYS.cov
+      include_calibrators: true
+      include_hubble_flow: true
+      z_column: zHD
+      z_hf_min: 0.023
+      z_hf_max: 0.15
+      cid_duplicate_mode: dedup
+      cid_duplicate_scope: cal
+      cid_dedup_strategy: best_fitprob
+      model:
+        ladder_level: L2
+        priors:
+          sigma_global_offset_mag: 10.0
+          sigma_survey_offset_mag: 0.2
+          sigma_calibrator_offset_mag: 0.2
+          sigma_overrides_path: data/processed/external_calibration/pantheon_plus_shoes_sigma_overrides_realcal_surveytime_shoeslin_covproj_v1.json
+          fragilistic:
+            enable: true
+            npz_path: data/raw/pantheon_plus_calibration/FRAGILISTIC_COVARIANCE.npz
+            scale: 1.0
+
+    - name: bao
+      data_path: data/processed/bao/bao_desi_2024_bao_all.npz
+      meta_path: data/processed/bao/bao_desi_2024_bao_all.meta.json
+      model:
+        ladder_level: L0
+
+    - name: chronometers
+      data_path: data/processed/chronometers/chronometers_BC03_all.npz
+      model:
+        ladder_level: L0
+
+    # External late-time H0 constraints (grid posteriors; stress-test only).
+    - name: h0_grid
+      label: trgb_freedman_2021_review
+      data_path: data/processed/h0_grids/trgb_freedman_2021_review.json
+      space: ln
+      model:
+        ladder_level: L0
+
+    - name: h0_grid
+      label: sbf_blakeslee_2021
+      data_path: data/processed/h0_grids/sbf_blakeslee_2021.json
+      space: ln
+      model:
+        ladder_level: L0
+
+    - name: h0_grid
+      label: tdcosmo_slacs_birrer_2020
+      data_path: data/processed/h0_grids/tdcosmo_slacs_birrer_2020.json
+      space: ln
+      model:
+        ladder_level: L0
+
+    - name: h0_grid
+      label: h0licow_wong_2020
+      data_path: data/processed/h0_grids/h0licow_wong_2020.json
+      space: ln
+      model:
+        ladder_level: L0
+
+    - name: h0_grid
+      label: strides_shajib_2020
+      data_path: data/processed/h0_grids/strides_shajib_2020.json
+      space: ln
+      model:
+        ladder_level: L0
+
+    - name: h0_grid
+      label: megamaser_pesce_2020
+      data_path: data/processed/h0_grids/megamaser_pesce_2020.json
+      space: ln
+      model:
+        ladder_level: L0
+
+predictive_score:
+  seed: 777
+  mode: group_holdout
+  group_var: cid
+  min_group_n: 1
+  stack_scope_part: pantheon_plus_shoes_ladder
+  always_include_calibrators: false
+  always_include_hubble_flow: true
+  use_diagonal_errors: false
+
+  models:
+    - label: baseline
+      model: {}
+
+    - label: +cal_offset_bounded
+      stack_overrides:
+        pantheon_plus_shoes_ladder:
+          mechanisms: {calibrator_offset: true}
+
+    - label: +bounded_calibration_fields
+      stack_overrides:
+        pantheon_plus_shoes_ladder:
+          mechanisms:
+            cal_survey_offsets: true
+            cal_survey_offsets_min_cal_per_survey: 4
+            hf_survey_offsets: true
+            pkmjd_bins:
+              enable: true
+              edges: [44672.6, 53410.4, 54131.12, 54885.0, 57269.22, 59385.6]
+              apply_to: cal
+            survey_pkmjd_bins:
+              enable: true
+              edges: [44672.6, 53410.4, 54131.12, 54885.0, 57269.22, 59385.6]
+              apply_to: cal
+              min_cal_per_survey: 4
+
+    # Term ablations (each adds exactly one new bounded metadata term on top of bounded fields).
+    - label: +fields+pkmjd_err
+      stack_overrides:
+        pantheon_plus_shoes_ladder:
+          mechanisms:
+            cal_survey_offsets: true
+            cal_survey_offsets_min_cal_per_survey: 4
+            hf_survey_offsets: true
+            pkmjd_bins:
+              enable: true
+              edges: [44672.6, 53410.4, 54131.12, 54885.0, 57269.22, 59385.6]
+              apply_to: cal
+            survey_pkmjd_bins:
+              enable: true
+              edges: [44672.6, 53410.4, 54131.12, 54885.0, 57269.22, 59385.6]
+              apply_to: cal
+              min_cal_per_survey: 4
+            pkmjd_err_linear: true
+            pkmjd_err_apply_to: cal
+
+    - label: +fields+mwebv
+      stack_overrides:
+        pantheon_plus_shoes_ladder:
+          mechanisms:
+            cal_survey_offsets: true
+            cal_survey_offsets_min_cal_per_survey: 4
+            hf_survey_offsets: true
+            pkmjd_bins:
+              enable: true
+              edges: [44672.6, 53410.4, 54131.12, 54885.0, 57269.22, 59385.6]
+              apply_to: cal
+            survey_pkmjd_bins:
+              enable: true
+              edges: [44672.6, 53410.4, 54131.12, 54885.0, 57269.22, 59385.6]
+              apply_to: cal
+              min_cal_per_survey: 4
+            mwebv_linear: true
+            mwebv_apply_to: cal
+
+    - label: +fields+host_mass_step
+      stack_overrides:
+        pantheon_plus_shoes_ladder:
+          mechanisms:
+            cal_survey_offsets: true
+            cal_survey_offsets_min_cal_per_survey: 4
+            hf_survey_offsets: true
+            pkmjd_bins:
+              enable: true
+              edges: [44672.6, 53410.4, 54131.12, 54885.0, 57269.22, 59385.6]
+              apply_to: cal
+            survey_pkmjd_bins:
+              enable: true
+              edges: [44672.6, 53410.4, 54131.12, 54885.0, 57269.22, 59385.6]
+              apply_to: cal
+              min_cal_per_survey: 4
+            host_mass_step: true
+            host_mass_apply_to: cal
+
+    - label: +fields+c_linear
+      stack_overrides:
+        pantheon_plus_shoes_ladder:
+          mechanisms:
+            cal_survey_offsets: true
+            cal_survey_offsets_min_cal_per_survey: 4
+            hf_survey_offsets: true
+            pkmjd_bins:
+              enable: true
+              edges: [44672.6, 53410.4, 54131.12, 54885.0, 57269.22, 59385.6]
+              apply_to: cal
+            survey_pkmjd_bins:
+              enable: true
+              edges: [44672.6, 53410.4, 54131.12, 54885.0, 57269.22, 59385.6]
+              apply_to: cal
+              min_cal_per_survey: 4
+            c_linear: true
+            c_apply_to: cal
+
+    - label: +fields+x1_linear
+      stack_overrides:
+        pantheon_plus_shoes_ladder:
+          mechanisms:
+            cal_survey_offsets: true
+            cal_survey_offsets_min_cal_per_survey: 4
+            hf_survey_offsets: true
+            pkmjd_bins:
+              enable: true
+              edges: [44672.6, 53410.4, 54131.12, 54885.0, 57269.22, 59385.6]
+              apply_to: cal
+            survey_pkmjd_bins:
+              enable: true
+              edges: [44672.6, 53410.4, 54131.12, 54885.0, 57269.22, 59385.6]
+              apply_to: cal
+              min_cal_per_survey: 4
+            x1_linear: true
+            x1_apply_to: cal
+
+    - label: +fields+biascor_m_b
+      stack_overrides:
+        pantheon_plus_shoes_ladder:
+          mechanisms:
+            cal_survey_offsets: true
+            cal_survey_offsets_min_cal_per_survey: 4
+            hf_survey_offsets: true
+            pkmjd_bins:
+              enable: true
+              edges: [44672.6, 53410.4, 54131.12, 54885.0, 57269.22, 59385.6]
+              apply_to: cal
+            survey_pkmjd_bins:
+              enable: true
+              edges: [44672.6, 53410.4, 54131.12, 54885.0, 57269.22, 59385.6]
+              apply_to: cal
+              min_cal_per_survey: 4
+            biascor_m_b_linear: true
+            biascor_m_b_apply_to: cal
+
+    - label: +bounded_fields_plus_metadata_bounded
+      stack_overrides:
+        pantheon_plus_shoes_ladder:
+          mechanisms:
+            cal_survey_offsets: true
+            cal_survey_offsets_min_cal_per_survey: 4
+            hf_survey_offsets: true
+            pkmjd_bins:
+              enable: true
+              edges: [44672.6, 53410.4, 54131.12, 54885.0, 57269.22, 59385.6]
+              apply_to: cal
+            survey_pkmjd_bins:
+              enable: true
+              edges: [44672.6, 53410.4, 54131.12, 54885.0, 57269.22, 59385.6]
+              apply_to: cal
+              min_cal_per_survey: 4
+            pkmjd_err_linear: true
+            pkmjd_err_apply_to: cal
+            mwebv_linear: true
+            mwebv_apply_to: cal
+            host_mass_step: true
+            host_mass_apply_to: cal
+            c_linear: true
+            c_apply_to: cal
+            x1_linear: true
+            x1_apply_to: cal
+            biascor_m_b_linear: true
+            biascor_m_b_apply_to: cal

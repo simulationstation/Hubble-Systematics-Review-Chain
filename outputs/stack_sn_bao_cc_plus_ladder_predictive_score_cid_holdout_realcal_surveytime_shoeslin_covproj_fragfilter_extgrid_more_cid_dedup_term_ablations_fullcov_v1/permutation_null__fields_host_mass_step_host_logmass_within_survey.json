@@ -1,0 +1,31 @@
+{
+  "apply_to": "cal",
+  "base_label": "baseline",
+  "mode": "within_survey",
+  "n_perm": 10,
+  "observed_mean_delta_logp": 0.18878632720782468,
+  "p_value_ge_obs": 0.36363636363636365,
+  "perm_mean_delta_logp": [
+    0.18588479140680775,
+    0.15980560887406559,
+    0.1979240992703161,
+    0.23155802479507845,
+    0.1232220897433628,
+    0.18652629011839494,
+    0.21161609281056712,
+    0.11892130964142765,
+    0.17706483539194903,
+    0.1453047229255199
+  ],
+  "perm_summary": {
+    "mean": 0.17378278649774895,
+    "p05": 0.12085666068729846,
+    "p50": 0.18147481339937838,
+    "p95": 0.22258415540204832,
+    "sd": 0.034991848707722574
+  },
+  "permute_column": "host_logmass",
+  "run_dir": "/home/primary/Hubble-Systematics-Review-Chain/outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cid_holdout_realcal_surveytime_shoeslin_covproj_fragfilter_extgrid_more_cid_dedup_term_ablations_fullcov_v1",
+  "seed": 123,
+  "test_label": "+fields+host_mass_step"
+}
