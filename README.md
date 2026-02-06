@@ -8,7 +8,7 @@ Systematics-first, *audit-style* pipeline for late-time distance-scale probes, p
 - SBC/coverage gates
 - time/epoch and sky (low-ℓ) invariance tests
 
-## Current findings (real data; 2026-02-05)
+## Current findings (real data; 2026-02-06)
 
 These are **real-data** runs on the public Pantheon+ / Pantheon+SH0ES tables in `data/raw/…`,
 using this repo’s **linear-Gaussian audit models** (not a full end-to-end SH0ES reanalysis).
@@ -94,6 +94,19 @@ using this repo’s **linear-Gaussian audit models** (not a full end-to-end SH0E
   Driver ranking: `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cid_holdout_covproj_term_ablations_v1/driver_ranking.md` (via `scripts/rank_predictive_score_drivers.py`)  
   Reproduce: `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cid_holdout_constrained_decomp_kcor_calhf_shoeslin_covproj_JLA_SALT2_cal_extgrid_more_v1.yaml`, `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cid_holdout_covproj_term_ablations_v1.yaml`  
   Priors: `data/processed/external_calibration/pantheon_plus_shoes_sigma_overrides_kcor_calhf_shoeslin_plus_covproj_JLA_SALT2_cal_v1.json` (built via `scripts/derive_proxy_priors_from_cov_projection.py` + `scripts/merge_sigma_overrides.py`)
+- **Permutation-null “is this tied to the actual metadata?” (real data; covproj CID holdout):** for the same CID-holdout term ablations, a *within-survey* permutation-null test supports `host_mass_step` as a “real” (non-random) driver but does **not** support `pkmjd_err_linear`:
+  - `+fields+host_mass_step`: observed mean Δlogp ≈ +0.2915; permuting `HOST_LOGMASS` among calibrators within each `IDSURVEY` gives p(Δlogp≥obs) ≈ **0.0138** (n=5000).
+  - `+fields+pkmjd_err`: observed mean Δlogp ≈ +0.2647; permuting `PKMJDERR` among calibrators within each `IDSURVEY` gives p ≈ **0.127** (n=5000), consistent with a “generic regressor” rather than a specific metadata-linked effect.
+  - Full `+bounded_fields_plus_metadata_bounded`: observed mean Δlogp ≈ +0.3985; permuting `HOST_LOGMASS` within-survey gives p ≈ **0.0778** (n=5000), i.e. marginal.
+  Artifacts: `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cid_holdout_covproj_term_ablations_v1/permutation_null__fields_host_mass_step_host_logmass_within_survey_n5000.json`, `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cid_holdout_covproj_term_ablations_v1/permutation_null__fields_pkmjd_err_pkmjd_err_within_survey_n5000.json`, `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cid_holdout_covproj_term_ablations_v1/permutation_null__bounded_fields_plus_metadata_bounded_host_logmass_within_survey_n5000.json`
+- **Harder generalization (calibrator survey holdout; covproj term ablations):** holding out calibrator SNe survey-by-survey (`group_var=idsurvey`, HF always in TRAIN) still yields large gains from the same bounded terms:
+  - `+fields+host_mass_step`: Δlogp ≈ +1.35 (win-rate 100%)
+  - `+fields+pkmjd_err`: Δlogp ≈ +1.28 (win-rate 90%)
+  - Full `+bounded_fields_plus_metadata_bounded`: Δlogp ≈ +1.93 (win-rate 90%)
+  Permutation-null on this split family (within-survey; n=5000): p ≈ **0.0104** for `host_mass_step` (permute `HOST_LOGMASS`) and p ≈ **0.1516** for `pkmjd_err` (permute `PKMJDERR`).
+  Report: `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_survey_holdout_covproj_term_ablations_v1/report.md`  
+  Artifacts: `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_survey_holdout_covproj_term_ablations_v1/permutation_null__fields_host_mass_step_host_logmass_within_survey_n5000.json`, `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_survey_holdout_covproj_term_ablations_v1/permutation_null__fields_pkmjd_err_pkmjd_err_within_survey_n5000.json`
+  Reproduce: `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_survey_holdout_covproj_term_ablations_v1.yaml`
 - **Calibration gates for these proxy terms (prior-MC + SBC + injections; real data + simulator):** under the combined kcor+SH0ES-linear+covproj bounds, a forward “prior-MC” draw of unmodeled distortions can explain p50/p95/p99 ≈ **20% / 60% / 79%** of a reference ln(73/67.4) tension scale (but P(>100%) remains ≈0). Repeated-noise SBC shows **no undercoverage** (it is conservative/over-covered), and injections confirm the dominant single-term H0-shift risks are `pkmjd_err_linear_mag` and `host_mass_step_mag` (each ≈15% of the reference scale at 1σ).  
   Reports: `outputs/pantheon_plus_shoes_ladder_prior_mc_constrained_kcor_calhf_shoeslin_covproj_JLA_SALT2_cal_v1/report.md`, `outputs/pantheon_plus_shoes_ladder_sbc_constrained_covproj_JLA_SALT2_cal_v1/report.md`, `outputs/pantheon_plus_shoes_ladder_injection_covproj_metadata_misspec_v1/report.md`, `outputs/pantheon_plus_shoes_ladder_injection_covproj_metadata_modeled_v1/report.md`  
   Reproduce: `configs/pantheon_plus_shoes_ladder_prior_mc_constrained_kcor_calhf_shoeslin_covproj_JLA_SALT2_cal_v1.yaml`, `configs/pantheon_plus_shoes_ladder_sbc_constrained_covproj_JLA_SALT2_cal_v1.yaml`, `configs/pantheon_plus_shoes_ladder_injection_covproj_metadata_misspec_v1.yaml`, `configs/pantheon_plus_shoes_ladder_injection_covproj_metadata_modeled_v1.yaml`

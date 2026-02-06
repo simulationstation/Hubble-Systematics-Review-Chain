@@ -144,6 +144,27 @@ Artifacts:
 - Gate sweep: `outputs/stack_sn_bao_cc_plus_ladder_fragilistic_gates_v1/report.md`
 - Holdout: `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_fragilistic_v1/report.md`
 
+## 2026-02-06 — Permutation-null supports host-mass as “real”, not PKMJDERR (real data)
+
+On the same covproj CID-holdout term-ablation run, a within-survey permutation-null suggests the
+`host_mass_step` gain is tied to the *actual* `HOST_LOGMASS` values (unlikely under permutation),
+while the `pkmjd_err_linear` gain is not:
+
+- `+fields+host_mass_step` (permute `HOST_LOGMASS` within `IDSURVEY`): p(Δlogp≥obs) ≈ 0.0138 (n=5000)
+- `+fields+pkmjd_err` (permute `PKMJDERR` within `IDSURVEY`): p ≈ 0.127 (n=5000)
+
+Artifacts:
+- `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cid_holdout_covproj_term_ablations_v1/permutation_null__fields_host_mass_step_host_logmass_within_survey_n5000.json`
+- `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cid_holdout_covproj_term_ablations_v1/permutation_null__fields_pkmjd_err_pkmjd_err_within_survey_n5000.json`
+
+On the harder **calibrator survey holdout** split family, the same story holds:
+- `+fields+host_mass_step`: p ≈ 0.0104 (n=5000)
+- `+fields+pkmjd_err`: p ≈ 0.1516 (n=5000)
+
+Artifacts:
+- `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_survey_holdout_covproj_term_ablations_v1/permutation_null__fields_host_mass_step_host_logmass_within_survey_n5000.json`
+- `outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_survey_holdout_covproj_term_ablations_v1/permutation_null__fields_pkmjd_err_pkmjd_err_within_survey_n5000.json`
+
 ## 2026-02-05 — CALIB-only covariance gate sharply bounds the calibrator step (real data)
 
 Pantheon+SH0ES also ships systematic-group covariance blocks. Using the **CALIB-only** grouping

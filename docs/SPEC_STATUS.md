@@ -22,6 +22,7 @@ This file maps the “systematics-first” spec you described (CatWISE-style sta
 - **Prior-MC forward simulator (prior → bias bound):** `src/hubble_systematics/audit/prior_mc.py`
 - **Cross-validated hemisphere scan:** `src/hubble_systematics/audit/hemisphere_scan.py`
 - **Predictive scoring (CV log predictive density):** `src/hubble_systematics/audit/predictive_score.py`
+- **Permutation-null tests (metadata proxy “realness”):** `scripts/proxy_permutation_null.py` (permute within-survey / global; supports multiprocessing)
 - **Exact Gaussian log evidence:** `src/hubble_systematics/gaussian_linear_model.py#log_marginal_likelihood`
 - **Joint / stacked inference:** `src/hubble_systematics/joint.py` (+ stack handling in `src/hubble_systematics/audit/tasks.py`)
 
@@ -51,6 +52,8 @@ This file maps the “systematics-first” spec you described (CatWISE-style sta
 - **Predictive scoring (stack; hold out calibrators inside ladder part while keeping other probes in TRAIN):**
   `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_v1.yaml` and the full-cov variant
   `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_fullcov_v1.yaml`
+- **Predictive scoring (stack; covproj term ablations + survey holdout):**
+  `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_survey_holdout_covproj_term_ablations_v1.yaml`
 - **Predictive scoring (stack; mechanism scan on calibrator-only proxies):**
   `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_mechanism_scan_v1.yaml`
 - **Mechanism attribution scans (stack; compare cal_offset vs time-bin proxies):**

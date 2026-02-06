@@ -1,0 +1,18 @@
+{
+  "branch": "main",
+  "describe": "a3687c8",
+  "dirty": true,
+  "head": "a3687c87265efe78ed448904e3d553d8c027218f",
+  "ok": true,
+  "remotes": [
+    "origin\tgit@github.com:simulationstation/Hubble-Systematics-Review-Chain.git (fetch)",
+    "origin\tgit@github.com:simulationstation/Hubble-Systematics-Review-Chain.git (push)"
+  ],
+  "status_porcelain": [
+    "?? configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_survey_holdout_covproj_term_ablations_v1.yaml",
+    "?? outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_survey_holdout_covproj_term_ablations_v1/",
+    "?? outputs/stack_sn_bao_cc_plus_ladder_predictive_score_cid_holdout_covproj_term_ablations_v1/permutation_null__fields_host_mass_step_host_logmass_within_survey.json",
+    "?? scripts/proxy_permutation_null.py"
+  ],
+  "toplevel": "/home/primary/Hubble-Systematics-Review-Chain"
+}
