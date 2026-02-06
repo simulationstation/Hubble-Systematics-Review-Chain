@@ -63,6 +63,35 @@ def _load_probe(cfg: dict[str, Any]):
     raise ValueError(f"Unknown probe name: {name}")
 
 
+def _stack_part_label(item: dict[str, Any]) -> str:
+    """
+    Return a stable, unique label for a stack part.
+
+    Notes:
+    - Stack items use `name` to select the probe loader (e.g. "h0_grid"); multiple items of the same
+      probe type are allowed, so we need an additional label to distinguish parts.
+    - If the stack item provides `part_label`, we always use it.
+    - For h0_grid / gaussian_measurement / siren_gate2_grid parts, we default to a prefixed label to
+      make group-holdout filtering (e.g. prefix "h0_grid:") convenient.
+    """
+    if item.get("part_label") is not None:
+        return str(item["part_label"])
+
+    name = str(item.get("name") or "").strip()
+    label = item.get("label")
+    if label is not None:
+        lab = str(label)
+        if name == "h0_grid":
+            return f"h0_grid:{lab}"
+        if name == "gaussian_measurement":
+            return f"gaussian:{lab}"
+        if name == "siren_gate2_grid":
+            return f"siren_gate2:{lab}"
+        return lab
+
+    return name
+
+
 def run_fit_baseline(ctx) -> dict[str, Any]:
     cfg = ctx.config
     anchor = _build_anchor(cfg)
@@ -83,13 +112,14 @@ def run_fit_baseline(ctx) -> dict[str, Any]:
             name = item.get("name")
             if name is None:
                 raise ValueError("Each stack item must include a name")
+            part_label = _stack_part_label(item)
             # Merge base model with any per-item overrides.
             item_model = _deep_merge_dicts(model, item.get("model", {}) or {})
             level = str(item_model.get("ladder_level", base_level))
             ds = _load_probe({"probe": item})
             y, y0, cov, X, prior = ds.build_design(anchor=anchor, ladder_level=level, cfg=item_model)
             parts.append(Part(y=y, y0=y0, cov=cov, X=X, prior=prior))
-            part_labels.append(str(name))
+            part_labels.append(str(part_label))
         stacked = stack_parts(parts)
         y, y0, cov, X, prior = stacked.y, stacked.y0, stacked.cov, stacked.X, stacked.prior
         level = base_level
@@ -191,7 +221,8 @@ def run_baseline_sweep_task(ctx) -> dict[str, Any]:
                 part_name = part_cfg.get("name")
                 if part_name is None:
                     raise ValueError("Each stack item must include a name")
-                part_override = stack_overrides.get(str(part_name), {}) or {}
+                part_key = _stack_part_label(part_cfg)
+                part_override = stack_overrides.get(str(part_key), {}) or {}
                 part_model = _deep_merge_dicts(_deep_merge_dicts(model_cfg, part_cfg.get("model", {}) or {}), part_override)
                 level = str(part_model.get("ladder_level", base_level))
                 ds = _load_probe({"probe": part_cfg})
@@ -481,8 +512,9 @@ def run_predictive_score_task(ctx) -> dict[str, Any]:
             name = item.get("name")
             if name is None:
                 raise ValueError("Each stack item must include a name")
+            part_label = _stack_part_label(item)
             ds = _load_probe({"probe": item})
-            parts.append(StackPredictivePart(name=str(name), dataset=ds, base_model=item.get("model", {}) or {}))
+            parts.append(StackPredictivePart(name=str(part_label), dataset=ds, base_model=item.get("model", {}) or {}))
 
         dataset = StackPredictiveDataset.from_parts(
             parts=parts,
@@ -545,8 +577,9 @@ def run_prior_mc_task(ctx) -> dict[str, Any]:
             name = item.get("name")
             if name is None:
                 raise ValueError("Each stack item must include a name")
+            part_label = _stack_part_label(item)
             ds = _load_probe({"probe": item})
-            parts.append(StackPredictivePart(name=str(name), dataset=ds, base_model=item.get("model", {}) or {}))
+            parts.append(StackPredictivePart(name=str(part_label), dataset=ds, base_model=item.get("model", {}) or {}))
 
         dataset = StackPredictiveDataset.from_parts(
             parts=parts,

@@ -8,6 +8,7 @@ from typing import Any
 
 import numpy as np
 import yaml
+import re
 
 from hubble_systematics.anchors import AnchorLCDM
 from hubble_systematics.audit.stack_predictive_dataset import StackPredictiveDataset, StackPredictivePart
@@ -48,6 +49,22 @@ def _load_probe(probe_cfg: dict[str, Any]):
         return load_siren_gate2_grid_dataset(probe_cfg)
     raise ValueError(f"Unknown probe name: {name!r}")
 
+def _stack_part_label(item: dict[str, Any]) -> str:
+    if item.get("part_label") is not None:
+        return str(item["part_label"])
+    name = str(item.get("name") or "").strip()
+    label = item.get("label")
+    if label is not None:
+        lab = str(label)
+        if name == "h0_grid":
+            return f"h0_grid:{lab}"
+        if name == "gaussian_measurement":
+            return f"gaussian:{lab}"
+        if name == "siren_gate2_grid":
+            return f"siren_gate2:{lab}"
+        return lab
+    return name
+
 
 def _stack_predictive_dataset_from_config(*, cfg: dict[str, Any], anchor: AnchorLCDM) -> tuple[StackPredictiveDataset, np.ndarray | None]:
     probe = cfg.get("probe", {}) or {}
@@ -66,8 +83,9 @@ def _stack_predictive_dataset_from_config(*, cfg: dict[str, Any], anchor: Anchor
         name = item.get("name")
         if name is None:
             raise ValueError("Each stack item must include a name")
+        part_label = _stack_part_label(item)
         ds = _load_probe(item)
-        parts.append(StackPredictivePart(name=str(name), dataset=ds, base_model=item.get("model", {}) or {}))
+        parts.append(StackPredictivePart(name=str(part_label), dataset=ds, base_model=item.get("model", {}) or {}))
 
     ds = StackPredictiveDataset.from_parts(
         parts=parts,
@@ -89,6 +107,9 @@ def _group_holdout_labels(
     dataset,
     group_var: str,
     min_group_n: int,
+    group_allowlist: list[Any] | None,
+    group_prefix: str | None,
+    group_regex: str | None,
     always_include_calibrators: bool,
     always_include_hubble_flow: bool,
     fixed_train_mask: np.ndarray | None,
@@ -123,9 +144,26 @@ def _group_holdout_labels(
 
     groups = np.unique(v[good])
 
+    allow = None
+    if group_allowlist:
+        if not isinstance(group_allowlist, list):
+            raise ValueError("group_allowlist must be a list")
+        allow = {str(x) for x in group_allowlist}
+    prefix = None if group_prefix is None else str(group_prefix)
+    rx = None
+    if group_regex is not None:
+        rx = re.compile(str(group_regex))
+
     labels: list[Any] = []
     test_counts = []
     for g in groups:
+        sg = str(g)
+        if allow is not None and sg not in allow:
+            continue
+        if prefix and not sg.startswith(prefix):
+            continue
+        if rx is not None and rx.search(sg) is None:
+            continue
         test = (v == g) & good & (~fixed_train)
         if int(np.sum(test)) < int(min_group_n):
             continue
@@ -173,6 +211,9 @@ def main() -> None:
 
     group_var = str(pred_cfg.get("group_var", "idsurvey"))
     min_group_n = int(pred_cfg.get("min_group_n", 20))
+    group_allowlist = pred_cfg.get("group_allowlist")
+    group_prefix = pred_cfg.get("group_prefix")
+    group_regex = pred_cfg.get("group_regex")
     always_include_calibrators = bool(pred_cfg.get("always_include_calibrators", False))
     always_include_hubble_flow = bool(pred_cfg.get("always_include_hubble_flow", False))
 
@@ -180,6 +221,9 @@ def main() -> None:
         dataset=dataset,
         group_var=group_var,
         min_group_n=min_group_n,
+        group_allowlist=group_allowlist,
+        group_prefix=group_prefix,
+        group_regex=group_regex,
         always_include_calibrators=always_include_calibrators,
         always_include_hubble_flow=always_include_hubble_flow,
         fixed_train_mask=fixed_train_mask,

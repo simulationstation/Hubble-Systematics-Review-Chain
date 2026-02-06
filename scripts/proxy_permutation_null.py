@@ -71,6 +71,22 @@ def _load_probe(probe_cfg: dict[str, Any]):
         return load_siren_gate2_grid_dataset(probe_cfg)
     raise ValueError(f"Unknown probe name: {name!r}")
 
+def _stack_part_label(item: dict[str, Any]) -> str:
+    if item.get("part_label") is not None:
+        return str(item["part_label"])
+    name = str(item.get("name") or "").strip()
+    label = item.get("label")
+    if label is not None:
+        lab = str(label)
+        if name == "h0_grid":
+            return f"h0_grid:{lab}"
+        if name == "gaussian_measurement":
+            return f"gaussian:{lab}"
+        if name == "siren_gate2_grid":
+            return f"siren_gate2:{lab}"
+        return lab
+    return name
+
 
 def _stack_parts_from_config(*, cfg: dict[str, Any]) -> list[StackPredictivePart]:
     probe = cfg.get("probe", {}) or {}
@@ -83,8 +99,9 @@ def _stack_parts_from_config(*, cfg: dict[str, Any]) -> list[StackPredictivePart
         name = item.get("name")
         if name is None:
             raise ValueError("Each stack item must include a name")
+        part_label = _stack_part_label(item)
         ds = _load_probe(item)
-        parts.append(StackPredictivePart(name=str(name), dataset=ds, base_model=item.get("model", {}) or {}))
+        parts.append(StackPredictivePart(name=str(part_label), dataset=ds, base_model=item.get("model", {}) or {}))
     return parts
 
 

@@ -87,3 +87,16 @@ When we have real Gaia/overlap/zeropoint products, we should:
    - injections (modeled + misspecified),
    - SBC/coverage checks.
 
+## Optional: exporter (sigma_overrides → external constraints)
+
+If you already have a merged `sigma_overrides` mapping (e.g. built from cov-projection + k-corr + FRAGILISTIC
+priors), you can export it into the list-style “external constraints” format and then edit it by hand:
+
+```bash
+.venv/bin/python scripts/export_sigma_overrides_to_external_constraints.py \
+  data/processed/external_calibration/pantheon_plus_shoes_sigma_overrides_realcal_surveytime_shoeslin_covproj_v1.json \
+  --out references/external_constraints_realcal_surveytime_shoeslin_covproj_v1.json
+```
+
+This is a convenience step: it preserves the same numbers but makes it easier to replace subsets with
+truly external products (Gaia cross-cal, overlap residuals, zeropoint logs) later.

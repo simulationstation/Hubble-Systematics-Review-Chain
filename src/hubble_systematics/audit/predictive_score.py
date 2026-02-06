@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+import re
 from typing import Any
 
 import numpy as np
@@ -77,6 +78,9 @@ def run_predictive_score(
             dataset=dataset,
             group_var=group_var,
             min_group_n=min_group_n,
+            group_allowlist=pred_cfg.get("group_allowlist"),
+            group_prefix=pred_cfg.get("group_prefix"),
+            group_regex=pred_cfg.get("group_regex"),
             always_include_calibrators=always_include_cal,
             always_include_hubble_flow=always_include_hf,
             fixed_train_mask=fixed_train_mask,
@@ -210,6 +214,9 @@ def _group_holdout_splits(
     dataset,
     group_var: str,
     min_group_n: int,
+    group_allowlist: list[Any] | None,
+    group_prefix: str | None,
+    group_regex: str | None,
     always_include_calibrators: bool,
     always_include_hubble_flow: bool,
     fixed_train_mask: np.ndarray | None,
@@ -244,8 +251,26 @@ def _group_holdout_splits(
             good &= np.asarray([x is not None for x in v], dtype=bool)
     groups = np.unique(v[good])
 
+    allow = None
+    if group_allowlist:
+        if not isinstance(group_allowlist, list):
+            raise ValueError("predictive_score.group_allowlist must be a list")
+        allow = {str(x) for x in group_allowlist}
+
+    prefix = None if group_prefix is None else str(group_prefix)
+    rx = None
+    if group_regex is not None:
+        rx = re.compile(str(group_regex))
+
     splits: list[tuple[np.ndarray, np.ndarray]] = []
     for g in groups:
+        sg = str(g)
+        if allow is not None and sg not in allow:
+            continue
+        if prefix and not sg.startswith(prefix):
+            continue
+        if rx is not None and rx.search(sg) is None:
+            continue
         test = (v == g) & good & (~fixed_train)
         if int(np.sum(test)) < min_group_n:
             continue

@@ -1,0 +1,54 @@
+{
+  "parts": [
+    {
+      "chi2": 1194.732142796547,
+      "label": "pantheon_plus",
+      "n": 1322
+    },
+    {
+      "chi2": 285.23518498719545,
+      "label": "pantheon_plus_shoes_ladder",
+      "n": 320
+    },
+    {
+      "chi2": 22.046626972703898,
+      "label": "bao",
+      "n": 12
+    },
+    {
+      "chi2": 12.42759542554882,
+      "label": "chronometers",
+      "n": 19
+    },
+    {
+      "chi2": 0.19330663330995113,
+      "label": "h0_grid:trgb_freedman_2021_review",
+      "n": 1
+    },
+    {
+      "chi2": 3.062913090021344,
+      "label": "h0_grid:sbf_blakeslee_2021",
+      "n": 1
+    },
+    {
+      "chi2": 0.20011244742098186,
+      "label": "h0_grid:tdcosmo_slacs_birrer_2020",
+      "n": 1
+    },
+    {
+      "chi2": 6.250843040862113,
+      "label": "h0_grid:h0licow_wong_2020",
+      "n": 1
+    },
+    {
+      "chi2": 3.5034895329189815,
+      "label": "h0_grid:strides_shajib_2020",
+      "n": 1
+    },
+    {
+      "chi2": 2.792862883682782,
+      "label": "h0_grid:megamaser_pesce_2020",
+      "n": 1
+    }
+  ]
+}

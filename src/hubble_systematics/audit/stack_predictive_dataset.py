@@ -178,6 +178,13 @@ class StackPredictiveDataset:
 
     def get_column(self, name: str) -> np.ndarray:
         name = str(name)
+        if name in {"stack_part", "stack_part_name", "part"}:
+            n_total = int(self.mask_full.shape[0])
+            out = np.full(n_total, None, dtype=object)
+            for nm, sl in self.part_slices:
+                out[sl] = str(nm)
+            return out[self.mask_full]
+
         n_total = int(self.mask_full.shape[0])
         out_float: np.ndarray | None = None
         out_obj: np.ndarray | None = None

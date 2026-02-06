@@ -1,0 +1,16 @@
+{
+  "created_by": "scripts/build_sigma_overrides_from_external_constraints.py",
+  "inputs": [
+    {
+      "n_entries": 116,
+      "path": "/home/primary/Hubble-Systematics-Review-Chain/references/external_constraints_realcal_surveytime_shoeslin_covproj_v1.json"
+    }
+  ],
+  "n_entries_total": 116,
+  "n_keys_out": 116,
+  "notes": [
+    "This file is a compiled per-parameter sigma-override mapping intended to be referenced via",
+    "prior_cfg.sigma_overrides_path in audit configs.",
+    "Entries may specify params directly, or via mechanism+selector fields (idsurvey/bin)."
+  ]
+}

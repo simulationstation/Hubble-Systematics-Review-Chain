@@ -1,0 +1,71 @@
+{
+  "always_include_calibrators": true,
+  "always_include_hubble_flow": true,
+  "mode": "group_holdout",
+  "models": {
+    "+bounded_calibration_fields": {
+      "ladder_level": "L1",
+      "logp": [
+        0.3623060425575009,
+        1.1803372466397781,
+        1.2826502941195255,
+        0.9319877500812352,
+        1.8131196230490554,
+        2.764897334421959
+      ],
+      "mean_delta_logp_vs_base": -0.053965758310028956,
+      "mean_logp": 1.389216381811509,
+      "sd_delta_logp_vs_base": 0.05155780592740597,
+      "sd_logp": 0.7517514806551961
+    },
+    "+bounded_fields_plus_metadata_bounded": {
+      "ladder_level": "L1",
+      "logp": [
+        -0.32327182681276945,
+        0.9188712431084944,
+        0.9573754304201714,
+        0.6202341013591774,
+        1.8790831260908187,
+        2.6933370020631777
+      ],
+      "mean_delta_logp_vs_base": -0.3189106274166929,
+      "mean_logp": 1.124271512704845,
+      "sd_delta_logp_vs_base": 0.2858904535121633,
+      "sd_logp": 0.9531689327752728
+    },
+    "+cal_offset_bounded": {
+      "ladder_level": "L1",
+      "logp": [
+        -0.15184529322468387,
+        0.9839289989581554,
+        1.0387644169123962,
+        0.6976131044162599,
+        1.864638314705131,
+        2.717462839621306
+      ],
+      "mean_delta_logp_vs_base": -0.25142174322344385,
+      "mean_logp": 1.191760396898094,
+      "sd_delta_logp_vs_base": 0.2286716822730832,
+      "sd_logp": 0.9033818031027262
+    },
+    "baseline": {
+      "ladder_level": "L1",
+      "logp": [
+        0.5067901182049965,
+        1.235968071882493,
+        1.3511533871374397,
+        0.9986076440300236,
+        1.7960783541410654,
+        2.7704952653332096
+      ],
+      "mean_delta_logp_vs_base": 0.0,
+      "mean_logp": 1.443182140121538,
+      "sd_delta_logp_vs_base": 0.0,
+      "sd_logp": 0.708540675492528
+    }
+  },
+  "n_rep": 6,
+  "seed": 991,
+  "train_frac": null,
+  "use_diagonal_errors": true
+}

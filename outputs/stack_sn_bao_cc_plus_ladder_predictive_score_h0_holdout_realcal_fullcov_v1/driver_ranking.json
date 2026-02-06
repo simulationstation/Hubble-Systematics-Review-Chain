@@ -1,0 +1,72 @@
+{
+  "base_label": "baseline",
+  "group_labels": [
+    "h0_grid:h0licow_wong_2020",
+    "h0_grid:megamaser_pesce_2020",
+    "h0_grid:sbf_blakeslee_2021",
+    "h0_grid:strides_shajib_2020",
+    "h0_grid:tdcosmo_slacs_birrer_2020",
+    "h0_grid:trgb_freedman_2021_review"
+  ],
+  "group_var": "stack_part",
+  "mode": "group_holdout",
+  "models": {
+    "+bounded_calibration_fields": {
+      "delta_logp": [
+        -0.06792871231304565,
+        -0.025946558424581267,
+        -0.032552410493942974,
+        -0.03076896993874323,
+        0.005030677953139717,
+        -0.011883389252866028
+      ],
+      "mean_delta_logp": -0.027341560411673238,
+      "win_rate": 0.16666666666666666
+    },
+    "+bounded_fields_plus_metadata_bounded": {
+      "delta_logp": [
+        -0.32679148885744436,
+        -0.12437459467923961,
+        -0.1564306010420926,
+        -0.14737183412099042,
+        0.02254380927012556,
+        -0.06181883686537182
+      ],
+      "mean_delta_logp": -0.1323739243825022,
+      "win_rate": 0.16666666666666666
+    },
+    "+cal_offset_bounded": {
+      "delta_logp": [
+        -0.2898139330403544,
+        -0.1103481245111515,
+        -0.13874280485978363,
+        -0.13076742976369604,
+        0.020191766756276763,
+        -0.05425308337854151
+      ],
+      "mean_delta_logp": -0.11728893479954172,
+      "win_rate": 0.16666666666666666
+    },
+    "baseline": {
+      "delta_logp": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "mean_delta_logp": 0.0,
+      "win_rate": 0.0
+    }
+  },
+  "run_dir": "/home/primary/Hubble-Systematics-Review-Chain/outputs/stack_sn_bao_cc_plus_ladder_predictive_score_h0_holdout_realcal_fullcov_v1",
+  "test_counts": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "branch": "main",
+  "describe": "1495674-dirty",
+  "dirty": true,
+  "head": "1495674c918fdc62f5580d6f6315331b46d533fc",
+  "ok": true,
+  "remotes": [
+    "origin\tgit@github.com:simulationstation/Hubble-Systematics-Review-Chain.git (fetch)",
+    "origin\tgit@github.com:simulationstation/Hubble-Systematics-Review-Chain.git (push)"
+  ],
+  "status_porcelain": [
+    "M docs/external_constraints.md",
+    " M scripts/proxy_permutation_null.py",
+    " M scripts/rank_predictive_score_drivers.py",
+    " M src/hubble_systematics/audit/predictive_score.py",
+    " M src/hubble_systematics/audit/stack_predictive_dataset.py",
+    " M src/hubble_systematics/audit/tasks.py",
+    "?? configs/stack_sn_bao_cc_plus_ladder_predictive_score_cid_holdout_realcal_surveytime_shoeslin_covproj_fragfilter_extgrid_more_cid_dedup_cal_bestfitprob_fullcov_v1.yaml",
+    "?? configs/stack_sn_bao_cc_plus_ladder_predictive_score_h0_holdout_realcal_diag_v1.yaml",
+    "?? configs/stack_sn_bao_cc_plus_ladder_predictive_score_h0_holdout_realcal_fullcov_v1.yaml",
+    "?? data/processed/external_calibration/pantheon_plus_shoes_sigma_overrides_from_external_constraints_realcal_v1.json",
+    "?? data/processed/external_calibration/pantheon_plus_shoes_sigma_overrides_from_external_constraints_realcal_v1.meta.json",
+    "?? outputs/stack_sn_bao_cc_plus_ladder_predictive_score_h0_holdout_realcal_diag_v1/",
+    "?? references/external_constraints_realcal_surveytime_shoeslin_covproj_v1.json",
+    "?? scripts/export_sigma_overrides_to_external_constraints.py"
+  ],
+  "toplevel": "/home/primary/Hubble-Systematics-Review-Chain"
+}

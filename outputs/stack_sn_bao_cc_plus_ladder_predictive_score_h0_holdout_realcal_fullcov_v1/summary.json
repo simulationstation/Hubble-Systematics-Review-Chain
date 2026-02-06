@@ -1,0 +1,80 @@
+{
+  "created_utc": "2026-02-06T05:30:06.009444+00:00",
+  "run_id": "stack_sn_bao_cc_plus_ladder_predictive_score_h0_holdout_realcal_fullcov_v1",
+  "tasks": {
+    "predictive_score": {
+      "always_include_calibrators": true,
+      "always_include_hubble_flow": true,
+      "mode": "group_holdout",
+      "models": {
+        "+bounded_calibration_fields": {
+          "ladder_level": "L1",
+          "logp": [
+            -0.49048022963848625,
+            0.8426725688338041,
+            0.8646992038962322,
+            0.5312930543797421,
+            1.8984245094630836,
+            2.6648618255514043
+          ],
+          "mean_delta_logp_vs_base": -0.027341560411673238,
+          "mean_logp": 1.0519118220809633,
+          "sd_delta_logp_vs_base": 0.022267614364731785,
+          "sd_logp": 1.003912198650134
+        },
+        "+bounded_fields_plus_metadata_bounded": {
+          "ladder_level": "L1",
+          "logp": [
+            -0.749343006182885,
+            0.7442445325791458,
+            0.7408210133480826,
+            0.41469019019749487,
+            1.9159376407800695,
+            2.6149263779388985
+          ],
+          "mean_delta_logp_vs_base": -0.1323739243825022,
+          "mean_logp": 0.9468794581101344,
+          "sd_delta_logp_vs_base": 0.10617859499848527,
+          "sd_logp": 1.077448478977546
+        },
+        "+cal_offset_bounded": {
+          "ladder_level": "L1",
+          "logp": [
+            -0.712365450365795,
+            0.7582710027472339,
+            0.7585088095303916,
+            0.43129459455478925,
+            1.9135855982662207,
+            2.622492131425729
+          ],
+          "mean_delta_logp_vs_base": -0.11728893479954172,
+          "mean_logp": 0.9619644476930947,
+          "sd_delta_logp_vs_base": 0.09427747176744007,
+          "sd_logp": 1.0669904185323014
+        },
+        "baseline": {
+          "ladder_level": "L1",
+          "logp": [
+            -0.4225515173254406,
+            0.8686191272583854,
+            0.8972516143901752,
+            0.5620620243184853,
+            1.893393831509944,
+            2.6767452148042703
+          ],
+          "mean_delta_logp_vs_base": 0.0,
+          "mean_logp": 1.0792533824926365,
+          "sd_delta_logp_vs_base": 0.0,
+          "sd_logp": 0.9844796524210646
+        }
+      },
+      "n_rep": 6,
+      "seed": 991,
+      "train_frac": null,
+      "use_diagonal_errors": false
+    },
+    "report": {
+      "ok": true
+    }
+  }
+}
