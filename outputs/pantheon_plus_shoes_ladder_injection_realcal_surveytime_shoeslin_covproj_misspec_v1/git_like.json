@@ -1,0 +1,22 @@
+{
+  "branch": "main",
+  "describe": "219f977",
+  "dirty": true,
+  "head": "219f977d58a6b091af6ea2021841f7696da4ceaf",
+  "ok": true,
+  "remotes": [
+    "origin\tgit@github.com:simulationstation/Hubble-Systematics-Review-Chain.git (fetch)",
+    "origin\tgit@github.com:simulationstation/Hubble-Systematics-Review-Chain.git (push)"
+  ],
+  "status_porcelain": [
+    "?? configs/pantheon_plus_shoes_ladder_injection_realcal_surveytime_shoeslin_covproj_misspec_v1.yaml",
+    "?? configs/pantheon_plus_shoes_ladder_injection_realcal_surveytime_shoeslin_covproj_modeled_v1.yaml",
+    "?? configs/pantheon_plus_shoes_ladder_prior_mc_realcal_surveytime_shoeslin_covproj_v1.yaml",
+    "?? configs/pantheon_plus_shoes_ladder_sbc_realcal_surveytime_shoeslin_covproj_v1.yaml",
+    "?? data/processed/external_calibration/pantheon_plus_shoes_sigma_overrides_realcal_surveytime_shoeslin_covproj_v1.json",
+    "?? data/processed/external_calibration/pantheon_plus_shoes_sigma_overrides_realcal_surveytime_shoeslin_covproj_v1.meta.json",
+    "?? outputs/pantheon_plus_shoes_ladder_injection_realcal_surveytime_shoeslin_covproj_misspec_v1/",
+    "?? outputs/pantheon_plus_shoes_ladder_prior_mc_realcal_surveytime_shoeslin_covproj_v1/"
+  ],
+  "toplevel": "/home/primary/Hubble-Systematics-Review-Chain"
+}

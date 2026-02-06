@@ -162,6 +162,12 @@ This file maps the “systematics-first” spec you described (CatWISE-style sta
   `configs/pantheon_plus_shoes_ladder_prior_mc_constrained_kcor_calhf_shoeslin_v1.yaml`
 - **Prior-MC bias bound (host mass only; covproj bounds):**
   `configs/pantheon_plus_shoes_ladder_prior_mc_host_mass_step_covproj_v1.yaml`
+- **Prior-MC + injection + SBC under merged “realcal survey×epoch” constraints:**
+  `data/processed/external_calibration/pantheon_plus_shoes_sigma_overrides_realcal_surveytime_shoeslin_covproj_v1.json`,
+  `configs/pantheon_plus_shoes_ladder_prior_mc_realcal_surveytime_shoeslin_covproj_v1.yaml`,
+  `configs/pantheon_plus_shoes_ladder_injection_realcal_surveytime_shoeslin_covproj_misspec_v1.yaml`,
+  `configs/pantheon_plus_shoes_ladder_injection_realcal_surveytime_shoeslin_covproj_modeled_v1.yaml`,
+  `configs/pantheon_plus_shoes_ladder_sbc_realcal_surveytime_shoeslin_covproj_v1.yaml`
 - **Injection/SBC under CALIB-only priors (survey/time injections):**
   `configs/pantheon_plus_shoes_ladder_injection_calibcov_misspec_v1.yaml`,
   `configs/pantheon_plus_shoes_ladder_injection_calibcov_modeled_v1.yaml`,
@@ -182,6 +188,8 @@ This file maps the “systematics-first” spec you described (CatWISE-style sta
   plus the CALIB-only external-prior variants:
   `configs/stack_sn_bao_cc_plus_ladder_calibcov_gates_extgrid_all_v1.yaml` and
   `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cal_holdout_calibcov_extgrid_all_v1.yaml`
+- **CID-holdout battery (calibrators held out by CID; ext grids; realcal survey×epoch pack):**
+  `configs/stack_sn_bao_cc_plus_ladder_predictive_score_cid_holdout_realcal_surveytime_shoeslin_covproj_extgrid_more_v1.yaml`
 
 ## What’s still incomplete vs the full ambition
 
